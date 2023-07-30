@@ -187,6 +187,7 @@ function playerupdate()
   pla.deadt = 1
   pla.deadx = pla.x
   pla.deady = pla.y
+  pla.vy -= 2
   sfx(0)
  end
 end

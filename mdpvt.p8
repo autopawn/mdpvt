@@ -13,7 +13,7 @@ end
 function _draw()
  cls()
  map()
- camera(pla.x-64, pla.y-64)
+ camera(pla.x-64+3, pla.y-64+8)
  
  playerdraw()
 end

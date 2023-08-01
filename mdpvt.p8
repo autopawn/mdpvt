@@ -48,7 +48,11 @@ function _draw()
   print(s, 1, 1, 10)
   -- speedrun clock
   if workers_dead<#workers then
-    time=(flr(frame/30*100)/100).."s"
+   centis = flr(frame/30*100)
+   s = centis\100
+   c2 = (centis\10)%10
+   c1 = centis%10
+   time=s.."."..c1..c2.."s"
   end
   print(time,100,2,6)
   print(time,100,1,7)

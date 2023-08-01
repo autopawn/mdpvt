@@ -6,4 +6,4 @@ Complete your murder drone training so they don't turn you into a branded pen!
 
 Programmed by:
 * Autopawn
-* Miszuk
+* [Duzy-Dym](https://github.com/Duzy-Dym) (Discord: miszuk2137)

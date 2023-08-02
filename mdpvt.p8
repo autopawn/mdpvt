@@ -357,7 +357,7 @@ function workers_update()
   end
   if not worker.dead and
    objcanmove(worker,worker.facedir,0) and
-   not objcanmove(worker, worker.facedir + worker.facedir*5, 16) then
+   not objcanmove(worker, worker.facedir + worker.facedir*5, 1) then
    worker.vx=worker.facedir/2
   else
    worker.vx=0

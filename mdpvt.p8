@@ -439,7 +439,7 @@ function workers_draw()
   spr(worker.sprite + 16, worker.x, worker.y + 8, 1, 1)
   end
   if worker.sprite == 23 then
-  spr(worker.sprite + 17, worker.x + worker.facedir*3, worker.y + 9, 1, 1, worker.facedir == 1) 
+  spr(worker.sprite + 17, worker.x + worker.facedir*3, worker.y + 9, 1, 1, worker.facedir == 1)
    end
   end
  end
@@ -475,7 +475,7 @@ function railgun_draw()
     player_die()
    end
   end
-  railshot.delay -= 1
+  railshot.delay -=1
  end
 end
 

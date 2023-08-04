@@ -8,3 +8,5 @@ You can play it here: https://autopawn.itch.io/mdpvt
 Programmed by:
 * Autopawn
 * [Duzy-Dym](https://github.com/Duzy-Dym) (Discord: miszuk2137)
+* Remixer (Discord: remimixer)
+

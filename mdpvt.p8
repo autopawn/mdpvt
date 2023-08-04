@@ -38,21 +38,21 @@ end
 function _draw()
  cls()
  camera(pla.x-64+3, pla.y-64+8)
-  
+
  map()
 
  workers_draw()
  railshots_draw()
  particles_draw()
  player_draw()
-  
+
  -- kill count
  camera()
  s = "kills: "..workers_dead
    .."/"..(#workers)
  print(s, 1, 2, 9)
  print(s, 1, 1, 10)
- 
+
  -- speedrun clock
  if workers_dead<#workers then
   centis = flr(frame/30*100)
@@ -61,7 +61,7 @@ function _draw()
   c1 = centis%10
   time=s.."."..c1..c2.."s"
  end
-  
+
  if dialog_on then
   dialog_draw()
  else
@@ -76,7 +76,7 @@ end
 -->8
 --physics
 -- this tab is for object
--- movement and the collision 
+-- movement and the collision
 -- system.
 
 function step(z)
@@ -95,7 +95,7 @@ function rectcol(x, y, w, h, fl)
  xf = (x+w-1)\8
  yi = y\8
  yf = (y+h-1)\8
-  
+
  for y=yi,yf do
   for x=xi,xf do
    -- get sprite at pos
@@ -144,11 +144,11 @@ function objmove(o)
   -- remaining movement
  rx = o.vx
  ry = o.vy
- 
+
  while abs(rx)>0.1 or abs(ry)>0.1 do
   sx = step(rx)
   sy = step(ry)
-  
+
   -- horizontal movement has
   -- preference.
   if abs(rx) > 0.01 then
@@ -181,7 +181,7 @@ end
 -- move object using its speed
 -- fast computation
 function objmovecheap(o)
- while not 
+ while not
    objcanmove(o,o.vx,o.vy) do
   o.vx *= 0.5
   o.vy *= 0.5
@@ -222,12 +222,12 @@ function player_update()
   if pla.deadt > 60 then
    run()
   end
-  
+
  else
   -- update animation counters
   pla.animw -= 1
   pla.animkill -= 1
- 
+
   -- react to controls
   if btn(0) and not btn(1) then
    pla.vx -= 1
@@ -248,33 +248,35 @@ function player_update()
   if not btn(0) and not btn(1) then
    pla.vx /= 4
   end
+  -- flutter flight
   if btnp(2) then
    pla.vy -= 3
    pla.animw = 7
+   sfx(6 + tonum(pla.ground))
   end
 
   -- limit horizontal speed
   if pla.vx > 4 then
    pla.vx = 4
   end
-  if pla.vx < -4 then 
+  if pla.vx < -4 then
    pla.vx = -4
   end
 
   -- limit vertical speed
-  if pla.vy < -4 then 
+  if pla.vy < -4 then
    pla.vy = -4
   end
-  
+
   -- update body animation
   if not pla.ground then
    pla.animb = 0
   end
  end
- 
+
  objapplygravity(pla)
  objmove(pla)
- 
+
  -- die if touching death block
  if not pla.dead and
    rectcol(pla.x, pla.y, pla.w,
@@ -311,7 +313,7 @@ function player_draw()
 	 end
 	 spr(headspr, pla.x, pla.y,
 	 		1, 1, fr)
- 
+
 	 -- draw wings
 	 if pla.animw >= 0 then
  	 spr(48+pla.animw/2,
@@ -319,9 +321,9 @@ function player_draw()
  	 spr(48+pla.animw/2,
  	   pla.x+6, pla.y+5, 1, 1, false)
 	 end
- 
+
 	 -- draw body
-	 bodyspr = 32+pla.animb%4		
+	 bodyspr = 32+pla.animb%4
  	spr(bodyspr, pla.x, pla.y+8,
   	 1, 1, fr)
  end
@@ -391,14 +393,14 @@ end
 function workers_update()
  for worker in all(workers) do
   if not worker.dead then
-   if not pla.dead and 
+   if not pla.dead and
      objcol(pla, worker) then
     worker_die(worker)
     pla.animkill = 10
    end
-  if worker.canmove then 
+  if worker.canmove then
    if objcanmove(worker,
-     worker.facedir,0) and 
+     worker.facedir,0) and
      not objcanmove(worker,
      worker.facedir*6, 1) then
     worker.vx = 0.5*worker.facedir
@@ -562,10 +564,10 @@ function particles_update()
   if p.lifetime < 0 then
    del(particles,p)
   end
-  
+
   objapplygravity(p)
   objmovecheap(p)
-  
+
   p.lifetime -= 1
  end
 end
@@ -640,7 +642,7 @@ function dialog_update()
    dialog_n += 1
    dialog_on = false
    frame = 0
-  end 
+  end
  end
 end
 
@@ -649,7 +651,7 @@ function dialog_draw()
  if not dialog_on then
   return
  end
- 
+
  current_dial = dialogs[dialog_n]
  line1 = current_dial[dialog_l]
 
@@ -667,7 +669,7 @@ function dialog_draw()
    return
   end
  end
-   
+
  -- draw a single line
  spr(line1[1],2,108,2,2)
  print(line1[2],23,109, 10)
@@ -906,12 +908,15 @@ __map__
 0000000000000000000000010101010101010101010101010100000000000001010101010101010101010101020202010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000101010101010101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-01020000000000665006620096200c6501c0201d1201c1201d120116201d120290501e1501e0401e140200501e17036670366703567034670346703467033650146501d650296502465000000000000000000000
+00020000000000665006620096200c6501c0201d1201c1201d120116201d120290501e1501e0401e140200501e17036670366703567034670346703467033650146501d650296502465000000000000000000000
 011000000000000000100501205014050160501b0501f0502305026050290502b0502c050290501c050130501105014050190501b0501d0501e050210501f050180501205013050190501b050000000000000000
 00030000306702d6602a65029650266402464022630206301e6301b6201962017620156101460012600106000f6000d6000c6000b600000000000000000000000000000000000000000000000000000000000000
 01040000266100b6100b6101f6001f6001d6001c6001a60013600116000e600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00080000005560255604556085560c55612556165561a5561d55622556275562e556355563a5563d5363d5263d5263d5263d5263d5263d5263d5263d5263d5263d5263d5263d526296062860626606216061f606
 00020000371733517333173311732f1732e1732b17329173281732515323153211531f1531d1531a1531715314153111530f1530c153091530715305153021530015300103021030010300003000030000300003
+a1040000126531365317653246572e657000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+020400000563411630216502f6601e650356603f6653f667006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600
+001e0000220321e0321d0321603000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __music__
 00 01424344
 

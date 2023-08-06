@@ -129,9 +129,9 @@ function _draw()
 
  workers_draw()
  railshots_draw()
+ player_draw()
  particles_draw()
  rockets_draw()
- player_draw()
 
  -- start gui
  camera()
@@ -306,6 +306,12 @@ function objinside(o,cx,cy,r)
    cx, cy, r)
  return i1 or i2
 end
+
+function inside_camera(x, y)
+ dx = abs(x - pla.x)
+ dy = abs(y - pla.y)
+ return dx <= 86 and dy <= 86
+end
 -->8
 --player
 -- this tab is for the player's
@@ -425,7 +431,7 @@ function player_die()
  pla.vy -= 2
  pla.vx /= 2
  pla.h = 8
- add_explosion(
+ add_blood2(
    pla.x+3,pla.y+9,{5,6,9,10})
 end
 
@@ -469,61 +475,92 @@ end
 -- radious of the rocket explosion
 rocket_xrad = 18
 
+-- rockets_update function: Handles the movement, collisions and explosions of rockets. 
 function rockets_update()
+ -- Cycle through each rocket
  for r in all(rockets) do
+  -- If a rocket is exploding, continue to animate the explosion
   if r.explosiont > 0 then
    r.explosiont += 1
-   if r.explosiont > 10 then
-    del(rockets, r)
+  -- If the explosion animation is over, remove the rocket
+  if r.explosiont > 5 then
+  del(rockets, r)
    end
   else
-
+   -- Check the rocket's ability to move and possible collisions, trigger explosion if required
    local explode = false
    if not objcanmove(r, r.vx, r.vy) then
     explode = true
    else
     objmove(r)
    end
-
+   -- Check collisions with workers, handle accordingly
    for w in all(workers) do
     if not w.dead and
       objcol(r, w) then
-     explode = true
+     if w.type != "thad" then
+    explode = true
+    else
+    w.pipeanim=12
+    sfx(11)
+    deflect_rocket(r)
+     end
     end
    end
-
+   -- Check distance to player, trigger explosion if too far
+   if abs(r.x - pla.x) > 100 then
+    explode = true
+   end
+   -- Check collision with player and whether the rocket was deflected 
+   if not pla.dead and
+     objcol(r, pla) and
+     r.deflected then
+    explode = true
+   end
+   -- Check for player input to explode the rocket
    if btnp(5) then
     explode = true
    end
 
+   -- If explosion is needed, animate the explosion, kill player and workers in the blast radius
    if explode then
+    sfx(10)
+    sfx(9)
     r.explosiont = 1
+    if not pla.dead and
+      r.deflected and
+      objinside(pla, r.x+3,
+        r.y+1, rocket_xrad) then
+     player_die()
+    end
     for w in all(workers) do
-     front = ((r.x+3 < w.x+4)
+     local front = ((r.x+3 < w.x+4)
        == (w.facedir == -1))
-    
      if not w.dead and
        objinside(w, r.x+3,
-       r.y+1, rocket_xrad) then
-      if w.type=="thad"
-        and front then
-       w.pipeanim=12
-      else
+         r.y+1, rocket_xrad) then
+      if not (w.type=="thad" and front) then
        worker_die(w)
       end
      end
     end
    end
-
   end
  end
 end
 
+-- deflect_rocket function: Changes the direction of the rocket
+function deflect_rocket(r)
+ r.vx *= -1
+ r.facer = not r.facer
+ r.deflected = true
+end
+
+-- rockets_draw function: Draw rockets, including explosion animations
 function rockets_draw()
  for r in all(rockets) do
   if r.explosiont > 0 then
-   circ(r.x+3, r.y+1,
-     rocket_xrad - 3, 8)
+   add_explosion(r.x,r.y)
   else
    spr(11+frame%2,
      r.x-1, r.y-3, 1, 1,
@@ -532,6 +569,7 @@ function rockets_draw()
  end
 end
 
+-- player_shoot function: Creates a rocket and makes the player character fire it
 function player_shoot()
  local rocket = {
   x = pla.x,
@@ -542,6 +580,7 @@ function player_shoot()
   h = 2,
   explosiont = 0,
   facer = pla.facer,
+  deflected = false
  }
  if pla.facer then
   rocket.x += 8
@@ -550,7 +589,7 @@ function player_shoot()
   rocket.x -= 6
   rocket.vx = -4
  end
- add(rockets,rocket)
+ add(rockets, rocket)
  pla.animr = 6
 end
 -->8
@@ -623,7 +662,7 @@ function create_worker(x1, y1, type)
   }
  elseif type == 26 then
   worker = {
-   type="thad",
+   type = "thad",
    x = x1,
    vx = 0,
    y = y1,
@@ -712,6 +751,7 @@ function workers_update()
    if worker.type == "thad" then
     if objcol(pla, worker) and
       pla.dead == false then
+     sfx(11)
      worker.pipeanim=12
      pla.vx+=10*worker.facedir
      pla.vy-=2
@@ -771,8 +811,6 @@ function workers_draw()
     worker.y+7,1,1,
     worker.facedir == 1)
    end
-   --TODO: make thad deflect rockets
-   --TODO: add a way to make thad die
   end
   end
  end
@@ -836,7 +874,9 @@ function worker_shoot(worker)
   color=7,
   delay = 60
  }
- sfx(4)
+ if inside_camera(worker.x, worker.y) then
+  sfx(4)
+ end
  add(railshots,railshot)
 end
 -->8
@@ -850,6 +890,7 @@ function add_blood(x,y,colors)
  amount = rnd(6)+10
  for i=1,amount do
   add(particles,{
+    type="blood",
     x=x,
     vx=rnd(4)-2,
     y=y,
@@ -858,16 +899,18 @@ function add_blood(x,y,colors)
     w=1,
     h = 1,
     color=rnd(colors),
+    gravity=true,
     lifetime=rnd(60)+50,
   })
  end
 end
 
-function add_explosion(x,y,colors)
+function add_blood2(x, y, colors)
  for dx=-2,2 do
   for dy=-2,2 do
    if dy%2!=0 or dx%2!=0 then
     add(particles,{
+      type="blood",
       x=x+dx,
       vx=dx,
       y=y+dy,
@@ -875,6 +918,7 @@ function add_explosion(x,y,colors)
       size=1,
       w=1,
       h=1,
+      gravity=true,
       color=rnd(colors),
       lifetime=100,
     })
@@ -883,23 +927,57 @@ function add_explosion(x,y,colors)
  end
 end
 
+function add_explosion(x, y)
+ for i = 1, 1 do
+  add(particles,{
+   type="explosion",
+   x=x+rnd(4)*rnd({-1,1}),
+   vx=0,
+   y=y+rnd(4)*rnd({-1,1}),
+   vy=0,
+   size=rnd({9,10,11,12}),
+   endsize=rnd({1,2,3}),
+   w=1,
+   h=1,
+   gravity=false,
+   color={4,9,9,10,7},
+   lifetime=24,
+  })
+ end
+end
+
 function particles_update()
  for p in all(particles) do
   if p.lifetime < 0 then
    del(particles,p)
   end
-
-  objapplygravity(p)
+  
+  if p.gravity then
+   objapplygravity(p)
+  end
   objmovecheap(p)
-
+  
+  if p.type == "explosion" then
+   if p.endsize<p.size then
+    p.size-=1
+   else
+    del(particles,p)
+   end
+  end
+  
   p.lifetime -= 1
  end
 end
 
 function particles_draw()
   for p in all(particles) do
+   if p.type == "explosion" then
+    circfill(p.x,p.y,p.size,
+      p.color[flr(p.size/2)])
+    else
     circfill(p.x,p.y,p.size,
       p.color)
+   end
   end
 end
 -->8
@@ -1298,12 +1376,15 @@ __sfx__
 00020000000000665006620096200c6501c0201d1201c1201d120116201d120290501e1501e0401e140200501e17036670366703567034670346703467033650146501d650296502465000000000000000000000
 011000000000000000100501205014050160501b0501f0502305026050290502b0502c050290501c050130501105014050190501b0501d0501e050210501f050180501205013050190501b050000000000000000
 00030000306702d6602a65029650266402464022630206301e6301b6201962017620156101460012600106000f6000d6000c6000b600000000000000000000000000000000000000000000000000000000000000
-01040000266100b6100b6101f6001f6001d6001c6001a60013600116000e600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00080000005560255604556085560c55612556165561a5561d55622556275562e556355563a5563d5363d5263d5263d5263d5263d5263d5263d5263d5263d5263d5263d5263d526296062860626606216061f606
+00040000266100b6100b6101f6001f6001d6001c6001a60013600116000e600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+90040000005760257604576085760c57612576165761a5761d57622576275762e576355763a5763d5763d5763d5763d5763d5763d5763d5763d5763d5763d5763d5763d5763d576296062860626606216061f606
 00020000371733517333173311732f1732e1732b17329173281732515323153211531f1531d1531a1531715314153111530f1530c153091530715305153021530015300103021030010300003000030000300003
-a1040000126531365317653246572e657000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+a0040000126531365317653246572e657000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 020400000563411630216502f6601e650356603f6653f667006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600006000060000600
 001e0000220321e0321d0321603000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000300000f6700d6700b6700867006670046700367001660002650066500265006550025500655002550065500245006450024500635002350063500235006350023500635002350062500225006250022500625
+000300002e6722e6622e6622c6522c6522a6522865225652216521f6421d6421b64218642166421463214632106320f6220e6220b6220a6220962207612056120461202602016020060200002000020000200002
+0002000023210282102d2102f21028610276102561023610216101e6101c4101b4101941015410134100a51007510055100261000000000000000000000000000000000000000000000000000000000000000000
 __music__
 00 01424344
 

@@ -11,9 +11,11 @@ level = 1
 -- stored on dget(2)
 dialog_shown = 0
 
--- time on the clock
--- stored on dget(3)
-timer = 0
+-- time on the clock, minutes
+-- and frames.
+-- stored on dget(3) and dget(4)
+timer_m = 0
+timer_f = 0
 
 -- frame for animations
 frame = 0
@@ -35,7 +37,8 @@ function _init()
  if state == 1 then
   level = dget(1)
   dialog_shown = dget(2)
-  timer = dget(3)
+  timer_m = dget(3)
+  timer_f = dget(4)
   -- by default, don't load
   -- checkpoint on next reset
   dset(0, 0)
@@ -82,7 +85,8 @@ function reset_level()
  dset(0, 1) -- load checkpoint
  dset(1, level) -- this level
  dset(2, 1) -- after the dialog
- dset(3, timer)
+ dset(3, timer_m)
+ dset(4, timer_f)
 
  run()
 end
@@ -91,7 +95,8 @@ function next_level()
  dset(0, 1) -- load checkpoint
  dset(1, level+1) -- next level
  dset(2, 0) -- before the dialog
- dset(3, timer)
+ dset(3, timer_m)
+ dset(4, timer_f)
 
  run()
 end
@@ -106,7 +111,11 @@ function _update()
   particles_update()
   railshots_update()
   -- update speedrun timer
-  timer += 1
+  timer_f += 1
+  if timer_f >= 1800 then
+   timer_f = 0
+   timer_m += 1
+  end
  end
  -- update frame counter
  frame += 1
@@ -137,18 +146,21 @@ function _draw()
 
  if dialog_on then
   dialog_draw()
- else
-  -- speedrun clock
-  centis = flr(timer/30*100)
-  s = centis\100
-  c2 = (centis\10)%10
-  c1 = centis%10
-  time=s.."."..c1..c2.."s"
-
-  print(time,100,2,6)
-  print(time,100,1,7)
-  spr(3,92,1)
  end
+
+ -- speedrun clock
+ secs = timer_f\30
+ centis = flr(timer_f%30*3.333)
+ c1 = centis\10
+ c2 = centis%10
+ s1 = secs\10
+ s2 = secs%10
+ tstr = timer_m..":"..s1..s2
+   .."."..c1..c2
+
+ print(tstr,100,2,6)
+ print(tstr,100,1,7)
+ spr(3,92,1)
 
 end
 

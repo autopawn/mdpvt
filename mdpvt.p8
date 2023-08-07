@@ -54,27 +54,37 @@ function _init()
    t = mget(x,y)
 
    -- look at the tile under
-   -- to know the level of the
-   -- current tile.
-   t_level = -1
+   -- for a level marker
+   levelmark = -1
    if 64 <= mget(x,y+1) and
      mget(x,y+1) <= 71 then
-    tlevel = mget(x,y+1)-63
+    levelmark = mget(x,y+1)-63
     mset(x,y+1,0)
    end
 
    if t==16 then
-    if tlevel == level then
+    if levelmark == level then
      pla.x = 8*x
      pla.y = 8*y
      level_has_player = true
     end
     mset(x,y,0)
    elseif t==20 or t==23 or t==24 or t==25 or t==26 then
-    if tlevel == level then
+    if levelmark == level then
      create_worker(x*8,y*8,t)
     end
     mset(x,y,0)
+   else
+    -- non-object tile with a
+    -- level marker gets either
+    -- deleted or duplicated
+    if levelmark != -1 then
+     if levelmark == level then
+      mset(x,y+1,t)
+     else
+      mset(x,y,0)
+     end
+    end
    end
   end
  end

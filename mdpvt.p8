@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
---main
+-- main
 
 -- current level.
 -- stored on dget(1)
@@ -194,7 +194,7 @@ end
 
 
 -->8
---physics
+-- physics
 -- this tab is for object
 -- movement and the collision
 -- system.
@@ -341,7 +341,7 @@ function inside_camera(x, y)
  return dx <= 86 and dy <= 86
 end
 -->8
---player
+-- player
 -- this tab is for the player's
 -- behavior.
 
@@ -621,9 +621,9 @@ function player_shoot()
  pla.animr = 6
 end
 -->8
---worker drones
---this tab is for declaring and
---adding worker drones
+-- worker drones
+-- this tab is for declaring and
+-- adding worker drones
 
 workers = {}
 workers_dead = 0
@@ -1012,7 +1012,6 @@ end
 -- dialog texts
 
 dialog_1 = {
-
  {98, "uh... where... who am i?"},
  {96, "it took you some time to"},
  {96, "wake up rookie."},
@@ -1042,34 +1041,35 @@ dialog_1 = {
 }
 
 dialog_2 = {
-
  {96, "excelent!"},
  {96, "now, i need you to murder"},
  {96, "all the drones in this"},
- {96, "area and then get back"},
- {96, "to the goal."},
+ {96, "area and then reach the"},
+ {96, "goal."},
+ {96, "just touch them and let"},
+ {96, "your instinct do the rest."},
 }
 
 dialog_3 = {
  {98, "so..."},
  {98, "is there a reason why i"},
- {98, "must murder those"},
- {98, "worker drones?"},
+ {98, "must murder those worker"},
+ {98, "drones?"},
  {96, "once you're completed"},
- {96, "your training, then"},
- {96, "maybe i'll give you"},
- {96, "an answer."},
+ {96, "your training, then maybe"},
+ {96, "i'll give you an answer."},
  {98, "`kay."},
- {96, "worker drones are"},
+ {96, "worker drones may be"},
  {96, "unpredictably armed."},
- {96, "murder all the drones"},
- {96, "and don't get shot by"},
- {96, "a railgun."},
- {98, "wait? what?!"},
+ {96, "managed instructed me to"},
+ {96, "add angsty teenagers"},
+ {96, "with railguns in this"},
+ {96, "part, for some reason."},
+ {98, "what is a railgun?"},
+ {96, "kill 'em all, rookie!"},
 }
 
 dialog_demo = {
-
  {96, "this demo is now over,"},
  {96, "thank you for playing!"},
  {96, "here's a few more bonus"},
@@ -1140,15 +1140,15 @@ function dialog_draw()
   line0 = current_dial[dialog_l-1]
   if line0[1] == line1[1] then
    spr(line1[1],2,108,2,2)
-   print(line0[2],23,109, 5)
-   print(line1[2],23,117, 10)
+   print(line0[2],22,109, 5)
+   print(line1[2],22,117, 10)
    return
   end
  end
 
  -- draw a single line
  spr(line1[1],2,108,2,2)
- print(line1[2],23,109, 10)
+ print(line1[2],22,109, 10)
 end
 
 

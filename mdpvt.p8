@@ -31,6 +31,9 @@ first_rocket_level = 4
 -- music track currently playing
 music_playing = -1
 
+-- frames of input transition.
+black = 14
+
 function _init()
  -- set the cart data.
  cartdata("murder_drones_mdpvt")
@@ -147,6 +150,10 @@ function _update()
  end
  -- update frame counter
  frame += 1
+ -- advance input animation
+ if black > 0 then
+  black -= 1
+ end
 end
 
 function _draw()
@@ -175,6 +182,22 @@ function _draw()
  if dialog_on then
   dialog_draw()
  end
+ 
+ -- input transition
+ if black >= 12 then
+  fillp(0)
+  rectfill(0, 0, 127, 127, 0)
+ elseif black > 9 then
+  fillp(0b0101000001010000.1)
+  rectfill(0, 0, 127, 127, 0)
+ elseif black > 6 then
+  fillp(0b0101101001011010.1)
+  rectfill(0, 0, 127, 127, 0)
+ elseif black > 3 then
+  fillp(0b1111101011111010.1)
+  rectfill(0, 0, 127, 127, 0)
+ end
+ fillp(0)
 
  -- speedrun clock
  secs = timer_f\30
@@ -189,7 +212,7 @@ function _draw()
  print(tstr,100,2,6)
  print(tstr,100,1,7)
  spr(3,92,1)
-
+ 
 end
 
 
@@ -228,6 +251,31 @@ function rectcol(x, y, w, h, fl)
  end
 
  return false
+end
+
+-- check whether the rectangle
+-- is totally inside tiles
+-- that have the given flag on
+function rectinside(x, y, w, h, fl)
+ -- note: backslash for integer
+ -- division.
+ xi = x\8
+ xf = (x+w-1)\8
+ yi = y\8
+ yf = (y+h-1)\8
+
+ for y=yi,yf do
+  for x=xi,xf do
+   -- get sprite at pos
+   s = mget(x, y)
+   -- get flag fl on the sprite
+   f = fget(s, fl)
+   -- if flag off, this is false.
+   if not f then return false end
+  end
+ end
+
+ return true
 end
 
 --function for checking collisions of two objects
@@ -447,7 +495,7 @@ function player_update()
  -- go to next level
  if not pla.dead and
    workers_dead == #workers
-   and rectcol(pla.x, pla.y,
+   and rectinside(pla.x, pla.y,
    pla.w, pla.h, 2) then
   next_level()
  end
@@ -503,26 +551,26 @@ end
 -- radious of the rocket explosion
 rocket_xrad = 18
 
--- rockets_update function: Handles the movement, collisions and explosions of rockets.
+-- rockets_update function: handles the movement, collisions and explosions of rockets.
 function rockets_update()
- -- Cycle through each rocket
+ -- cycle through each rocket
  for r in all(rockets) do
-  -- If a rocket is exploding, continue to animate the explosion
+  -- if a rocket is exploding, continue to animate the explosion
   if r.explosiont > 0 then
    r.explosiont += 1
-  -- If the explosion animation is over, remove the rocket
+  -- if the explosion animation is over, remove the rocket
   if r.explosiont > 5 then
   del(rockets, r)
    end
   else
-   -- Check the rocket's ability to move and possible collisions, trigger explosion if required
+   -- check the rocket's ability to move and possible collisions, trigger explosion if required
    local explode = false
    if not objcanmove(r, r.vx, r.vy) then
     explode = true
    else
     objmove(r)
    end
-   -- Check collisions with workers, handle accordingly
+   -- check collisions with workers, handle accordingly
    for w in all(workers) do
     if not w.dead and
       objcol(r, w) then
@@ -535,22 +583,22 @@ function rockets_update()
      end
     end
    end
-   -- Check distance to player, trigger explosion if too far
+   -- check distance to player, trigger explosion if too far
    if abs(r.x - pla.x) > 100 then
     explode = true
    end
-   -- Check collision with player and whether the rocket was deflected
+   -- check collision with player and whether the rocket was deflected
    if not pla.dead and
      objcol(r, pla) and
      r.deflected then
     explode = true
    end
-   -- Check for player input to explode the rocket
+   -- check for player input to explode the rocket
    if btnp(5) then
     explode = true
    end
 
-   -- If explosion is needed, animate the explosion, kill player and workers in the blast radius
+   -- if explosion is needed, animate the explosion, kill player and workers in the blast radius
    if explode then
     sfx(10)
     sfx(9)
@@ -1134,6 +1182,11 @@ function dialog_draw()
  rectfill(0,106,127,127,0)
  rect(1,107,18,124,7)
  rect(20,107,126,124,7)
+ 
+ -- draw next icon
+ print("❎",119,123, 2)
+ print("❎",119,122+(frame\8)%2,
+   8)
 
  -- draw two lines
  if dialog_l > 1 then

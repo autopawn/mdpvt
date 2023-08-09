@@ -32,7 +32,7 @@ first_rocket_level = 4
 music_playing = -1
 
 -- frames of input transition.
-black = 14
+black = 9
 
 function _init()
  -- set the cart data.
@@ -184,16 +184,16 @@ function _draw()
  end
  
  -- input transition
- if black >= 12 then
+ if black >= 8 then
   fillp(0)
   rectfill(0, 0, 127, 127, 0)
- elseif black > 9 then
+ elseif black > 6 then
   fillp(0b0101000001010000.1)
   rectfill(0, 0, 127, 127, 0)
- elseif black > 6 then
+ elseif black > 4 then
   fillp(0b0101101001011010.1)
   rectfill(0, 0, 127, 127, 0)
- elseif black > 3 then
+ elseif black > 2 then
   fillp(0b1111101011111010.1)
   rectfill(0, 0, 127, 127, 0)
  end
@@ -482,9 +482,6 @@ function player_update()
   end
  end
 
- objapplygravity(pla)
- objmove(pla)
-
  -- die if touching death block
  if not pla.dead and
    rectcol(pla.x, pla.y, pla.w,
@@ -499,6 +496,9 @@ function player_update()
    pla.w, pla.h, 2) then
   next_level()
  end
+
+ objapplygravity(pla)
+ objmove(pla) 
 end
 
 function player_die()

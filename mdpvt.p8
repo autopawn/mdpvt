@@ -178,20 +178,6 @@ function _draw()
  -- start gui
  camera()
 
- 
- -- death counter
- d = "♥: "..deathcount
- print(d, 1, 2, 9)
- print(d, 1, 1, 10)
-
- -- kill count
- if #workers > 0 then
-  s = "웃:"..workers_dead
-    .."/"..(#workers)
-  print(s, 50, 2, 9)
-  print(s, 50, 1, 10)
- end
-
  if dialog_on then
   dialog_draw()
  end
@@ -211,6 +197,19 @@ function _draw()
   rectfill(0, 0, 127, 127, 0)
  end
  fillp(0)
+
+ -- death counter
+ d = "♥:"..deathcount
+ print(d, 1, 2, 6)
+ print(d, 1, 1, 7)
+
+ -- kill count
+ if #workers > 0 then
+  s = "웃:"..workers_dead
+    .."/"..(#workers)
+  print(s, 50, 2, 9)
+  print(s, 50, 1, 10)
+ end
 
  -- speedrun clock
  secs = timer_f\30

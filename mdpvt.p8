@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 2
+level = 1
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -1176,7 +1176,7 @@ end
 -- update the current dialog
 function dialog_update()
  current_dial = dialogs[dialog_n]
- if btnp(5) then
+ if btnp(5) or btn(4) then
   dialog_l += 1
   if dialog_l > #current_dial then
    dialog_l = 1

@@ -199,16 +199,16 @@ function _draw()
  fillp(0)
 
  -- death counter
- d = "♥:"..deathcount
- print(d, 1, 2, 6)
- print(d, 1, 1, 7)
+ d = "deaths:"..deathcount
+ print(d, 1, 2, 9)
+ print(d, 1, 1, 10)
 
  -- kill count
  if #workers > 0 then
-  s = "웃:"..workers_dead
+  s = "kills:"..workers_dead
     .."/"..(#workers)
-  print(s, 50, 2, 9)
-  print(s, 50, 1, 10)
+  print(s, 1, 9, 9)
+  print(s, 1, 8, 10)
  end
 
  -- speedrun clock

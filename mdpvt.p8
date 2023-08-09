@@ -514,6 +514,8 @@ end
 function player_draw()
  fr = pla.facer
 
+ rectfill(pla.x+1, pla.y+3,
+   pla.x+6, pla.y+5, 0)
  if pla.dead then
   -- draw head
   spr(18, pla.x, pla.y,
@@ -852,6 +854,8 @@ end
 
 function workers_draw()
  for worker in all(workers) do
+  rectfill(worker.x+1, worker.y+3,
+    worker.x+6, worker.y+5, 0)
   if worker.dead then
    spr(worker.sprite+2, worker.x, worker.y, 1, 1)
    spr(worker.sprite+18, worker.x - 7, worker.y, 1, 1)

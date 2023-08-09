@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 1
+level = 2
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -16,6 +16,10 @@ dialog_shown = 0
 -- stored on dget(3) and dget(4)
 timer_m = 0
 timer_f = 0
+
+-- death counter tally (player)
+-- stored on dget(5)
+deathcount = 0
 
 -- frame for animations
 frame = 0
@@ -45,6 +49,7 @@ function _init()
   dialog_shown = dget(2)
   timer_m = dget(3)
   timer_f = dget(4)
+  deathcount = dget(5)
   -- by default, don't load
   -- checkpoint on next reset
   dset(0, 0)
@@ -103,6 +108,7 @@ function reset_level()
  dset(2, 1) -- after the dialog
  dset(3, timer_m)
  dset(4, timer_f)
+ dset(5, deathcount)
 
  run()
 end
@@ -113,6 +119,7 @@ function next_level()
  dset(2, 0) -- before the dialog
  dset(3, timer_m)
  dset(4, timer_f)
+ dset(5, deathcount)
 
  run()
 end
@@ -171,12 +178,18 @@ function _draw()
  -- start gui
  camera()
 
+ 
+ -- death counter
+ d = "♥: "..deathcount
+ print(d, 1, 2, 9)
+ print(d, 1, 1, 10)
+
  -- kill count
  if #workers > 0 then
-  s = "kills: "..workers_dead
+  s = "웃:"..workers_dead
     .."/"..(#workers)
-  print(s, 1, 2, 9)
-  print(s, 1, 1, 10)
+  print(s, 50, 2, 9)
+  print(s, 50, 1, 10)
  end
 
  if dialog_on then
@@ -509,6 +522,7 @@ function player_die()
  pla.h = 8
  add_blood2(
    pla.x+3,pla.y+9,{5,6,9,10})
+ deathcount+=1
 end
 
 function player_draw()

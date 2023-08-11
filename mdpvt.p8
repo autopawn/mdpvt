@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 10
+level = 4
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -589,27 +589,23 @@ function rockets_update()
   else
    -- check the rocket's ability to move and possible collisions, trigger explosion if required
    local explode = false
-   if not objcanmove(r, r.vx, r.vy) then
-    explode = true
-   else
-    objmove(r)
-   end
+   objmove(r)
    -- check collisions with workers, handle accordingly
    for w in all(workers) do
     if not w.dead and 
-      w.type != "target" and
+      w.type == "thad" and
       objcol(r, w) then
-     if w.type != "thad" then
-      explode = true
-     else
-      w.pipeanim=12
-      sfx(11)
-      deflect_rocket(r)
-     end
+     w.pipeanim=12
+     sfx(11)
+     deflect_rocket(r)
     end
    end
-   -- check distance to player, trigger explosion if too far
-   if abs(r.x - pla.x) > 100 then
+   -- explode after enough time
+   -- on a wall
+   if abs(r.vx) < 1 then
+    r.timeonwall += 1
+   end
+   if r.timeonwall > 15 then
     explode = true
    end
    -- check collision with player and whether the rocket was deflected
@@ -631,7 +627,7 @@ function rockets_update()
     if not pla.dead and
       r.deflected and
       objinside(pla, r.x+3,
-        r.y+1, rocket_xrad) then
+      r.y+1, rocket_xrad) then
      player_die()
     end
     for w in all(workers) do
@@ -639,7 +635,7 @@ function rockets_update()
        == (w.facedir == -1))
      if not w.dead and
        objinside(w, r.x+3,
-         r.y+1, rocket_xrad) then
+       r.y+1, rocket_xrad) then
       if not (w.type=="thad" and front) then
        worker_die(w)
       end
@@ -681,7 +677,8 @@ function player_shoot()
   h = 2,
   explosiont = 0,
   facer = pla.facer,
-  deflected = false
+  deflected = false,
+  timeonwall = 0
  }
  if pla.facer then
   rocket.x += 8

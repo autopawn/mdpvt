@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 1
+level = 5
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -609,11 +609,10 @@ function rockets_update()
   else
    -- check the rocket's ability to move and possible collisions, trigger explosion if required
    local explode = false
-   if not objcanmove(r, r.vx, r.vy) then
+   if abs(r.vx) < 1 then
     explode = true
-   else
-    objmove(r)
    end
+   objmove(r)
    -- check collisions with workers, handle accordingly
    for w in all(workers) do
     if not w.dead and 

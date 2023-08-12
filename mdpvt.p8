@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 5
+level = 3
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -988,8 +988,8 @@ function railshots_update()
   if railshot.delay==30 then
    sfx(2)
    sfx(5)
-   railshot.y-=3
-   railshot.h=6
+   railshot.y-=2
+   railshot.h=5
    railshot.color=11
   elseif railshot.delay==0 then
    if railshot.owner.canflip then
@@ -1012,7 +1012,7 @@ function railshots_draw()
   rectfill(railshot.x,
     railshot.y,
     railshot.x+railshot.w-1,
-    railshot.y+railshot.h,
+    railshot.y+railshot.h-1,
     railshot.color)
  end
 end
@@ -1025,7 +1025,7 @@ function worker_shoot(worker)
   y = worker.y + 10,
   x2 = 1,
   w = 0,
-  h = 0,
+  h = 1,
   facedir = worker.facedir,
   color=7,
   delay = 60

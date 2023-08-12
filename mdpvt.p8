@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 3
+level = 4
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -609,28 +609,27 @@ function rockets_update()
   else
    -- check the rocket's ability to move and possible collisions, trigger explosion if required
    local explode = false
-   if abs(r.vx) < 1 then
-    explode = true
-   end
    objmove(r)
-   -- check collisions with workers, handle accordingly
+   -- check collision with thad
    for w in all(workers) do
     if not w.dead and 
-      w.type != "target" and
+      w.type == "thad" and
       objcol(r, w) then
-     if w.type != "thad" then
-      explode = true
-     elseif not r.deflected then
-      w.pipeanim=12
-      sfx(11)
-      deflect_rocket(r, w.facedir == 1)
-     end
+     w.pipeanim=12
+     sfx(11)
+     deflect_rocket(r, w.facedir == 1)
     end
    end
-   -- check distance to player, trigger explosion if too far
-   if abs(r.x - pla.x) > 100 then
+
+   -- explode after enough time
+   -- on a wall
+   if abs(r.vx) < 1 then
+    r.timeonwall += 1
+   end
+   if r.timeonwall > 15 then
     explode = true
    end
+
    -- check collision with player and whether the rocket was deflected
    if not pla.dead and
      objcol(r, pla) and
@@ -693,7 +692,8 @@ function rockets_draw()
  end
 end
 
--- player_shoot function: Creates a rocket and makes the player character fire it
+-- creates a rocket and makes 
+-- the player character fire it
 function player_shoot()
  local rocket = {
   x = pla.x,
@@ -704,7 +704,8 @@ function player_shoot()
   h = 2,
   explosiont = 0,
   facer = pla.facer,
-  deflected = false
+  deflected = false,
+  timeonwall = 0
  }
  if pla.facer then
   rocket.x += 8

@@ -21,6 +21,13 @@ timer_f = 0
 -- stored on dget(5)
 deathcount = 0
 
+-- time on the clock, for the
+-- current level, minutes and
+-- frames.
+-- stored in dget(6) and dget(7)
+timer_lev_m = 0
+timer_lev_f = 0
+
 -- frame for animations
 frame = 0
 
@@ -50,6 +57,8 @@ function _init()
   timer_m = dget(3)
   timer_f = dget(4)
   deathcount = dget(5)
+  timer_lev_m = dget(6)
+  timer_lev_f = dget(7)
   -- by default, don't load
   -- checkpoint on next reset
   dset(0, 0)
@@ -118,6 +127,8 @@ function reset_level()
  dset(3, timer_m)
  dset(4, timer_f)
  dset(5, deathcount)
+ dset(6, timer_lev_m)
+ dset(7, timer_lev_f)
 
  run()
 end
@@ -129,6 +140,8 @@ function next_level()
  dset(3, timer_m)
  dset(4, timer_f)
  dset(5, deathcount)
+ dset(6, timer_lev_m)
+ dset(7, timer_lev_f)
 
  run()
 end
@@ -148,6 +161,12 @@ end
 function _update()
  if dialog_on then
   dialog_update()
+  
+  -- reset level timer
+  if not dialog_on then
+   timer_lev_m = 0
+   timer_lev_f = 0
+  end
  elseif level_has_player then
   rockets_update()
   player_update()
@@ -163,6 +182,12 @@ function _update()
    timer_f = 0
    timer_m += 1
   end
+  -- update level timer
+  timer_lev_f += 1
+  if timer_lev_f >= 1800 then
+   timer_lev_f = 0
+   timer_lev_m += 1
+  end
  end
 
  decor_tiles_update()
@@ -172,6 +197,21 @@ function _update()
  if black > 0 then
   black -= 1
  end
+end
+
+function draw_timer(mins,frams,
+  x,y)
+ secs = frams\30
+ centis = flr(frams%30*3.333)
+ c1 = centis\10
+ c2 = centis%10
+ s1 = secs\10
+ s2 = secs%10
+ tstr = mins..":"..s1..s2
+   .."."..c1..c2
+
+ print(tstr,x,y+1,6)
+ print(tstr,x,y,7)
 end
 
 function _draw()
@@ -223,19 +263,12 @@ function _draw()
  end
 
  -- speedrun clock
- secs = timer_f\30
- centis = flr(timer_f%30*3.333)
- c1 = centis\10
- c2 = centis%10
- s1 = secs\10
- s2 = secs%10
- tstr = timer_m..":"..s1..s2
-   .."."..c1..c2
-
- print(tstr,100,2,6)
- print(tstr,100,1,7)
+ draw_timer(timer_m, timer_f,
+   100, 1)
+ draw_timer(timer_lev_m,
+   timer_lev_f, 100, 8)
  spr(3,92,1)
-
+ 
 end
 
 function decor_tiles_update()

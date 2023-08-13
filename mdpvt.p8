@@ -1219,7 +1219,10 @@ dialog_1 = {
 }
 
 dialog_2 = {
- {96, "excelent!"},
+ {96, "excelent!",
+   {"l", 0, 2}},
+ {96, "it took you long enough...",
+   {"l", 2, 9999}},
  {96, "now, i need you to murder"},
  {96, "all the drones in this"},
  {96, "area and then reach the"},
@@ -1267,7 +1270,8 @@ dialogs = {
 }
 
 -- current dialog
-dialog_n = 1
+-- (filtered by conditions)
+current_dial = {}
 
 -- current line in dialog
 dialog_l = 1
@@ -1282,14 +1286,41 @@ dialog_on = false
 function dialog_start(n)
  dialog_n = n
  if n <= #dialogs then
+  current_dial = dialogs[dialog_n]
+  filter_current_dial()
+  dialog_l = 1
   dialog_on = true
   music(7)
  end
 end
 
+-- move dialog to the next available
+-- line.
+function filter_current_dial()
+ dial2 = {}
+ for l in all(current_dial) do
+  cond = l[3]
+  if not cond then
+   add(dial2, l)
+  else
+   if cond[1] == "l" then
+    tm = timer_lev_m
+      +timer_lev_f/1800
+   else 
+    tm = timer_m+timer_f/1800
+   end
+   if cond[2] <= tm and
+     tm < cond[3] then
+    add(dial2, l)
+   end
+  end
+ end
+ 
+ current_dial = dial2
+end
+
 -- update the current dialog
 function dialog_update()
- current_dial = dialogs[dialog_n]
  if btnp(5) or btn(4) then
   dialog_l += 1
   dialog_c = 0
@@ -1311,7 +1342,6 @@ function dialog_draw()
   return
  end
 
- current_dial = dialogs[dialog_n]
  line1 = current_dial[dialog_l]
  -- only show a substring
  text1 = sub(line1[2], 1, dialog_c)

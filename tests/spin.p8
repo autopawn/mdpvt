@@ -49,9 +49,9 @@ function draw_arm(s)
  if cosa < 0 then
   oval3d(s*17,24,0,4,4,4,7)
  end
- oval3d(s*6,20,0,4,3,4,5)
- oval3d(s*11,21,0,4,3,4,5)
- oval3d(s*14,22,0,4,3,4,5)
+ oval3d(s*6,20,0,4,3,4,6)
+ oval3d(s*11,21,0,4,3,4,6)
+ oval3d(s*14,22,0,4,3,4,6)
  if cosa >= 0 then
   oval3d(s*17,24,0,4,4,4,7)
  end
@@ -61,9 +61,9 @@ function draw_leg(s)
  if cosa<0 then
   oval3d(s*6,50,3,4,4,8,10)
  end
- oval3d(s*4,36,0,3,4,3,5)
- oval3d(s*5,40,1,3,4,3,5)
- oval3d(s*6,44,0,3,4,3,5)
+ oval3d(s*4,36,0,3,4,3,6)
+ oval3d(s*5,40,1,3,4,3,6)
+ oval3d(s*6,44,0,3,4,3,6)
  if cosa>=0 then
   oval3d(s*6,50,3,4,4,8,10)
  end
@@ -74,7 +74,7 @@ end
 function draw_zipper()
  oval3d(0,21,3,2,3,1,9)
  cili3d(0,23,4,2,3,1,9)
- cili3d(0,23,4,0.5,2,1,5)
+ cili3d(0,23,4,0.5,2,1,6)
 end
 
 function draw_led(phi,y)
@@ -132,8 +132,8 @@ function _draw()
  cili3d(0,16,0,3,2,3,9)
  
  -- body
- oval3d(0,25,0,6,7,5,5)
- oval3d(0,30,0,5,4,5,5)
+ oval3d(0,25,0,6,7,5,6)
+ oval3d(0,30,0,5,4,5,6)
   
  -- head
  oval3d(0,10,0,9,6,9,7)

@@ -500,7 +500,7 @@ function player_update()
   pla.animr -= 1
 
   -- react to controls
-  if btn(0) and not btn(1) then
+  if btn(⬅️) and not btn(➡️) then
    pla.vx -= 1
    -- limit horizontal speed
    if pla.vx < -3 then
@@ -512,7 +512,7 @@ function player_update()
     sfx(3)
    end
   end
-  if btn(1) and not btn(0) then
+  if btn(➡️) and not btn(⬅️) then
    pla.vx += 1
    -- limit horizontal speed
    if pla.vx > 3 then
@@ -524,18 +524,18 @@ function player_update()
     sfx(3)
    end
   end
-  if not btn(0) and not btn(1) then
+  if not btn(⬅️) and not btn(➡️) then
    pla.vx /= 4
   end
   -- flutter flight
-  if btnp(2) then
+  if btnp(❎) then
    pla.vy -= 3
    pla.animw = 7
    sfx(6 + tonum(pla.ground))
   end
 
  -- shoot
- if btnp(5) and #rockets==0
+ if btnp(🅾️) and #rockets==0
    and level >= first_rocket_level
    then
   player_shoot()
@@ -550,8 +550,8 @@ function player_update()
 
  -- ground slam activate
  if not pla.ground then
-  if btnp(3) and
-    not btnp(2) and
+  if btnp(⬇️) and
+    not btnp(⬆️) and
     not pla.slam then
    sfx(8)
    pla.slam=true
@@ -706,7 +706,7 @@ function rockets_update()
     explode = true
    end
    -- check for player input to explode the rocket
-   if btnp(5) then
+   if btnp(🅾️) then
     explode = true
    end
 
@@ -1468,6 +1468,7 @@ dialog_1 = {
  {96, "worker drones, mostly."},
  {98, "oh..."},
  {96, "let's try the wings."},
+ {96, "press ❎ to flutter."},
  {96, "move to the next area,"},
  {96, "and avoid the death-"},
  {96, "blocks."},
@@ -1547,12 +1548,15 @@ dialog_4 = {
  {98, "hey!",
    4, 9999},
  {96, "i've enabled your rocket"},
- {96, "launcher. you don't have"},
- {96, "to worry about ammo, but"},
+ {96, "launcher."},
+ {96, "press 🅾️ to shoot."},
+ {96, "also, you don't have to"},
+ {96, "worry about ammo, but"},
  {96, "you do have to detonate"},
- {96, "them manually."},
+ {96, "them manually, pressing"},
+ {96, "🅾️ a second time."},
  {96, "here's a few targets to"},
- {96, "practice on"},
+ {96, "practice on."},
  {96, "knock 'em dead, rookie!"},
 }
 
@@ -1667,7 +1671,7 @@ end
 
 -- update the current dialog
 function dialog_update()
- if btnp(5) or btn(4) then
+ if btnp(❎) or btn(🅾️) then
   dialog_l += 1
   dialog_c = 0
   if dialog_l > #current_dial then

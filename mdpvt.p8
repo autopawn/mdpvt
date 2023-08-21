@@ -610,6 +610,9 @@ function player_update()
 end
 
 function player_die()
+ if pla.dead then
+  return
+ end
  sfx(0)
  pla.dead = true
  pla.vy -= 2

@@ -190,6 +190,7 @@ function _update()
   workers_update()
   particles_update()
   railshots_update()
+  knives_update()
   shake_update()
   -- update music track
   -- (may make this depend on "level" later)
@@ -242,9 +243,11 @@ function _draw()
  -- draw map
  map()
 
+ knives_draw(false)
  workers_draw()
  railshots_draw()
  player_draw()
+ knives_draw(true)
  particles_draw()
  rockets_draw()
 
@@ -799,7 +802,11 @@ function rockets_update()
      if not w.dead and
        objinside(w, r.x+3,
          r.y+1, rocket_xrad) then
-      if not (w.type=="thad" and front) then
+      if w.type == "hunter" then
+       w.stun = 90
+       w.animhit = 6
+       w.vx = 0
+      elseif not (w.type=="thad" and front) then
        worker_hit(w)
       end
      end
@@ -883,6 +890,7 @@ workers = {}
 workers_dead = 0
 
 railshots={}
+knives={}
 
 function create_worker(x1, y1, type)
  worker = {
@@ -900,6 +908,8 @@ function create_worker(x1, y1, type)
   facedir = rnd({-1,1}),
   blink = rnd({8,9,10,11,12}),
   flying = false,
+  stun = 0,
+  animhit=0
  }
  if type==23 or type == 24 or type == 25 then
   worker.type = "uzi"
@@ -927,6 +937,7 @@ function create_worker(x1, y1, type)
   worker.blood = {8,13,6}
   worker.facedir = 1
   worker.flying = true
+  worker.knivedelay = 30+10*#workers
  elseif type == 29 or type==30 then
   worker.type = "mech"
   worker.h = 24
@@ -936,7 +947,6 @@ function create_worker(x1, y1, type)
   worker.blood = {5,6,9,10,13}
   worker.facedir = 1
   worker.hp = 3+2*hard
-  worker.animhit=0
   worker.hands = {
    {x=x1-7, y=y1+9, w=6, h=6,
     vx=0, vy=0},
@@ -1065,19 +1075,29 @@ function workers_update()
     end
     worker.pipeanim-=1
    elseif worker.type=="hunter" then
-   
-    if pla.x>worker.x then
-     worker.facedir=1
+    if worker.stun > 0 then
+     worker.flying = false
+     worker.stun -= 1
     else
-     worker.facedir=-1
-    end
+     worker.flying = true
+     if pla.x>worker.x then
+      worker.facedir=1
+     else
+      worker.facedir=-1
+     end
+     
+     worker.knivedelay -= 1
+     if worker.knivedelay==0 then
+      worker_throw_knives(worker)
+     end
 
-    if frame%35 == 0 then
-     objmoveto(worker,
-       pla.x + rnd(90)-45,
-       pla.y + rnd(40)-20,1)
+     if frame%35 == 0 then
+      objmoveto(worker,
+        pla.x + rnd(90)-45,
+        pla.y + rnd(40)-20,1)
+     end
+     worker.vy += 0.5*cos(frame*0.1)
     end
-    worker.vy += 0.5*cos(frame*0.1)
    end
   end
 
@@ -1139,8 +1159,7 @@ function workers_update()
   end
   objmove(worker)
 
-  if worker.animhit
-    and worker.animhit > 0 then
+  if worker.animhit > 0 then
    worker.animhit -= 1
   end
 
@@ -1155,6 +1174,13 @@ end
 
 function workers_draw()
  for worker in all(workers) do
+ 
+  if worker.animhit > 0 then
+   pal(8,7)
+   pal(9,7)
+   pal(10,7)
+  end
+ 
   if worker.type == "target" then
    if not worker.dead then
     spr(worker.sprite, worker.x, worker.y)
@@ -1164,10 +1190,7 @@ function workers_draw()
 
   if worker.type == "mech" then
 
-   if worker.animhit > 0 then
-    pal(9,7)
-    pal(10,7)
-   elseif worker.canmove then
+   if worker.canmove then
     pal(9,2)
     pal(10,8)
    end
@@ -1215,13 +1238,14 @@ function workers_draw()
 
   rectfill(worker.x+1, worker.y+3,
    worker.x+6, worker.y+5, 0)
-
+   
   if worker.dead then
    spr(worker.sprite+2, worker.x, worker.y, 1, 1)
    spr(worker.sprite+18, worker.x - 7, worker.y, 1, 1)
   else
-   spr(worker.sprite+tonum((
-     frame\4)%worker.blink==0),
+   blink = worker.stun > 0 or
+     (frame\4)%worker.blink==0
+   spr(worker.sprite+tonum(blink),
      worker.x, worker.y,
      1, 1,worker.facedir == 1)
    if worker.canmove then
@@ -1257,6 +1281,7 @@ function workers_draw()
 
   ::workers_draw_continue::
   -- reset palette
+  pal(8,8)
   pal(9,9)
   pal(10,10)
  end
@@ -1343,6 +1368,87 @@ function worker_shoot(worker)
   sfx(4)
  end
  add(railshots,railshot)
+end
+
+knive_delay = 30
+
+function knives_update()
+ for kni in all(knives) do
+  kni.t += 1
+  if kni.t < knive_delay then
+   if kni.owner.dead or
+     kni.owner.stun > 0 then
+    kni.disabled = true
+    kni.t = knive_delay
+   else
+    own = kni.owner
+    p = min(kni.t/20, 1)
+    kni.x = (1-p)*kni.x +
+      p*(own.x+3+10*kni.tx)
+    kni.y = (1-p)*kni.y +
+      p*(own.y+8+10*kni.ty)
+   end
+  else
+   if kni.t == knive_delay then
+    spd=5
+    px = pla.x+3+rnd(16)-8
+    py = pla.y+10+rnd(16)-8
+    objmoveto(kni,px,py,spd)
+    kni.tx = kni.vx/spd
+    kni.ty = kni.vy/spd
+   elseif kni.t > 150 then
+    del(knives, kni)
+   end
+   moving = abs(kni.vx) >= 1
+     or abs(kni.vy) >= 1
+   if moving
+     and objcol(pla,kni)
+     and not kni.disabled then
+    player_die()
+   end
+   if kni.disabled then
+    objapplygravity(kni)
+   end
+   objmovecheap(kni)
+  end
+ end
+end
+
+function knives_draw(front)
+ for kni in all(knives) do
+  if front == (kni.t > knive_delay)
+    then
+   line(kni.x-3*kni.tx+1,
+    kni.y-3*kni.ty+1,
+    kni.x+3*kni.tx+1,
+    kni.y+3*kni.ty+1, 7)
+   circfill(kni.x-kni.tx+1,
+     kni.y-kni.ty+1, 1, 6)
+  end
+ end
+end
+
+function worker_throw_knives(
+  worker)
+ worker.knivedelay=100-hard*40
+ nknives = 6
+ if (hard) nknives += 3
+ for i=1,nknives do
+  local kni = {
+   owner=worker,
+   x = worker.x+2,
+   y = worker.y+5,
+   vx = 0,
+   vy = 0,
+   w = 3,
+   h = 3,
+   tx = cos(i/nknives),
+   ty = sin(i/nknives),
+   t=i*2,
+   disabled = false,
+  }
+  add(knives, kni)
+ end
 end
 -->8
 -- particles
@@ -1791,14 +1897,14 @@ function menu_draw()
  print("∧", 22, 80+10*menu_option, 9)
 end
 __gfx__
-00000000166616668888888816661666550055001066106000000000000000001777177799009900008800880000000000000000d00000000000000044444000
-00000000555155518aaaaaa85aaaaaa1550055005051100100c0000000000000ddd1ddd199009900008800880000005a0000005add00000000000000ca66c000
-00700700661666168a5aa5a86a0aa0a600550055661660160ccdddd00000000077177717009900998800880000000d9000000d9a59d00000000000000cac0000
-00077000515551558a8aa8a85a8aa8a5005500555105515500c0000000000000d1ddd1dd009900998800880007777d9a07777d9009d777700000000000a00000
-00077000166616668aaaaaa81aaaaaa6550055000006166000000c000000000017771777990099000088008808667d9a08667d9009d76630000000000c6c0000
-007007005551555185a55a5850a00a0155005500500155500ddddcc000000000ddd1ddd1990099000088008800000d9000000d9a59d0000000000000c6aac000
-00000000661666168858858866066016005500556610061000000c00000000007717771700990099880088000000005a0000005a5d0000000000000044444000
-0000000051555155888888885155515500550055015100650000000000000000d1ddd1dd00990099880088000000000000000000dd0000000000000000000000
+00000000166616668888888816661666550055001066106000000000000000001777177799009900008800880000000000000000d00000000505501144444000
+00000000555155518aaaaaa85aaaaaa1550055005051100100c0000000000000ddd1ddd199009900008800880000005a0000005add00000001555505ca66c000
+00700700661666168a5aa5a86a0aa0a600550055661660160ccdddd00000000077177717009900998800880000000d9000000d9a59d00000555575510cac0000
+00077000515551558a8aa8a85a8aa8a5005500555105515500c0000000000000d1ddd1dd009900998800880007777d9a07777d9009d777705157875000a00000
+00077000166616668aaaaaa81aaaaaa6550055000006166000000c000000000017771777990099000088008808667d9a08667d9009d76630055787510c6c0000
+007007005551555185a55a5850a00a0155005500500155500ddddcc000000000ddd1ddd1990099000088008800000d9000000d9a59d0000005557550c6aac000
+00000000661666168858858866066016005500556610061000000c00000000007717771700990099880088000000005a0000005a5d0000000501555044444000
+0000000051555155888888885155515500550055015100650000000000000000d1ddd1dd00990099880088000000000000000000dd0000001501101100000000
 0555550005555500055555000555550005151100051511000515110002555550025555500255555008aa870008aa870008aa870006da660006da660006da6600
 0a5a55550a5a5555085855550a5a555505151111051511110515111102225555022255550222555508aa877708aa877708aa877706ad666606ad666606ad6666
 55555a5555555a555555585555555a55111111111111111111111111222222252222222522222225999999779999997799999977cccccc66cccccc66cccccc66
@@ -2050,7 +2156,7 @@ hddh55000dd00000hddhh0000dd00000hddhh0000dd0000515551555155515551555155515551555
 1hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh01hhh101hhh101hh0
 
 __gff__
-0001020104018080010404000000000104040404000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0001020104018080010404000000020104040404000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 0001010101010101010101010101000000000000000000000000000000000000000000000000000000000000000808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080801010101080808080808080808080808

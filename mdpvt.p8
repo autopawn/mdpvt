@@ -647,9 +647,9 @@ function player_update()
        rnd({30,35,40,45}))
      camera_thug_shake(2,4)
      local slamkillzone={
-      x=pla.x-16,
+      x=pla.x-8,
       y=pla.y,
-      w=32,
+      w=24,
       h=16
      }
      for worker in all(workers) do

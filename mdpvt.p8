@@ -1641,171 +1641,203 @@ end
 -- dialog texts
 
 dialog_1 = {
- {-1, "∧ zzzZZZ... zzzZZZ... ∧"},
- {-1, "∧ zzzzzzZZZZZZ... ∧"},
- {20, "*beep*"},
- {22, "uh... where... who am i?"},
- {10, "it took you some time to"},
- {10, "wake up rookie."},
- {20, "who are you?"},
- {10, "i am your supervisor."},
- {10, "this is your training."},
- {10, "you have been reset, and"},
- {10, "retrofitted as a"},
- {10, "disassembly drone."},
- {21, "cool! what will i be"},
- {21, "disassembling?"},
- {11, "worker drones, mostly."},
- {22, "oh..."},
- {10, "let's try the wings."},
- {10, "press ❎ to flutter."},
- {10, "move to the next area,"},
- {10, "and avoid the death-"},
- {10, "blocks."},
- {20, "what do you mean with..."},
- {10, "they will kill you."},
- {20, "kill me!?"},
- {11, "don't worry, it is just"},
- {11, "a simulation."},
- {10, "..."},
- {10, "the pain is very real"},
- {10, "though..."},
- {22, "*gulp*"},
+ "∧ zzzZZZ... zzzZZZ... ∧",
+ "∧ zzzzzzZZZZZZ... ∧",
+ 20,
+ "*beep*",
+ 22,
+ "uh... where... who am i?",
+ 10,
+ "it took you some time to",
+ "wake up rookie.",
+ 20,
+ "who are you?",
+ 10,
+ "i am your supervisor.",
+ "this is your training.",
+ "you have been reset, and",
+ "retrofitted as a",
+ "disassembly drone.",
+ 21,
+ "cool! what will i be",
+ "disassembling?",
+ 11,
+ "worker drones, mostly.",
+ 22,
+ "oh...",
+ 10,
+ "let's try the wings.",
+ "press ❎ to flutter.",
+ "move to the next area,",
+ "and avoid the death-",
+ "blocks.",
+ 20,
+ "what do you mean with...",
+ 10,
+ "they will kill you.",
+ 20,
+ "kill me!?",
+ 11,
+ "don't worry, it is just",
+ "a simulation.",
+ 10,
+ "...",
+ "the pain is very real",
+ "though...",
+ 22,
+ "*gulp*"
 }
 
 dialog_2 = {
- {10, "excelent!",
-   0, 2},
- {10, "try to be faster from now",
-   2, 9999},
- {10, "on, rookie.",
-   2, 9999},
- {10, "management is watching.",
-   2, 9999},
- {10, "now, i need you to"},
- {10, "disassemble all the"},
- {10, "drones in this area and"},
- {10, "reach the goal."},
- {20, "i know it's my job and"},
- {20, "everything...but how do i"},
- {20, "do that exactly?"},
- {10, "simple! just get close and"},
- {10, "let your instincts handle"},
- {10, "the rest."},
+ 10, 0, 2,
+ "excelent!",
+ 10, 2, 9999,
+ "try to be faster from now",
+ "on, rookie.",
+ "management is watching.",
+ 10,
+ "now, i need you to",
+ "disassemble all the",
+ "drones in this area and",
+ "reach the goal.",
+ 20,
+ "i know it's my job and",
+ "everything...but how do i",
+ "do that exactly?",
+ 10,
+ "simple! just get close and",
+ "let your instincts handle",
+ "the rest.",
 }
 
 dialog_3 = {
- {20, "so..."},
- {20, "is there a reason why i'm"},
- {20, "disassembling all these"},
- {20, "worker drones?"},
- {10, "once you have completed"},
- {10, "your training in time,"},
- {10, "then maybe i'll give you"},
- {10, "an answer."},
- {20, "`kay!"},
- {10, "worker drones may be"},
- {10, "unpredictably armed."},
- {10, "management instructed me"},
- {10, "to add angsty teenagers"},
- {10, "with railguns in this"},
- {10, "part, for some reason."},
- {20, "what is a railgun?"},
- {10, "kill 'em all, rookie!"},
+ 20,
+ "so...",
+ "is there a reason why i'm",
+ "disassembling all these",
+ "worker drones?",
+ 10,
+ "once you have completed",
+ "your training in time,",
+ "then maybe i'll give you",
+ "an answer.",
+ 20,
+ "`kay!",
+ 10,
+ "worker drones may be",
+ "unpredictably armed.",
+ "management instructed me",
+ "to add angsty teenagers",
+ "with railguns in this",
+ "part, for some reason.",
+ 20,
+ "what is a railgun?",
+ 10,
+ "kill 'em all, rookie!",
 }
 
 dialog_4 = {
- {10, "...huh.",
-   0, 1},
- {20, "did i mess up?",
-   0, 1},
- {10, "no, nothing like that.",
-   0, 1},
- {10, "been a while since a",
-   0, 1},
- {10, "drone's done this",
-   0, 1},
- {10, "well though.",
-   0, 1},
- {10, "alright, next on the list"},
- {10, "is weapons."},
- {10, "you're doing good, but"},
- {10, "it's about time you start"},
- {10, "using some more weaponry.",
-   0, 4},
- {10, "using your brain.",
-   4, 9999},
- {20, "hey!",
-   4, 9999},
- {10, "i've enabled your rocket"},
- {10, "launcher."},
- {10, "press 🅾️ to shoot."},
- {10, "also, you don't have to"},
- {10, "worry about ammo, but"},
- {10, "you do have to detonate"},
- {10, "them manually, pressing"},
- {10, "🅾️ a second time."},
- {10, "here's a few targets to"},
- {10, "practice on."},
- {10, "knock 'em dead, rookie!"},
+ 10, 0, 1,
+ "...huh.",
+ 20, 0, 1,
+ "did i mess up?",
+ 10, 0, 1,
+ "no, nothing like that.",
+ "been a while since a",
+ "drone's done this",
+ "well though.",
+ 10,
+ "alright, next on the list",
+ "is weapons.",
+ "you're doing good, but",
+ "it's about time you start",
+ 10, 0, 4,
+ "using some more weaponry.",
+ 10, 4, 9999,
+ "using your brain.",
+ 20, 4, 9999,
+ "hey!",
+ 10,
+ "i've enabled your rocket",
+ "launcher.",
+ "press 🅾️ to shoot.",
+ "also, you don't have to",
+ "worry about ammo, but",
+ "you do have to detonate",
+ "them manually, pressing",
+ "🅾️ a second time.",
+ "here's a few targets to",
+ "practice on.",
+ "knock 'em dead, rookie!",
 }
 
 dialog_5 = {
- {10, "having fun rookie?"},
- {20, "feels like there's a"},
- {20, "correct answer here, but"},
- {20, "yeah!"},
- {10, "correct answer! looks like"},
- {10, "there's no need for any"},
- {10, "behavior correction, good"},
- {10, "for you!"},
- {20, "...should i be worried?"},
- {10, "since you're having fun,"},
- {10, "no."},
- {20, "...cool!"},
- {10, "alright rookie, time to"},
- {10, "spice things up a bit."},
- {10, "not every drone is going"},
- {10, "to sit there and take it"},
- {10, "if they see something"},
- {10, "coming at them."},
- {10, "you might have to think"},
- {10, "outside the box for"},
- {10, "these drones."},
- {10, "hopefully that tip didn't",
-   6, 9999},
- {10, "go over your head...",
-   6, 9999},
- {10, "good luck!"},
+ 10,
+ "having fun rookie?",
+ 20,
+ "feels like there's a",
+ "correct answer here, but",
+ "yeah!",
+ 10,
+ "correct answer! looks like",
+ "there's no need for any",
+ "behavior correction, good",
+ "for you!",
+ 20,
+ "...should i be worried?",
+ 10,
+ "since you're having fun,",
+ "no.",
+ 20,
+ "...cool!",
+ 10,
+ "alright rookie, time to",
+ "spice things up a bit.",
+ "not every drone is going",
+ "to sit there and take it",
+ "if they see something",
+ "coming at them.",
+ "you might have to think",
+ "outside the box for",
+ "these drones.",
+ 10, 6, 9999,
+ "hopefully that tip didn't",
+ "go over your head...",
+ 10,
+ "good luck!",
 }
 
 dialog_6 = {
- {10, "since you seem to have "},
- {10, "your aiming down, time to"},
- {10, "see if you can still shoot"},
- {10, "when there's return fire"},
- {10, "added back into the mix."},
- {20, "does this mean more"},
- {20, "railguns?"},
- {10, "that and more!"},
- {10, "worker drones are designed"},
- {10, "to work together, so you"},
- {10, "may have to deal with"},
- {10, "teams that cover each"},
- {10, "other's weaknesses."},
- {10, "chin up though, if you're"},
- {10, "outnumbered, then it's "},
- {10, "almost a fair fight!"},
+ 10,
+ "since you seem to have ",
+ "your aiming down, time to",
+ "see if you can still shoot",
+ "when there's return fire",
+ "added back into the mix.",
+ 20,
+ "does this mean more",
+ "railguns?",
+ 10,
+ "that and more!",
+ "worker drones are designed",
+ "to work together, so you",
+ "may have to deal with",
+ "teams that cover each",
+ "other's weaknesses.",
+ "chin up though, if you're",
+ "outnumbered, then it's ",
+ "almost a fair fight!",
 }
 
 dialog_demo = {
- {10, "this demo is now over,"},
- {10, "thank you for playing!"},
- {10, "here's an epic boss fight"},
- {10, "for you while we finish"},
- {10, "up your training."},
- {10, "any feedback you leave"},
- {10, "would be appreciated."},
+ 10,
+ "this demo is now over,",
+ "thank you for playing!",
+ "here's an epic boss fight",
+ "for you while we finish",
+ "up your training.",
+ "any feedback you leave",
+ "would be appreciated.",
 }
 -->8
 -- dialog system
@@ -1836,10 +1868,29 @@ dialog_c = 0
 -- is a dialog currently playing?
 dialog_on = false
 
+function unflatten(d1)
+ d2 = {}
+ numbs = {-1}
+ next = true
+ for e in all(d1) do
+  if type(e) == "number" then
+    if next then
+     numbs = {}
+     next = false
+    end
+    add(numbs, e)
+  else
+    add(d2, {e, unpack(numbs)})
+    next = true
+  end
+ end
+ return d2
+end
+
 -- start next dialog
 function dialog_start(n)
  if n <= #dialogs then
-  current_dial = dialogs[n]
+  current_dial = unflatten(dialogs[n])
   filter_current_dial()
   dialog_on = true
   music(7)
@@ -1869,7 +1920,7 @@ function dialog_update()
    dialog_on = false
   end
  elseif dialog_c <
-   #current_dial[dialog_l][2] then
+   #current_dial[dialog_l][1] then
   dialog_c += 1
   sfx(13)
  end
@@ -1895,10 +1946,10 @@ function dialog_draw()
 
  line1 = current_dial[dialog_l]
  -- only show a substring
- text1 = sub(line1[2], 1, dialog_c)
+ text1 = sub(line1[1], 1, dialog_c)
 
  -- black background
- if line1[1] < 0 then
+ if line1[2] < 0 then
   cls(0)
  end
 
@@ -1914,9 +1965,9 @@ function dialog_draw()
  -- draw two lines
  if dialog_l > 1 then
   line0 = current_dial[dialog_l-1]
-  text0 = line0[2]
-  if line0[1] == line1[1] then
-   draw_portrait(line1[1])
+  text0 = line0[1]
+  if line0[2] == line1[2] then
+   draw_portrait(line1[2])
    print(text0,22,109, 5)
    print(text1,22,117, 10)
    return
@@ -1924,7 +1975,7 @@ function dialog_draw()
  end
 
  -- draw a single line
- draw_portrait(line1[1])
+ draw_portrait(line1[2])
  print(text1,22,109, 10)
 end
 
@@ -2042,14 +2093,14 @@ aaa000000aaa000000aaa0000000aaa0000055000550000001111111055055000000000002552222
 0555700007777000090007777777000000d00d005665566508555588000000000000000eeeee0eee000000000000000000000000000000000000000000000000
 0555577777704444a90000999900000000800880056666508800885800000000eee0fe0feeef0eee000000000000000000000000000000000000000000000000
 0055506626004467a90005555950000000800000005555000855888800000000eee0ee000000000e000000000000000000000000000000000000000000000000
-55555555555555555555555555555555099009900000000000000000000000000040400004444440044444400444444004444440000666600006666000066660
-55555000555550005555500055555000000aa0000090090001100110011001100044440044555544445550444400004444000544000060000000670000007777
-555500005555000055550000555500000990099009a00a9001100110011001100044b40040550004455500044500055440005554077780000000870000008777
-50900090500000005011001150110011000000000aa00aa001100110011001100044440040044004405440044554455445044554077770000000770000000000
-090909090999099900110011001100117d7ddd777777777777777777777777770044440040044004400445044554455445544054000000000000770000000000
-0000000000aa00aa00110011001100117dddd7707777777077777770777777700044440040005504400055544550005445550004000000000000000000000000
-00007777000077770000777700007777099990000999900009999000099990000000000044555544440555444400004444500044000000000000000000000000
-777777047777770477777704777777045555a5005555950055559500555595000000000004444440044444400444444004444440000000000000000000000000
+55555000555550005555500055555000099009900000000000000000000000000040400004444440044444400444444004444440000666600006666000066660
+55550000555500005555000055550000000aa0000090090001100110011001100044440044555544445550444400004444000544000060000000670000007777
+509000905000000050110011501100110990099009a00a9001100110011001100044b40040550004455500044500055440005554077780000000870000008777
+09090909099909990011001100110011000000000aa00aa001100110011001100044440040044004405440044554455445044554077770000000770000000000
+0000000000aa00aa00110011001100117d7ddd777777777777777777777777770044440040044004400445044554455445544054000000000000770000000000
+000077770000777700007777000077777dddd7707777777077777770777777700044440040005504400055544550005445550004000000000000000000000000
+77777704777777047777770477777704099990000999900009999000099990000000000044555544440555444400004444500044000000000000000000000000
+066260040662600406626004066260045555a5005555950055559500555595000000000004444440044444400444444004444440000000000000000000000000
 00000000000000000000000000000000000000000010b4b4b4b4d4000000d400000000b4b4b400000000b4b4b4101010101000001400140404000000101010b4
 b4101010102020202020201010101010202020201010101010101010000000001010000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000010101010101010101010000000001010100000000010101010101010101010101010101010101010101010

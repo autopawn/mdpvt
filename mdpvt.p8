@@ -36,19 +36,26 @@ level_has_player = false
 -- gets the rockets
 first_rocket_level = 4
 
+-- Level on wich the player
+-- gains the ability to break
+-- cracked bricks
+break_bricks_level = 4
+
 -- music track currently playing
 music_playing = -1
 
 -- frames of input transition.
 black = 9
 
--- camera shake
+-- camera does the thug shaker
 camera_shake_x=0
 camera_shake_y=0
 camera_shake_time=0
 
 -- stars for the background
 stars = {}
+
+cracked_bricks={}
 
 function _init()
  -- set the cart data.
@@ -77,7 +84,7 @@ function _init()
  -- enable objects of the
  -- current level
  for x = 0,127 do
-  for y=0,63 do
+  for y = 0,63 do
 
    -- ambibalent death-blocks
    if mget(x,y)==3 then
@@ -130,6 +137,10 @@ function _init()
     end
    end
 
+   if t == 5 then
+    local brick = {x=x*8,y=y*8,w=8,h=8}
+    add(cracked_bricks, brick)
+   end
    -- turn direction switchers
    -- into their invisible
    -- variant
@@ -154,6 +165,8 @@ function _init()
  end
 
  ::init_end::
+ for brick in all(cracked_bricks) do
+ end
 end
 
 function reset_level()
@@ -683,12 +696,18 @@ function player_update()
       x=pla.x-8,
       y=pla.y,
       w=24,
-      h=16
+      h=22
      }
      for worker in all(workers) do
       if objcol(worker,slamkillzone) and not worker.dead then
        worker_hit(worker)
       end
+     end 
+     for brick in all(cracked_bricks) do
+       slamkillzone.y=pla.y+8
+       if objcol(brick, slamkillzone) then
+        brick_break(brick)
+       end  
      end
     end
    end
@@ -851,9 +870,21 @@ function rockets_update()
       end
      end
     end
+    for brick in all(cracked_bricks) do
+     if objinside(brick, r.x+3,
+       r.y+1, rocket_xrad) then
+      brick_break(brick)
+     end
+    end
    end
   end
  end
+end
+
+function brick_break(brick)
+ add_blood(brick.x+4,brick.y+4,{1,5,6}, rnd(6)+4, rnd({30,35,40,45}))
+ mset(brick.x/8,brick.y/8,0)
+ del(brick)
 end
 
 -- deflect_rocket function: Changes the direction of the rocket

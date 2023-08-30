@@ -40,21 +40,16 @@ end
 
 function _update()
  -- update camera
- cama += 0.015
+ cama += 0.01
  cosa = cos(cama)
  sina = sin(cama)
 end
 
-function draw_arm(s)
- if cosa < 0 then
-  oval3d(s*17,24,0,4,4,4,7)
- end
+function draw_arm(s, front)
  oval3d(s*6,20,0,4,3,4,6)
  oval3d(s*11,21,0,4,3,4,6)
  oval3d(s*14,22,0,4,3,4,6)
- if cosa >= 0 then
-  oval3d(s*17,24,0,4,4,4,7)
- end
+ oval3d(s*17,24,0,4,4,4,7)
 end
 
 function draw_leg(s)
@@ -71,12 +66,6 @@ function draw_leg(s)
  cili3d(s*6,54.5,3,4,0.4,8,9)
 end
 
-function draw_zipper()
- oval3d(0,21,3,2,3,1,9)
- cili3d(0,23,4,2,3,1,9)
- cili3d(0,23,4,0.5,2,1,6)
-end
-
 function draw_led(phi,y)
  px = cos(phi)*9
  pz = sin(phi)*9
@@ -86,44 +75,48 @@ function draw_led(phi,y)
  end
 end
 
+function draw_flask()
+ cili3d(0,23,-17,2,4,2,5)
+ cili3d(0,23,-17,2,3,2,10)
+end
+
 function draw_tail()
  if cosa<0 then
-  cili3d(0,23,-17,2,4,2,5)
-  cili3d(0,23,-17,2,3,2,10)
+  draw_flask()
  end
- p1x,p1y = viewpos(0,30,-5)
- p2x,p2y = viewpos(0,35,-9)
- p3x,p3y = viewpos(0,35,-15)
- p4x,p4y = viewpos(0,30,-19)
- p5x,p5y = viewpos(0,16,-19)
- line(p1x,p1y,p2x,p2y,13)
- line(p2x,p2y,p3x,p3y,13)
- line(p3x,p3y,p4x,p4y,13)
- line(p4x,p4y,p5x,p5y,13)
+ p = {
+   30,-5,
+   35,-9,
+   35,-15,
+   30,-19,
+   16,-19}
+ for i=1,7,2 do
+  x1,y1 = viewpos(0,p[i],p[i+1])
+  x2,y2 = viewpos(0,p[i+2],p[i+3])
+  line(x1, y1, x2, y2, 13)
+ end
  if cosa>=0 then
-  cili3d(0,23,-17,2,4,2,5)
-  cili3d(0,23,-17,2,3,2,10)
+  draw_flask()
  end
+end
+
+function draw_eye(x)
+ oval3d(x,10,7,1,2,1,9)
+ oval3d(x,11,7,1,1,1,10)
 end
 
 function _draw()
  cls()
  camera(0,-10)
-
- if sina >= 0 then
-  side = 1
- else
-  side = -1
- end
-
+ 
+ side = sgn(sina)
+ front = cosa>=0
+ 
  -- back arm
  draw_arm(-side)
  draw_leg(-side)
  
- if cosa<0 then
-  -- back zipper
-  draw_zipper()
- else
+ if front then
   -- back tail
   draw_tail()
  end
@@ -138,15 +131,13 @@ function _draw()
  -- head
  oval3d(0,10,0,9,6,9,7)
  cili3d(0,9,0,9,3,9,6)
- if cosa > 0 then
+ if front then
   oval3d(0,10,18,9,4,9,0)
  end
- if cosa > 0.78 then
+ if cosa > 0.75 then
   oval3d(0,14,8,3,1,1,7)
-  oval3d(3,10,7,1,2,1,9)
-  oval3d(-3,10,7,1,2,1,9)
-  oval3d(3,11,7,1,1,1,10)
-  oval3d(-3,11,7,1,1,1,10)
+  draw_eye(-3)
+  draw_eye(3)
  end
  
  -- cap
@@ -160,9 +151,11 @@ function _draw()
     4-min(i%4,1))
  end
  
- if cosa>=0 then
-  -- front zipper
-  draw_zipper()
+ if front then
+  -- draw zipper
+  oval3d(0,21,3,2,3,1,9)
+  cili3d(0,23,4,2,3,1,9)
+  cili3d(0,23,4,0.5,2,1,6)
  else
   -- front tail
   draw_tail()

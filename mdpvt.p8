@@ -708,9 +708,9 @@ function player_update()
      camera_thug_shake(2,4)
      local slamkillzone={
       x=pla.x-8,
-      y=pla.y,
+      y=pla.y+8,
       w=24,
-      h=22
+      h=14
      }
      for worker in all(workers) do
       if objcol(worker,slamkillzone) and not worker.dead then

@@ -872,8 +872,11 @@ function rockets_update()
      player_die()
     end
     for w in all(workers) do
-     local front = ((r.x+3 < w.x+4)
-       == (w.facedir == -1))
+     if w.facedir == -1 then
+      front = r.x+2 < w.x 
+     else
+      front = w.x+6 < r.x
+     end
      if not w.dead and
        objinside(w, r.x+3,
          r.y+1, rocket_xrad) then
@@ -881,7 +884,10 @@ function rockets_update()
        w.stun = 90
        w.animhit = 6
        w.vx = 0
-      elseif not (w.type=="thad" and front) then
+      elseif w.type=="thad"
+        and front then
+       w.pipeanim = 12
+      else
        worker_hit(w)
       end
      end

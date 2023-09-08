@@ -179,6 +179,7 @@ function _init()
 
  ::init_end::
  for brick in all(cracked_bricks) do
+  printh("brick")
  end
 end
 
@@ -909,6 +910,7 @@ function brick_break(brick)
   mset(brick.x/8,brick.y/8,0)
   del(brick)
  end
+ del(cracked_bricks,brick)
 end
 
 -- deflect_rocket function: Changes the direction of the rocket

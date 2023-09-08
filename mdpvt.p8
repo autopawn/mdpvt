@@ -908,9 +908,8 @@ function brick_break(brick)
  if level >= break_bricks_level then
   add_blood(brick.x+4,brick.y+4,{1,5,6}, rnd(6)+4, rnd({30,35,40,45}))
   mset(brick.x/8,brick.y/8,0)
-  del(brick)
+  del(cracked_bricks,brick)
  end
- del(cracked_bricks,brick)
 end
 
 -- deflect_rocket function: Changes the direction of the rocket

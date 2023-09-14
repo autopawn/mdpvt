@@ -2126,11 +2126,22 @@ end
 -- selected option
 menu_option = 0
 
+-- number particles
+numparts = {}
+
 function menu_init()
  -- level saved in the cart
  menu_saved_level = dget(1)
  -- difficulty saved in the cart
  menu_saved_hard = dget(6)
+ -- initialize number particles
+ for i=0,9 do
+  for sx in all({1, 104}) do
+   np = {sx + i\2*4, rnd(128),
+     1+rnd(2)}
+   add(numparts, np)
+  end
+ end
 end
 
 -- camera angle in radians
@@ -2289,11 +2300,23 @@ function draw_rookie()
  draw_leg(side)
 end
 
+function update_numparts()
+ for np in all(numparts) do
+  np[2] -= np[3]
+  if np[2] < -8 then
+   np[2] = 128
+   np[3] = 1 + rnd(2)
+  end
+ end
+end
+
 function menu_update()
  -- update camera
  cama = 0.82 - frame*0.01
  cosa = cos(cama)
  sina = sin(cama)
+ 
+ update_numparts()
 
  if frame < 79 then
   if btnp(❎) then
@@ -2347,10 +2370,19 @@ function menu_draw()
  camera(0,min(-20,frame-100))
  draw_rookie()
  camera()
+ 
+ for part in all(numparts) do
+  col = 5
+  if (frame > 80) col = 8
+  txt = sub(tostr(100+rnd(100)),
+    2, 3)
+  print(txt, part[1],
+    part[2], col)
+ end
 
  t1 = sub("VIRTUAL TRAINING",
    1, frame\5)
- printx(t1, 32, 8, 10)
+ printx(t1, 32, 10, 10)
 
  if frame < 80 then
   if frame % 5 == 0 then
@@ -2360,7 +2392,7 @@ function menu_draw()
   cls(7)
   sfx(9)
  else
-  printx("mdp", 58, 1, 9)
+  print("murder drones", 38, 2, 9)
   if menu_saved_level == 0 then
    print("continue",38,84,5)
   elseif menu_saved_hard == 1 then
@@ -2372,12 +2404,11 @@ function menu_draw()
   print("new game (hard)",38,104,7)
   printx("∧", 28, 84+10*menu_option, 9)
  
-  line(0, 119, 128, 119, 5)
-  line(0, 126, 128, 126, 5)
+  rectfill(-1, 118, 128, 125, 0)
+  rect(-1, 118, 128, 125, 5)
+  print("FANGAME BY AUTOPAWN, MISZUK & CRJONCH. MUSIC BY REMIMIXER. SPECIAL THANKS TO THE MDP DISCORD SERVER!",
+   128-(frame-80)%528, 119, 5)
  end
- 
- print("PROGRAMMED BY AUTOPAWN & MISZUK. MUSIC BY REMIMIXER. LEVELS BY CRJONCH.",
-   228-frame%520, 120, 5)
 end
 -->8
 -- void blocks

@@ -1916,42 +1916,40 @@ dialog_6 = {
 dialog_7 = {
  10,
  "okay rookie, now you will",
- "have to face",
- "a real threat.",
- 20,
- "like what?",
- 10,
+ "have to face a real",
+ "threat.",
  "at the end of this",
- "testroom there are drones",
- "that have telekinetic",
+ "testroom there is a drone",
+ "that has telekinetic",
  "powers and can also fly.",
  22,
- "wait, isn't that",
- "a little overpowered",
- "for a worker drone?",
- "such thing doesn't",
+ "wait, isn't that a little",
+ "overpowered for a worker",
+ "drone?",
+ "such a thing doesn't",
  "really exist, right?",
- 13,
+ 14,
  "...",
  "rookie, listen carefully,",
  "because i am only going",
- "to say this once:",
+ "to say this once.",
+ 13,
  "you may live long enough",
  "to see man-made horrors",
  "beyond your comprehension.",
  10,
  "you better be prepared.",
- 23,
+ 24,
  "...",
  "hold on a moment!",
- 10,
- "did i terrify you?",
- 23,
- "yes... but no...?",
+ 12,
+ "what? did i scare you?",
+ 24,
+ "yes... i mean no.",
  22,
  "i just don't see the",
  "way out of this tunnel.",
- 10,
+ 11,
  "oh yeah! almost forgot to",
  "mention that your rockets",
  "and stomp maneuver gained",
@@ -1972,9 +1970,8 @@ dialog_7 = {
  "also you need that to",
  "disassemble these beasts.",
  "conventional explosives",
- "aren't enough for",
- "this kind.",
-
+ "aren't enough for this",
+ "kind.",
 }
 
 dialog_bonus_2 = {
@@ -2084,15 +2081,21 @@ end
 
 -- update the current dialog
 function dialog_update()
+ incomplete = dialog_c <
+   #current_dial[dialog_l][1]
  if btnp(❎) or btn(🅾️) then
-  dialog_l += 1
-  dialog_c = 0
-  if dialog_l > #current_dial then
-   dialog_l = 1
-   dialog_on = false
+  if incomplete then
+    dialog_c = 100
+  else
+    dialog_l += 1
+    dialog_c = 0
+    if dialog_l > #current_dial then
+     dialog_l = 1
+     dialog_on = false
+    end
   end
- elseif dialog_c <
-   #current_dial[dialog_l][1] then
+  sfx(13)
+ elseif incomplete then
   dialog_c += 1
   sfx(13)
  end
@@ -2100,12 +2103,12 @@ end
 
 function draw_portrait(s)
  if s>9 then
-  char = s/10-1
-  expr = s%10-1
-  spr(80+2*char,2,108,2,2)
-  if expr >= 0 then
+  chara = s\10 - 1
+  expre = s%10 - 1
+  spr(80+2*chara,2,108,2,2)
+  if expre >= 0 then
    rectfill(7,116,14,123,0)
-   spr(112+4*char+expr,7,116)
+   spr(112+4*chara+expre,7,116)
   end
  end
 end
@@ -2534,7 +2537,7 @@ aaa000000aaa000000aaa0000000aaa00000550005500000011111110550550000000000d2552222
 0000000000aa00aa00110011099909997d7ddd77777777777d7777777dddd77700ffff00f44ff44ff44ff54ff55ff55ff55ff45f000000000000770000000000
 000077770000777700007777000077777dddd7707777777077ddd7707dddd77000ffff00f444554ff444555ff554445ff555444f000000000000000000000000
 777777047777770477777704777777040999900009999000099966000999900000000000ff5555ffff4555ffff4444ffff5444ff000000000000000000000000
-066260040662600406626004066260045555a500555595005556770055559500000000000ffffff00ffffff00ffffff00ffffff0000000000000000000000000
+066260040662600406626004066260045555a500555595005556776055559500000000000ffffff00ffffff00ffffff00ffffff0000000000000000000000000
 10000000000000000000000000000000000000000010b4b4b4b4d4000000d400000000b4b4b400000000b4b4b4101010101000001400140404000000101010b4
 b4101010102020202020201010101010202020201010101010101010000000001010000000000000000000000000000000000000000000000000000000000000
 10000000000000000000000000000000000000000010101010101010101010000000001010100000000010101010101010101010101010101010101010101010

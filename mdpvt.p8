@@ -123,7 +123,7 @@ function _init()
    elseif t==20 or t==23 or
      t==24 or t==25 or t==26 or
      t==29 or t==30 or t==43 or
-     t==84 or t==85 then
+     t==84 or t==85 or t==86 then
     if levelmark == level then
      w = create_worker(
        x*8,y*8,t)
@@ -981,7 +981,7 @@ railshots={}
 knives={}
 spawn_points={}
 
-function create_worker(x1, y1, type)
+function create_worker(x1, y1, id)
  worker = {
   x = x1,
   vx = 0,
@@ -1003,19 +1003,20 @@ function create_worker(x1, y1, type)
   lives = 1,
   startx = x1,
   starty = y1,
+  id = id,
  }
- if type==23 or type == 24 or type == 25 then
+ if id==23 or id==24 or id==25 then
   worker.type = "uzi"
   worker.railgundelay = 0
   worker.sprite = 23
-  if type==24 then
+  if id==24 then
    worker.canflip = false
    worker.facedir = -1
-  elseif type==25 then
+  elseif id==25 then
    worker.canflip = false
    worker.facedir = 1
   end
- elseif type == 26 then
+ elseif id==26 then
   worker.type = "thad"
   worker.canflip = true
   worker.touchdeath = false
@@ -1023,7 +1024,7 @@ function create_worker(x1, y1, type)
   worker.pipeanim = 0
   worker.blood = {8,5,6}
   worker.facedir = 1
- elseif type == 84 or type == 85 then
+ elseif id==84 or id==85 or id==86 then
   worker.type = "hunter"
   worker.touchdeath = false
   worker.sprite = 84
@@ -1032,8 +1033,8 @@ function create_worker(x1, y1, type)
   worker.flying = true
   worker.knivedelay = 50+5*#workers
   worker.lives = 3 + hard
-  worker.canfollow = type == 84
- elseif type == 29 or type == 30 then
+  worker.canfollow = id==84
+ elseif id==29 or id==30 then
   worker.type = "mech"
   worker.h = 24
   worker.canmove = type==30
@@ -1048,11 +1049,11 @@ function create_worker(x1, y1, type)
    {x=x1+9, y=y1+9, w=6, h=6,
     vx=0, vy=0}
   }
-  if type==30 then
+  if id==30 then
    worker.hp=6+4*hard
    add(worker.blood, 8)
   end
- elseif type == 43 then
+ elseif id==43 then
   worker.type = "target"
   worker.h = 8
   worker.canflip = false
@@ -1117,7 +1118,10 @@ function worker_die(worker)
    sy = spawn[2]
   end
   sfx(60)
-  worker2 = create_worker(sx,sy,worker.sprite)
+  id2 = worker.id
+  -- hunter 85 creates hunter 84
+  if (worker.id == 85) id2 = 84
+  worker2 = create_worker(sx,sy,id2)
   worker2.lives = worker.lives-1
   add_hole(sx+4, sy+4)
  end
@@ -2597,7 +2601,7 @@ b4b4b4b4101030303010101010101010101010101010101010101010101010501010000000000000
 10000000000000000000000000840000100000000084000000000000001000000000000000101000000000100000000000000080800000000000800000001010
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
 10004500560010101010101000000000000000000000000010000000001000000000000000100000000000000000000000000080800000000000000000001010
-00000000000000000000000000000000000000000010000000000000000100000000000000550000000000000000000000000000000000001000000000001010
+00000000000000000000000000000000000000000010000000000000000100000000000000450000000000000000000000000000000000001000000000001010
 10008400840000000000000000000000000000000000001000000000101000000000001010100000001000000000000000000000000000000000000000000010
 0000000000000000000000000000000000000000001000000000000000a400000000000000a40000000000000000000000000000000000001000000000001090
 90000000000000000000000000000000000000000000000000000000100000000000001090900000001000000000000000000000000000000000000000000010

@@ -1200,7 +1200,6 @@ function workers_update()
      worker.knivedelay -= 1
      if worker.knivedelay==0 then
       worker_throw_knives(worker)
-      sfx(3)
      end
 
      if frame%35 == 0 then
@@ -1533,10 +1532,14 @@ function knives_update()
    end
    moving = abs(kni.vx) >= 1
      or abs(kni.vy) >= 1
-   if moving
-     and objcol(pla,kni)
-     and not kni.disabled then
-    player_die()
+   if moving then
+     if objcol(pla,kni) and
+       not kni.disabled then
+      player_die()
+     end
+   elseif not kni.stopped then
+    sfx(3)
+    kni.stopped = true
    end
    if kni.disabled then
     objapplygravity(kni)
@@ -1578,6 +1581,7 @@ function worker_throw_knives(
    ty = sin(i/nknives),
    t=i*2,
    disabled = false,
+   stopped = false,
   }
   add(knives, kni)
  end

@@ -1572,7 +1572,7 @@ end
 
 function worker_throw_knives(
   worker)
- worker.knivedelay=85-hard*30
+ worker.knivedelay=85-hard*20
  nknives = 6
  if (hard==1) nknives += 2
  for i=1,nknives do

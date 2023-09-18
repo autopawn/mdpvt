@@ -1034,7 +1034,7 @@ function create_worker(x1, y1, id)
  elseif id==29 or id==30 then
   worker.type = "mech"
   worker.h = 24
-  worker.canmove = type==30
+  worker.canmove = id==30
   worker.touchdeath = false
   worker.sprite = 29
   worker.blood = {5,6,9,10,13}
@@ -1088,7 +1088,7 @@ function worker_die(worker)
  worker.vx = 0
  worker.h -= 8
  worker.flying = false
- if not worker.type == "mech" then
+ if worker.type != "mech" then
   add_blood(
     worker.x+3, worker.y+9,
     worker.blood)
@@ -1544,9 +1544,6 @@ function knives_update()
        not kni.disabled then
       player_die()
      end
-   elseif not kni.stopped then
-    sfx(3)
-    kni.stopped = true
    end
    if kni.disabled then
     objapplygravity(kni)
@@ -1588,10 +1585,10 @@ function worker_throw_knives(
    ty = sin(i/nknives),
    t=i*2,
    disabled = false,
-   stopped = false,
   }
   add(knives, kni)
  end
+ sfx(3)
 end
 -->8
 -- particles
@@ -2470,8 +2467,11 @@ function void_blocks_update()
  for p in all(void_blocks) do
   x,y = unpack(p)
   in_cam = inside_camera(8*x,8*y)
-  if frame%(12-3*hard)==0 or
-    not in_cam then
+  repl_frame = frame%(12-3*hard)==0
+  if repl_frame then
+    sfx(60)
+  end
+  if repl_frame or not in_cam then
    del(void_blocks, p)
    for sx=x-1,x+1 do
     for sy=y-1,y+1 do

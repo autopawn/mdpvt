@@ -915,7 +915,7 @@ end
 function rockets_draw()
  for r in all(rockets) do
   if r.explosiont > 0 then
-   add_explosion(r.x,r.y)
+   add_explosion(r.x,r.y, 1)
   else
    if r.deflected then
     pal(8,9)
@@ -1609,8 +1609,8 @@ function add_blood(x,y,colors,amountt,life)
   end
  end
 
-function add_explosion(x, y)
- for i = 1, 1 do
+function add_explosion(x, y, amount)
+ for i = 1, amount do
   add(particles,{
    type="explosion",
    x=x+rnd(4)*rnd({-1,1}),

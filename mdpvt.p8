@@ -236,6 +236,7 @@ function _update()
   workers_update()
   particles_update()
   railshots_update()
+  bombs_update()
   knives_update()
   shake_update()
   void_blocks_update()
@@ -307,6 +308,7 @@ function _draw()
  workers_draw()
  railshots_draw()
  player_draw()
+ bombs_draw()
  knives_draw(true)
  particles_draw()
  rockets_draw()
@@ -481,9 +483,11 @@ function objcanmove(o, dx, dy, flag)
 end
 
 -- apply gravity (no more than terminal velocity)
+grav = 0.2
+
 function objapplygravity(o)
  if o.vy < 7 then
-  o.vy = min(o.vy + 0.2, 7)
+  o.vy = min(o.vy + grav, 7)
  end
 end
 
@@ -976,6 +980,7 @@ workers_req = 0
 
 railshots={}
 knives={}
+bombs = {}
 spawn_points={}
 
 function create_worker(x1, y1, id)
@@ -1038,7 +1043,7 @@ function create_worker(x1, y1, id)
   worker.sprite = 29
   worker.blood = {5,6,9,10,13}
   worker.facedir = 1
-  worker.hp = 20+10*hard
+  worker.hp =15+5*hard
   worker.hands = {
    {x=x1-7, y=y1+9, w=6, h=6,
     vx=0, vy=0, moving=false},
@@ -1217,57 +1222,45 @@ function workers_update()
    end
   end
 
+  -- mech update
   if worker.hands then
    if not worker.dead then
     if frame%720 < 360 then
-     -- special attack
      fr = frame%360+1
-     if fr < 30 then
-      for hand in all(worker.hands) do
-       hand.vx = 0
-       hand.vy = 0
-       hand.x = 0.9*hand.x+0.1*(worker.x+1)
-       hand.y = 0.9*hand.y+0.1*(worker.y+9)
+     -- special attack
+     for h = 1,2 do
+      if fr < 30 then
+       mech_reset_hand(worker, h, 0.1)
+      elseif fr < 90 then
+       sfx(2)
+       objmoveto(worker.hands[h],
+         worker.x-600+400*h, worker.y, 2)
       end
-     elseif fr < 90 then
-      sfx(2)
-      objmoveto(worker.hands[1],
-        worker.x-200, worker.y, 2)
-      objmoveto(worker.hands[2],
-        worker.x+200, worker.y, 2)
      end
      if fr%40==0 and worker.ground then
       worker.vy -= 4
      end
-    else
-     fr = frame%120+1
-     hand = nil
-     ret = nil
-     if fr<30 then
-      hand = worker.hands[1]
-      ret = {worker.x-7, worker.y+9}
-     elseif fr==30 then
-      hand = worker.hands[1]
-     elseif 60<fr and fr<90 then
-      hand = worker.hands[2]
-      ret = {worker.x+9, worker.y+9}
-      fr -= 60
-     elseif fr==90 then
-      hand = worker.hands[2]
+     if fr%40==20 then
+      worker_shoot_bomb(worker, 0.25-fr/2000)
      end
-     if hand then
-      if ret then
-       hand.vx = 0
-       hand.vy = 0
-       p = 0.01
-       if (fr>20) p = 0.3
-       hand.x = (1-p)*hand.x+p*ret[1]
-       hand.y = (1-p)*hand.y+p*ret[2]
-      else
-       hand.moving = true
-       objmoveto(hand,
-         pla.x, pla.y+4, 6)
-      end
+    else
+     fr = frame%120
+     p = 0.01
+     if (fr%30 > 20) p = 0.3
+     if fr<30 then
+      mech_reset_hand(worker, 1, p)
+     elseif fr==40 then
+      hand = worker.hands[1]
+      hand.moving = true
+      objmoveto(hand,
+        pla.x, pla.y+4, 6)
+     elseif 60<fr and fr<90 then
+      mech_reset_hand(worker, 2, p)
+     elseif fr==100 then
+      hand = worker.hands[2]
+      hand.moving = true
+      objmoveto(hand,
+        pla.x, pla.y+4, 6)
      end
     end
 
@@ -1324,6 +1317,14 @@ end
 function change_direction(worker)
  worker.vx=0
  worker.facedir*=-1
+end
+
+function mech_reset_hand(worker, h, p)
+ hand = worker.hands[h]
+ hand.vx = 0
+ hand.vy = 0
+ hand.x = (1-p)*hand.x+p*(worker.x-23+16*h)
+ hand.y = (1-p)*hand.y+p*(worker.y+9)
 end
 
 function workers_draw()
@@ -1619,6 +1620,64 @@ function worker_throw_knives(
  end
  sfx(3)
 end
+
+function bombs_update()
+ for bomb in all(bombs) do
+  if bomb.vy > 1 and
+    bomb.y < pla.y and
+    objcol(pla,bomb) then
+   player_die()
+  end
+  objapplygravity(bomb)
+  objmove(bomb)
+  if bomb.vx == 0 and bomb.vy == 0 then
+   add_blood(bomb.x+3, bomb.y+3, {5}, 8, 30)
+   del(bombs,bomb)
+  end
+ end
+end
+
+function bombs_draw()
+ for bomb in all(bombs) do
+  c = 5
+  if (bomb.vy > 1) c = 8
+  circfill(bomb.x+2, bomb.y+2, 2, c)
+  circfill(bomb.x+3, bomb.y+1, 1, 7)
+ end
+end
+
+function worker_shoot_bomb(worker, rot)
+ dx = pla.x-worker.x
+ dy = pla.y-worker.y
+ sa = sin(rot)
+ ca = cos(rot)
+ if (dx < 0) ca *= -1
+
+ v = 4
+
+ -- -- controlled shot
+ -- div = dy-sa/ca*dx
+ -- if div > 0 then
+ -- num = 0.5*grav*dx*dx/ca/ca
+ -- v2 = num/div
+ -- if v2 > 0 then
+ --  v = min(sqrt(v2), v)
+ -- end
+ -- end
+
+ bomb = {
+  x = worker.x + 1,
+  y = worker.y + 1,
+  vx = ca*v,
+  vy = sa*v,
+  w = 5,
+  h = 5
+ }
+
+ add(bombs, bomb)
+end
+
+
 -->8
 -- particles
 -- this tab is for defining
@@ -1638,22 +1697,22 @@ function add_blood(x,y,colors,amountt,life)
   lifetime = life
  end
 
-  for i=1,amount do
-   add(particles,{
-    type="blood",
-    x=x,
-    vx=rnd(4)-2,
-    y=y,
-    vy=-rnd(4),
-    size=rnd(1)+1,
-    w=1,
-    h = 1,
-    color=rnd(colors),
-    gravity=true,
-    lifetime=lifetime,
-   })
-  end
+ for i=1,amount do
+  add(particles,{
+   type="blood",
+   x=x,
+   vx=rnd(4)-2,
+   y=y,
+   vy=-rnd(4),
+   size=rnd(1)+1,
+   w=1,
+   h = 1,
+   color=rnd(colors),
+   gravity=true,
+   lifetime=lifetime,
+  })
  end
+end
 
 function add_explosion(x, y, amount)
  for i = 1, amount do
@@ -2638,13 +2697,13 @@ b4b4b4b4101030303010101010101010101010101010101010101010101010501010000000000000
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
 10000000000000000001000000000000101000000000000000000010100000000000000000000010100000000000000000000000000000000000000000001010
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
-10000000000000000084000000000000100000000000000000000000100000000000000000001010000000000000505000000000000000000000500000001010
+10000000000000000084000000000000100000000000000000000000100000000000000000001010000000000000505050000000000000000000500000001010
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
-10000000000000000000000000560000100000000045000000000000101000000000000000001000000000000000505000000000000000000050500000001010
+10000000000000000000000000560000100000000045000000000000101000000000000000001000000000000000505050000000000000000050500000001010
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
-10000000000000000000000000840000100000000084000000000000001000000000000000101000000000500000000000000050500000000050500000001010
+10000000000000000000000000840000100000000084000000000000001000000000000000101000000000500000000000000000000000000050500000001010
 00000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000001000000000000000
-10004500560010101010101000000000000000000000000010000000001000000000000000100000000000000000000000000050500000000000000000001010
+10004500560010101010101000000000000000000000000010000000001000000000000000100000000000000000000000000000000000000000000000001010
 00000000000000000000000000000000000000000010000000000000000100000000000000450000000000000000000000000000000000001000000000001010
 10008400840000000000000000000000000000000000001000000000101000000000001010100000005000000000000000000000000000000000000000000010
 0000000000000000000000000000000000000000001000000000000000a400000000000000a40000000000000000000000000000000000001000000000001090

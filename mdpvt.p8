@@ -1038,7 +1038,7 @@ function create_worker(x1, y1, id)
   worker.sprite = 29
   worker.blood = {5,6,9,10,13}
   worker.facedir = 1
-  worker.hp = 6+4*hard
+  worker.hp = 20+10*hard
   worker.hands = {
    {x=x1-7, y=y1+9, w=6, h=6,
     vx=0, vy=0, moving=false},
@@ -1219,42 +1219,65 @@ function workers_update()
 
   if worker.hands then
    if not worker.dead then
-    fr = frame%120+1
-    hand = nil
-    ret = nil
-    if fr<30 then
-     hand = worker.hands[1]
-     ret = {worker.x-7, worker.y+9}
-    elseif fr==30 then
-     hand = worker.hands[1]
-    elseif 60<fr and fr<90 then
-     hand = worker.hands[2]
-     ret = {worker.x+9, worker.y+9}
-     fr -= 60
-    elseif fr==90 then
-     hand = worker.hands[2]
-    end
-    if hand then
-     if ret then
-      hand.vx = 0
-      hand.vy = 0
-      p = 0.01
-      if (fr>15) p = 0.2
-      hand.x = (1-p)*hand.x+p*ret[1]
-      hand.y = (1-p)*hand.y+p*ret[2]
-     else
-      hand.moving = true
-      objmoveto(hand,
-        pla.x, pla.y+4, 6)
+    if frame%720 >= 360 then
+     -- special attack
+     fr = frame%360+1
+     if fr < 30 then
+      for hand in all(worker.hands) do
+       hand.vx = 0
+       hand.vy = 0
+       hand.x = 0.9*hand.x+0.1*(worker.x+1)
+       hand.y = 0.9*hand.y+0.1*(worker.y+9)
+      end
+     elseif fr < 90 then
+      sfx(2)
+      objmoveto(worker.hands[1],
+        worker.x-200, worker.y, 2)
+      objmoveto(worker.hands[2],
+        worker.x+200, worker.y, 2)
+     end
+     if fr%30==0 and worker.ground then
+      worker.vy -= 4
+     end
+    else
+     fr = frame%120+1
+     hand = nil
+     ret = nil
+     if fr<30 then
+      hand = worker.hands[1]
+      ret = {worker.x-7, worker.y+9}
+     elseif fr==30 then
+      hand = worker.hands[1]
+     elseif 60<fr and fr<90 then
+      hand = worker.hands[2]
+      ret = {worker.x+9, worker.y+9}
+      fr -= 60
+     elseif fr==90 then
+      hand = worker.hands[2]
+     end
+     if hand then
+      if ret then
+       hand.vx = 0
+       hand.vy = 0
+       p = 0.01
+       if (fr>20) p = 0.3
+       hand.x = (1-p)*hand.x+p*ret[1]
+       hand.y = (1-p)*hand.y+p*ret[2]
+      else
+       hand.moving = true
+       objmoveto(hand,
+         pla.x, pla.y+4, 6)
+      end
+     end
+
+     chs = mech_chainsaws(worker)
+     for ch in all(chs) do
+      if objcol(ch, pla) then
+       player_die()
+      end
      end
     end
 
-    chs = mech_chainsaws(worker)
-    for ch in all(chs) do
-     if objcol(ch, pla) then
-      player_die()
-     end
-    end
     for hand in all(worker.hands) do
      -- kill player
      if objcol(pla,hand) then
@@ -1262,7 +1285,7 @@ function workers_update()
      end
      -- destroy bricks
      if hand.moving and hand.vx == 0
-       and hand.vy==0 then
+       and hand.vy == 0 then
       hand.moving = false
       camera_thug_shake(5,3)
       for brick in all(cracked_bricks) do
@@ -1273,6 +1296,7 @@ function workers_update()
       end
      end
     end
+
    else
     objapplygravity(
       worker.hands[1])

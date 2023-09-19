@@ -1219,7 +1219,7 @@ function workers_update()
 
   if worker.hands then
    if not worker.dead then
-    if frame%720 >= 360 then
+    if frame%720 < 360 then
      -- special attack
      fr = frame%360+1
      if fr < 30 then
@@ -1236,7 +1236,7 @@ function workers_update()
       objmoveto(worker.hands[2],
         worker.x+200, worker.y, 2)
      end
-     if fr%30==0 and worker.ground then
+     if fr%40==0 and worker.ground then
       worker.vy -= 4
      end
     else
@@ -1269,17 +1269,18 @@ function workers_update()
          pla.x, pla.y+4, 6)
       end
      end
+    end
 
-     chs = mech_chainsaws(worker)
-     for ch in all(chs) do
-      if objcol(ch, pla) then
-       player_die()
-      end
+    -- kill player with chainsaws
+    chs = mech_chainsaws(worker)
+    for ch in all(chs) do
+     if objcol(ch, pla) then
+      player_die()
      end
     end
 
     for hand in all(worker.hands) do
-     -- kill player
+     -- kill player with hands
      if objcol(pla,hand) then
       player_die()
      end

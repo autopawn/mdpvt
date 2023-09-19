@@ -2134,6 +2134,7 @@ function dialog_update()
     if dialog_l > #current_dial then
      dialog_l = 1
      dialog_on = false
+     frame = 0
     end
   end
   sfx(13)

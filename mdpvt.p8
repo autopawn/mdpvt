@@ -578,7 +578,7 @@ function objinside(o,cx,cy,r)
  end
 end
 
-function objmoveto(o,x,y,s)
+function objaimto(o,x,y,s)
  dx = (x - o.x)/4
  dy = (y - o.y)/4
  if abs(dx) < 128 and
@@ -1208,7 +1208,7 @@ function workers_update()
      end
 
      if frame%35 == 0 then
-      objmoveto(worker,
+      objaimto(worker,
         pla.x + rnd(90)-45,
         pla.y + rnd(40)-20,1)
       if not worker.canfollow then
@@ -1316,7 +1316,7 @@ end
 function mech_launch_hand(worker, h)
  hand = worker.hands[h]
  hand.moving = true
- objmoveto(hand, pla.x, pla.y+4, 6)
+ objaimto(hand, pla.x, pla.y+4, 6)
  sfx(41)
 end
 
@@ -1562,7 +1562,7 @@ function knives_update()
     sfx(1)
     px = pla.x+3+rnd(16)-8
     py = pla.y+10+rnd(16)-8
-    objmoveto(kni,px,py,spd)
+    objaimto(kni,px,py,spd)
     kni.tx = kni.vx/spd
     kni.ty = kni.vy/spd
    elseif kni.t > 150 then

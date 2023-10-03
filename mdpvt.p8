@@ -237,6 +237,7 @@ function _update()
   particles_update()
   railshots_update()
   knives_update()
+  electroballs_update()
   shake_update()
   void_blocks_update()
   -- update music track
@@ -308,6 +309,7 @@ function _draw()
  railshots_draw()
  player_draw()
  knives_draw(true)
+ electroballs_draw()
  particles_draw()
  rockets_draw()
 
@@ -979,6 +981,7 @@ workers_req = 0
 
 railshots={}
 knives={}
+electroballs={}
 spawn_points={}
 
 function create_worker(x1, y1, id)
@@ -1050,7 +1053,7 @@ function create_worker(x1, y1, id)
     vx=0, vy=0, moving=false}
   }
   worker.t = 0
-  worker.phase = 1
+  worker.angry = 0
  elseif id==43 then
   worker.type = "target"
   worker.h = 8
@@ -1231,12 +1234,17 @@ function workers_update()
    if not worker.dead then
 
     if worker.hp <= worker.maxhp\2 then
-     worker.phase = 2
+     worker.angry = 1
     end
 
-    for t=1,1+worker.phase do
-     worker.t += 1
+    for t=1,2+worker.angry do
      local fr = worker.t%1200
+
+     -- throw energy ball
+     if fr%(1200-600*worker.angry) == 120 then
+      eball = {x=worker.x+2, y=worker.y+10, vx=0, vy=0, w=4, h=4, t=0}
+      add(electroballs, eball)
+     end
 
      if fr < 600 then -- spinning attack
       for h = 1,2 do
@@ -1271,6 +1279,8 @@ function workers_update()
         mech_reset_hand(worker, 1, p)
       end
      end
+     -- increase counter
+     worker.t += 1
     end
 
     -- kill player with chainsaws
@@ -1361,13 +1371,13 @@ function workers_draw()
   end
 
   if worker.type == "mech" then
-   -- change color on phase 2
-   if worker.phase == 2 then
+   -- change color if angry
+   if worker.angry == 1 then
     pal(9, 2)
    end
 
    for t = 0,1 do
-    circfill(worker.x+1+5*t,worker.y+10,3,9)
+    circfill(worker.x+1+5*t,worker.y+10,3,13)
    end
 
    chs = mech_chainsaws(worker)
@@ -1642,6 +1652,35 @@ function worker_throw_knives(
  sfx(3)
 end
 
+function electroballs_update()
+ for ball in all(electroballs) do
+  ball.t += 1
+  if ball.t > 240 then
+   del(electroballs, ball)
+   add_blood(ball.x+2, ball.y+2, {7, 10, 12})
+  else
+   -- Accelerate towards the player
+   vx = ball.vx
+   vy = ball.vy
+   if abs(vx) < 3 and abs(vy) < 3 then
+    objaimto(ball, pla.x+2, pla.y+6, 0.03+0.03*hard)
+    ball.vx += vx
+    ball.vy += vy
+   end
+   if objcol(pla, ball) then
+    player_die()
+   end
+   objmove(ball)
+  end
+ end
+end
+
+function electroballs_draw()
+ for ball in all(electroballs) do
+  spr(53+frame\2%3, ball.x-2, ball.y-2)
+ end
+end
+
 -->8
 -- particles
 -- this tab is for defining
@@ -1767,7 +1806,6 @@ function particles_draw()
 end
 
 -- camera does the thug shaker
-
 function camera_thug_shake(strength, time)
  camera_shake_x = rnd(strength)
  camera_shake_y = rnd(strength)

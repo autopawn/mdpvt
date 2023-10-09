@@ -719,6 +719,7 @@ function player_update()
      for worker in all(workers) do
       if objcol(worker,slamkillzone) and not worker.dead then
        worker_hit(worker)
+       worker_hit(worker)
       end
      end
      for brick in all(cracked_bricks) do
@@ -1095,6 +1096,9 @@ function worker_hit(worker)
 end
 
 function worker_die(worker)
+ if worker.dead then
+  return
+ end
  sfx(2)
  worker.dead = true
  worker.vy -= 0.5
@@ -1110,6 +1114,7 @@ function worker_die(worker)
     worker.x+3, worker.y+9,
     worker.blood,22)
     music(43)
+  electroballs = {}
  end
  workers_dead += 1
  for railshot in all(railshots) do

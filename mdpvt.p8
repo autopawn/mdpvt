@@ -565,10 +565,10 @@ end
 -- is the object inside a circle
 -- NOTE: assuming object has portrait shape
 function objinside(o,cx,cy,r)
- tiles = (o.h+7)\8
- for t=0,tiles-1 do
+ pts = (o.h+3)\4
+ for t=1,pts do
   if inside(
-    o.x+o.w/2, o.y+o.w/2+8*t-4,
+    o.x+o.w/2, o.y-2+4*t,
     cx, cy, r) then
    return true
   end
@@ -1056,9 +1056,9 @@ function create_worker(x1, y1, id)
   worker.facedir = 1
   worker.maxhp = 15+5*hard
   worker.hands = {
-   {x=x1-7, y=y1+9, w=6, h=6,
+   {x=x1+1, y=y1+9, w=6, h=6,
     vx=0, vy=0, moving=false},
-   {x=x1+9, y=y1+9, w=6, h=6,
+   {x=x1+1, y=y1+9, w=6, h=6,
     vx=0, vy=0, moving=false}
   }
   worker.t = 0

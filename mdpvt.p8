@@ -468,11 +468,10 @@ end
 
 --function for checking collisions of two objects
 function objcol(o1, o2)
-  if o1.x + o1.w <= o2.x then return false end
-  if o2.x + o2.w <= o1.x then return false end
-  if o1.y + o1.h <= o2.y then return false end
-  if o2.y + o2.h <= o1.y then return false end
-  return true
+  return o1.x + o1.w > o2.x and
+    o2.x + o2.w > o1.x and
+    o1.y + o1.h > o2.y and
+    o2.y + o2.h > o1.y
 end
 
 -- can the object move by
@@ -528,7 +527,7 @@ function objmove(o)
    else
     o.vy = 0
     ry = 0
-    o.ground = (sy > 0)
+    o.ground = sy > 0
    end
   end
  end
@@ -564,21 +563,26 @@ function inside(x, y, cx, cy, r)
 end
 
 -- is the object inside a circle
+-- NOTE: assuming object has portrait shape
 function objinside(o,cx,cy,r)
- if o.h <= 8 then
-  i1 = inside(
-    o.x+o.w/2, o.y+o.h/2,
-    cx, cy, r)
-  return i1
- else
-  i1 = inside(
-    o.x+o.w/2, o.y+o.h*0.25,
-    cx, cy, r)
-  i2 = inside(
-    o.x+o.w/2, o.y+o.h*0.75,
-    cx, cy, r)
-  return i1 or i2
+ tiles = (o.h+7)\8
+ for t=0,tiles-1 do
+  if inside(
+    o.x+o.w/2, o.y+o.w/2+8*t-4,
+    cx, cy, r) then
+   return true
+  end
  end
+ return false
+end
+
+function veclimit(vx, vy, lim)
+ m = lim/sqrt(vx*vx + vy*vy + 0.001)
+ if m < 1 then
+  vx *= m
+  vy *= m
+ end
+ return vx, vy
 end
 
 function objaimto(o,x,y,s,relative)
@@ -586,9 +590,7 @@ function objaimto(o,x,y,s,relative)
  dy = (y - o.y)/4
  if abs(dx) < 128 and
    abs(dy) < 128 then
-  f = s/sqrt(dx*dx + dy*dy)
-  dx *= f
-  dy *= f
+  dx,dy = veclimit(dx, dy, s)
   if relative then
    dx += o.vx
    dy += o.vy
@@ -1250,7 +1252,7 @@ function workers_update()
 
      if fr < 600 then -- spinning attack
       -- throw energy ball
-      if fr%(1540-1000*worker.angry) == 59 then
+      if fr%(10540-10000*worker.angry) == 58 then
         eball = {x=worker.x+2, y=worker.y+10, vx=0, vy=0, w=4, h=4, t=0}
         add(electroballs, eball)
       end
@@ -1668,7 +1670,8 @@ function electroballs_update()
    add_blood(ball.x+2, ball.y+2, {7, 10, 12})
   else
    -- Accelerate towards the player
-   objaimto(ball, pla.x+2, pla.y+6, 0.03+0.02*hard, true)
+   objaimto(ball, pla.x+2, pla.y+6, 0.03, true)
+   ball.vx, ball.vy = veclimit(ball.vx, ball.vy, 3+hard)
    if objcol(pla, ball) then
     player_die()
    end

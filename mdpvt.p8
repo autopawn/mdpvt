@@ -581,14 +581,20 @@ function objinside(o,cx,cy,r)
  end
 end
 
-function objaimto(o,x,y,s)
+function objaimto(o,x,y,s,relative)
  dx = (x - o.x)/4
  dy = (y - o.y)/4
  if abs(dx) < 128 and
    abs(dy) < 128 then
-  p = sqrt(dx*dx + dy*dy)
-  o.vx = s*dx/p
-  o.vy = s*dy/p
+  f = s/sqrt(dx*dx + dy*dy)
+  dx *= f
+  dy *= f
+  if relative then
+   dx += o.vx
+   dy += o.vy
+  end
+  o.vx = dx
+  o.vy = dy
  end
 end
 
@@ -1133,12 +1139,13 @@ end
 function mech_chainsaws(worker)
  chs = {}
  for h in all(worker.hands) do
-  for p in all({0.25, 0.5, 0.75}) do
-   ch={}
-   ch.x=p*worker.x+(1-p)*h.x+1
-   ch.y=p*(worker.y+8)+(1-p)*h.y+1
-   ch.w=6
-   ch.h=6
+  for p in all({0.333, 0.666}) do
+   ch={
+    x=p*worker.x+(1-p)*h.x+1,
+    y=p*(worker.y+8)+(1-p)*h.y+1,
+    w=6,
+    h=6,
+   }
    add(chs, ch)
   end
  end
@@ -1241,7 +1248,7 @@ function workers_update()
      local fr = worker.t%1200
 
      -- throw energy ball
-     if fr%(1200-600*worker.angry) == 120 then
+     if fr%(300-150*worker.angry) == 120 then
       eball = {x=worker.x+2, y=worker.y+10, vx=0, vy=0, w=4, h=4, t=0}
       add(electroballs, eball)
      end
@@ -1253,7 +1260,7 @@ function workers_update()
         elseif fr < 60 then
          mech_reset_hand(worker, h, 0.1)
         else
-         worker.hands[h].x = worker.x+1+128*sin((fr-60)/540+0.5*h)
+         worker.hands[h].x = worker.x+1+116*sin((fr-60)/540+0.5*h)
          -- hop
          if worker.ground then
           worker.vy -= 3
@@ -1660,13 +1667,7 @@ function electroballs_update()
    add_blood(ball.x+2, ball.y+2, {7, 10, 12})
   else
    -- Accelerate towards the player
-   vx = ball.vx
-   vy = ball.vy
-   if abs(vx) < 3 and abs(vy) < 3 then
-    objaimto(ball, pla.x+2, pla.y+6, 0.03+0.03*hard)
-    ball.vx += vx
-    ball.vy += vy
-   end
+   objaimto(ball, pla.x+2, pla.y+6, 0.03+0.03*hard, true)
    if objcol(pla, ball) then
     player_die()
    end

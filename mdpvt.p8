@@ -1051,7 +1051,7 @@ function create_worker(x1, y1, id)
   worker.h = 24
   worker.touchdeath = false
   worker.sprite = 29
-  worker.blood = {5,6,9,10,13}
+  worker.blood = {5,6,13}
   worker.facedir = 1
   worker.maxhp = 15+5*hard
   worker.hands = {
@@ -1352,7 +1352,7 @@ end
 function mech_launch_hand(worker, h)
  hand = worker.hands[h]
  hand.moving = true
- objaimto(hand, pla.x, pla.y+4, 5+hard)
+ objaimto(hand, pla.x, pla.y+4, 4+hard)
  sfx(41)
 end
 

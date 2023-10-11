@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 9
+level = 8
 
 -- music to play for each level
 -- in order, starting from 1
@@ -231,13 +231,13 @@ function _update()
      level_dialog_music[level])
   end
  elseif level_has_player then
-  rockets_update()
+  foreach(rockets, rocket_update)
   player_update()
-  workers_update()
-  particles_update()
-  railshots_update()
-  knives_update()
-  electroballs_update()
+  foreach(workers, worker_update)
+  foreach(particles, particle_update)
+  foreach(railshots, railshot_update)
+  foreach(knives, knife_update)
+  foreach(electroballs, electroball_update)
   shake_update()
   void_blocks_update()
   -- update music track
@@ -306,12 +306,12 @@ function _draw()
 
  knives_draw(false)
  player_draw()
- workers_draw()
- railshots_draw()
+ foreach(workers, worker_draw)
+ foreach(railshots, railshot_draw)
  knives_draw(true)
- electroballs_draw()
- particles_draw()
- rockets_draw()
+ foreach(electroballs, electroball_draw)
+ foreach(particles, particle_draw)
+ foreach(rockets, rocket_draw)
 
  -- start gui
  camera()
@@ -815,91 +815,88 @@ end
 rocket_xrad = 18
 
 -- rockets_update function: handles the movement, collisions and explosions of rockets.
-function rockets_update()
- -- cycle through each rocket
- for r in all(rockets) do
-  -- if a rocket is exploding, continue to animate the explosion
-  if r.explosiont > 0 then
-   r.explosiont += 1
+function rocket_update(r)
+ -- if a rocket is exploding, continue to animate the explosion
+ if r.explosiont > 0 then
+  r.explosiont += 1
   -- if the explosion animation is over, remove the rocket
   if r.explosiont > 5 then
-  del(rockets, r)
+   del(rockets, r)
+  end
+ else
+  -- check the rocket's ability to move and possible collisions, trigger explosion if required
+  local explode = false
+  objmove(r)
+  -- check collision with thad
+  for w in all(workers) do
+   if not w.dead and
+     w.type == "thad" and
+     objcol(r, w) then
+    w.pipeanim=12
+    sfx(11)
+    deflect_rocket(r, w.facedir == 1)
    end
-  else
-   -- check the rocket's ability to move and possible collisions, trigger explosion if required
-   local explode = false
-   objmove(r)
-   -- check collision with thad
-   for w in all(workers) do
-    if not w.dead and
-      w.type == "thad" and
-      objcol(r, w) then
-     w.pipeanim=12
-     sfx(11)
-     deflect_rocket(r, w.facedir == 1)
-    end
-   end
+  end
 
-   -- explode after enough time
-   -- on a wall
-   if abs(r.vx) < 1 then
-    r.timeonwall += 1
-   end
-   if r.timeonwall > 15 then
-    explode = true
-   end
-   if r.timeonwall == 1 then
-    sfx(61)
-   end
-   -- explode if deflected
-   if not pla.dead
-     and r.deflected and
-     ((r.x-1 < pla.x) == (r.vx<0))
-     then
-    explode = true
-   end
-   -- check for player input to explode the rocket
-   if btnp(🅾️) and not r.deflected then
-    explode = true
-   end
+  -- explode after enough time
+  -- on a wall
+  if abs(r.vx) < 1 then
+   r.timeonwall += 1
+  end
+  if r.timeonwall > 15 then
+   explode = true
+  end
+  if r.timeonwall == 1 then
+   sfx(61)
+  end
+  -- explode if deflected
+  if not pla.dead
+    and r.deflected and
+    ((r.x-1 < pla.x) == (r.vx<0))
+    then
+   explode = true
+  end
+  -- check for player input to explode the rocket
+  if btnp(🅾️) and not r.deflected then
+   explode = true
+  end
 
-   -- if explosion is needed, animate the explosion, kill player and workers in the blast radius
-   if explode then
-    sfx(9)
-    camera_thug_shake(1,2)
-    r.explosiont = 1
-    if not pla.dead and
-      r.deflected and
-      objinside(pla, r.x+3,
-        r.y+1, rocket_xrad) then
-     player_die()
-    end
-    for w in all(workers) do
-     if w.facedir == -1 then
-      front = r.x+2 < w.x
-     else
-      front = w.x+6 < r.x
-     end
-     if not w.dead and
-       objinside(w, r.x+3,
-         r.y+1, rocket_xrad) then
-      if w.type == "hunter" then
-       w.stun = 90
-       w.animhit = 6
-       w.vx = 0
-      elseif w.type=="thad"
-        and front then
-       w.pipeanim = 12
-      else
-       worker_hit(w)
-      end
-     end
-    end
-    for brick in all(cracked_bricks) do
-     if objinside(brick, r.x+3,
+  -- if explosion is needed, animate the explosion, kill player and workers in the blast radius
+  if explode then
+   sfx(9)
+   camera_thug_shake(1,2)
+   r.explosiont = 1
+   if not pla.dead and
+     r.deflected and
+     objinside(pla, r.x+3,
        r.y+1, rocket_xrad) then
-      brick_break(brick)
+    player_die()
+   end
+   for w in all(workers) do
+    if w.facedir == -1 then
+     front = r.x+2 < w.x
+    else
+     front = w.x+6 < r.x
+    end
+    if not w.dead and
+      objinside(w, r.x+3,
+        r.y+1, rocket_xrad) then
+     if w.type == "hunter" then
+      w.stun = 90
+      w.animhit = 6
+      w.vx = 0
+     elseif w.type=="thad"
+       and front then
+      w.pipeanim = 12
+     else
+      worker_hit(w)
      end
+    end
+   end
+   for brick in all(cracked_bricks) do
+    if objinside(brick, r.x+3,
+      r.y+1, rocket_xrad) then
+     brick_break(brick)
     end
    end
   end
@@ -926,29 +923,27 @@ function deflect_rocket(r, facer)
 end
 
 -- rockets_draw function: Draw rockets, including explosion animations
-function rockets_draw()
- for r in all(rockets) do
-  if r.explosiont > 0 then
-   add_explosion(r.x,r.y, 1)
-  else
-   if r.deflected then
-    pal(8,9)
-    pal(7,8)
-    pal(6,8)
-   end
-   if r.timeonwall > 0 then
-    spr(13,
-      r.x-1, r.y-3, 1, 1,
-      r.facer)
-   else
-    spr(11+frame%2,
-      r.x-1, r.y-3, 1, 1,
-      r.facer)
-   end
-   pal(8,8)
-   pal(7,7)
-   pal(6,6)
+function rocket_draw(r)
+ if r.explosiont > 0 then
+  add_explosion(r.x,r.y, 1)
+ else
+  if r.deflected then
+   pal(8,9)
+   pal(7,8)
+   pal(6,8)
   end
+  if r.timeonwall > 0 then
+   spr(13,
+     r.x-1, r.y-3, 1, 1,
+     r.facer)
+  else
+   spr(11+frame%2,
+     r.x-1, r.y-3, 1, 1,
+     r.facer)
+  end
+  pal(8,8)
+  pal(7,7)
+  pal(6,6)
  end
 end
 
@@ -1159,195 +1154,189 @@ function mech_chainsaws(worker)
  return chs
 end
 
-function workers_update()
- for worker in all(workers) do
+function worker_update(worker)
+ if worker.type == "target" then
+  return
+ end
 
-  if worker.type == "target" then
-   goto worker_update_skip
+ if not worker.dead then
+   -- die if touching a void block
+  if rectcol(worker.x, worker.y,
+    worker.w, worker.h, 3) then
+   worker_hit(worker)
   end
-
-  if not worker.dead then
-    -- die if touching a void block
-   if rectcol(worker.x, worker.y,
-     worker.w, worker.h, 3) then
-    worker_hit(worker)
-   end
-   if not pla.dead and
-     objcol(pla, worker) and
-     worker.touchdeath then
-    worker_hit(worker)
-    pla.animkill = 10
-   end
-   if worker.canmove then
-    if objcanmove(worker,
-      worker.facedir, 0, 0) and
-      objcanmove(worker,
-      worker.facedir, 0, 1) and
-      objcanmove(worker,
-      worker.facedir, 0, 7) and
-      not objcanmove(worker,
-      worker.facedir * 6, 1) then
-     worker.vx = 0.5*worker.facedir
-    else
-     if worker.canflip then
-      change_direction(worker)
-     end
+  if not pla.dead and
+    objcol(pla, worker) and
+    worker.touchdeath then
+   worker_hit(worker)
+   pla.animkill = 10
+  end
+  if worker.canmove then
+   if objcanmove(worker,
+     worker.facedir, 0, 0) and
+     objcanmove(worker,
+     worker.facedir, 0, 1) and
+     objcanmove(worker,
+     worker.facedir, 0, 7) and
+     not objcanmove(worker,
+     worker.facedir * 6, 1) then
+    worker.vx = 0.5*worker.facedir
+   else
+    if worker.canflip then
+     change_direction(worker)
     end
    end
-   if worker.type=="uzi" then
-    if worker.railgundelay==0 then
-     worker_shoot(worker)
-    end
-    worker.railgundelay-=1
-   elseif worker.type == "thad" then
-    if objcol(pla, worker) and
-      pla.dead == false then
-     sfx(11)
-     worker.pipeanim=12
-     pla.vx+=10*worker.facedir
-     pla.vy-=2
-    end
+  end
+  if worker.type=="uzi" then
+   if worker.railgundelay==0 then
+    worker_shoot(worker)
+   end
+   worker.railgundelay-=1
+  elseif worker.type == "thad" then
+   if objcol(pla, worker) and
+     pla.dead == false then
+    sfx(11)
+    worker.pipeanim=12
+    pla.vx+=10*worker.facedir
+    pla.vy-=2
+   end
+   if pla.x>worker.x then
+    worker.facedir=1
+   else
+    worker.facedir=-1
+   end
+   worker.pipeanim-=1
+  elseif worker.type=="hunter" then
+   if worker.stun > 0 then
+    worker.flying = false
+    worker.stun -= 1
+   elseif not worker.dead then
+    worker.flying = true
     if pla.x>worker.x then
      worker.facedir=1
     else
      worker.facedir=-1
     end
-    worker.pipeanim-=1
-   elseif worker.type=="hunter" then
-    if worker.stun > 0 then
-     worker.flying = false
-     worker.stun -= 1
-    elseif not worker.dead then
-     worker.flying = true
-     if pla.x>worker.x then
-      worker.facedir=1
-     else
-      worker.facedir=-1
-     end
 
-     worker.knivedelay -= 1
-     if worker.knivedelay==0 then
-      worker_throw_knives(worker)
-     end
-
-     if frame%35 == 0 then
-      objaimto(worker,
-        pla.x + rnd(90)-45,
-        pla.y + rnd(40)-20,1)
-      if not worker.canfollow then
-        worker.vx = 0
-      end
-     end
-     worker.vy += 0.5*cos(frame*0.1)
+    worker.knivedelay -= 1
+    if worker.knivedelay==0 then
+     worker_throw_knives(worker)
     end
+
+    if frame%35 == 0 then
+     objaimto(worker,
+       pla.x + rnd(90)-45,
+       pla.y + rnd(40)-20,1)
+     if not worker.canfollow then
+       worker.vx = 0
+     end
+    end
+    worker.vy += 0.5*cos(frame*0.1)
    end
   end
+ end
 
-  -- mech update
-  if worker.hands then
-   if not worker.dead then
+ -- mech update
+ if worker.hands then
+  if not worker.dead then
 
-    if worker.hp <= worker.maxhp\2 then
-     worker.angry = 1
-    end
+   if worker.hp <= worker.maxhp\2 then
+    worker.angry = 1
+   end
 
-    for t=1,2+worker.angry do
-     local fr = worker.t%1200
+   for t=1,2+worker.angry do
+    local fr = worker.t%1200
 
-
-     if fr < 600 then -- spinning attack
-      -- throw energy ball
-      if fr%(10540-10000*worker.angry) == 58 then
-        eball = {x=worker.x+2, y=worker.y+10, vx=0, vy=0, w=4, h=4, t=0}
-        add(electroballs, eball)
-        sfx(1)
-      end
-      -- move the hands
-      for h = 1,2 do
-        if fr < 60 then
-         mech_reset_hand(worker, h, 0.1)
-        else
-         worker.hands[h].x = worker.x+1+116*sin((fr-60)/540+0.5*h)
-         -- hop
-         if worker.ground then
-          worker.vy -= 3
-          worker.ground = false
-         end
+    if fr < 600 then -- spinning attack
+     -- throw energy ball
+     if fr%(10540-10000*worker.angry) == 58 then
+      eball = {x=worker.x+2, y=worker.y+10, vx=0, vy=0, w=4, h=4, t=0}
+       add(electroballs, eball)
+       sfx(1)
+     end
+     -- move the hands
+     for h = 1,2 do
+       if fr < 60 then
+        mech_reset_hand(worker, h, 0.1)
+       else
+        worker.hands[h].x = worker.x+1+116*sin((fr-60)/540+0.5*h)
+        -- hop
+        if worker.ground then
+         worker.vy -= 3
+         worker.ground = false
         end
-      end
-     else -- pincer attack
-      fr %= 300
-      p = 0.01
-      if (fr%75 > 45) p = 0.3
-      -- aim for the player
-      if fr%150 == 10 then
-       worker.tx = pla.x+1
-       worker.ty = pla.y+4
-       sfx(41)
-      end
-
-      if fr==25 then
-        mech_launch_hand(worker, 1)
-      elseif 75<fr and fr<150 then
-        mech_reset_hand(worker, 2, p)
-      elseif fr==175 then
-        mech_launch_hand(worker, 2)
-      elseif 225<fr then
-        mech_reset_hand(worker, 1, p)
-      end
+       end
      end
-     -- increase counter
-     worker.t += 1
-    end
+    else -- pincer attack
+     fr %= 300
+     p = 0.01
+     if (fr%75 > 45) p = 0.3
+     -- aim for the player
+     if fr%150 == 9 then
+      worker.tx = pla.x+1
+      worker.ty = pla.y+4
+      sfx(41)
+     end
 
-    -- kill player with chainsaws
-    chs = mech_chainsaws(worker)
-    for ch in all(chs) do
-     if objcol(ch, pla) then
-      player_die()
+     if fr==25 then
+       mech_launch_hand(worker, 1)
+     elseif 75<fr and fr<150 then
+       mech_reset_hand(worker, 2, p)
+     elseif fr==175 then
+       mech_launch_hand(worker, 2)
+     elseif 225<fr then
+       mech_reset_hand(worker, 1, p)
      end
     end
+    -- increase counter
+    worker.t += 1
+   end
 
-    for hand in all(worker.hands) do
-     objmovecheap(hand)
-     -- kill player with hands
-     if objcol(pla,hand) then
-      player_die()
-     end
-     -- make sound if colliding
-     if hand.moving and hand.vx == 0
-       and hand.vy == 0 then
-      hand.moving = false
-      camera_thug_shake(5,3)
-     end
-     -- destroy bricks
-     for brick in all(cracked_bricks) do
-      if objinside(brick, hand.x+3,
-        hand.y+3, 11) then
-       hand.vx /= 4
-       hand.vy /= 4
-       brick_break(brick)
-      end
-     end
-    end
-   else
-    for hand in all(worker.hands) do
-     objapplygravity(hand)
-     objmovecheap(hand)
+   -- kill player with chainsaws
+   chs = mech_chainsaws(worker)
+   for ch in all(chs) do
+    if objcol(ch, pla) then
+     player_die()
     end
    end
-  end
 
-  if not worker.flying then
-   objapplygravity(worker)
+   for hand in all(worker.hands) do
+    objmovecheap(hand)
+    -- kill player with hands
+    if objcol(pla,hand) then
+     player_die()
+    end
+    -- make sound if colliding
+    if hand.moving and hand.vx == 0
+      and hand.vy == 0 then
+     hand.moving = false
+     camera_thug_shake(5,3)
+    end
+    -- destroy bricks
+    for brick in all(cracked_bricks) do
+     if objinside(brick, hand.x+3,
+       hand.y+3, 11) then
+      hand.vx /= 4
+      hand.vy /= 4
+      brick_break(brick)
+     end
+    end
+   end
+  else
+   for hand in all(worker.hands) do
+    objapplygravity(hand)
+    objmovecheap(hand)
+   end
   end
-  objmove(worker)
+ end
 
-  if worker.animhit > 0 then
-   worker.animhit -= 1
-  end
+ if not worker.flying then
+  objapplygravity(worker)
+ end
+ objmove(worker)
 
-  ::worker_update_skip::
+ if worker.animhit > 0 then
+  worker.animhit -= 1
  end
 end
 
@@ -1371,177 +1360,170 @@ function mech_reset_hand(worker, h, p)
  worker.tx = nil
 end
 
-function workers_draw()
- for worker in all(workers) do
+function worker_draw(worker)
+ if worker.animhit > 0 then
+  pal(8,7)
+  pal(9,7)
+  pal(10,7)
+ end
 
-  if worker.animhit > 0 then
-   pal(8,7)
-   pal(9,7)
-   pal(10,7)
+ if worker.type == "target" then
+  if not worker.dead then
+   spr(worker.sprite, worker.x, worker.y)
+  end
+  goto worker_draw_end
+ end
+
+ if worker.type == "mech" then
+  -- change color if angry
+  if worker.angry == 1 then
+   pal(9, 2)
   end
 
-  if worker.type == "target" then
-   if not worker.dead then
-    spr(worker.sprite, worker.x, worker.y)
-   end
-   goto workers_draw_continue
+  -- shoulder pads
+  for t = 0,1 do
+   circfill(worker.x+1+5*t,worker.y+10,3,13)
   end
 
-  if worker.type == "mech" then
-   -- change color if angry
-   if worker.angry == 1 then
-    pal(9, 2)
-   end
-
-   -- shoulder pads
-   for t = 0,1 do
-    circfill(worker.x+1+5*t,worker.y+10,3,13)
-   end
-
-   -- chainsaws
-   chs = mech_chainsaws(worker)
-   for ch in all(chs) do
-    spr(62+frame%2, ch.x-1, ch.y-1,
-      1, 1, frame%4>=2,
-      frame%4>=2)
-   end
-
-   -- target
-   if worker.tx then
-    spr(94+frame%2, worker.tx-1, worker.ty-1)
-   end
-   -- body
-   rectfill(worker.x+1, worker.y+3,
-     worker.x+6, worker.y+5, 0)
-   if worker.dead then
-    spr(worker.sprite+2,
-      worker.x, worker.y, 1, 2)
-   else
-    if worker.animhit > 0 then
-     spr(worker.sprite+2,
-       worker.x, worker.y, 1, 1,
-       worker.x < pla.x)
-    else
-     spr(worker.sprite+tonum((
-       frame\4)%worker.blink==0),
-       worker.x, worker.y, 1, 1,
-       worker.x < pla.x)
-    end
-    spr(worker.sprite+16,
-      worker.x, worker.y+8, 1, 2)
-    print(worker.hp,
-      worker.x+4,
-      worker.y-8, 8)
-   end
-
-   for h in all(worker.hands) do
-    spr(46, h.x-1, h.y-1,
-      1, 1, h.x-1 < worker.x)
-   end
-
-   goto workers_draw_continue
+  -- chainsaws
+  chs = mech_chainsaws(worker)
+  for ch in all(chs) do
+   spr(62+frame%2, ch.x-1, ch.y-1,
+     1, 1, frame%4>=2,
+     frame%4>=2)
   end
 
-  -- glitch effect
-  if worker.type == "hunter" and
-    worker.flying then
-   draw_glitch(
-     worker.x-2,worker.y+3,
-     12,12,{0,8})
+  -- target
+  if worker.tx then
+   spr(94+frame%2, worker.tx-1, worker.ty-1)
   end
-
-  -- black rectangle under head
+  -- body
   rectfill(worker.x+1, worker.y+3,
-   worker.x+6, worker.y+5, 0)
-
+    worker.x+6, worker.y+5, 0)
   if worker.dead then
-   spr(worker.sprite+2, worker.x, worker.y, 1, 1)
-   spr(worker.sprite+18, worker.x - 7, worker.y, 1, 1)
+   spr(worker.sprite+2,
+     worker.x, worker.y, 1, 2)
   else
-
-   blink = worker.stun > 0 or
-     (frame\4)%worker.blink==0
-   spr(worker.sprite+tonum(blink),
-     worker.x, worker.y,
-     1, 1,worker.facedir == 1)
-   if worker.type == "hunter" then
-    spr(worker.sprite+16,
-      worker.x,
-      worker.y+8,
-      1, 1,
-      worker.facedir == 1)
-   elseif worker.canmove then
-    spr(worker.sprite+16
-      +(frame\16)%2, worker.x,
-      worker.y+8, 1, 1)
+   if worker.animhit > 0 then
+    spr(worker.sprite+2,
+      worker.x, worker.y, 1, 1,
+      worker.x < pla.x)
    else
-    spr(worker.sprite+16,
-      worker.x, worker.y+8,
-      1, 1)
+    spr(worker.sprite+tonum((
+      frame\4)%worker.blink==0),
+      worker.x, worker.y, 1, 1,
+      worker.x < pla.x)
    end
-   if worker.type=="uzi" then
-    spr(worker.sprite+17,
-      worker.x+worker.facedir*3,
-      worker.y+9,1,1,
-      worker.facedir == 1)
-   end
-   if worker.type=="thad" then
-    if worker.pipeanim>0 then
-     spr(worker.sprite+32+worker.pipeanim/4,
-       worker.x+worker.facedir*4,
-       worker.y+7,1,1,
-       worker.facedir == 1)
-    else
-    spr(worker.sprite+32,
+   spr(worker.sprite+16,
+     worker.x, worker.y+8, 1, 2)
+   print(worker.hp,
+     worker.x+4,
+     worker.y-8, 8)
+  end
+
+  for h in all(worker.hands) do
+   spr(46, h.x-1, h.y-1,
+     1, 1, h.x-1 < worker.x)
+  end
+
+  goto worker_draw_end
+ end
+
+ -- glitch effect
+ if worker.type == "hunter" and
+   worker.flying then
+  draw_glitch(
+    worker.x-2,worker.y+3,
+    12,12,{0,8})
+ end
+
+ -- black rectangle under head
+ rectfill(worker.x+1, worker.y+3,
+  worker.x+6, worker.y+5, 0)
+
+ if worker.dead then
+  spr(worker.sprite+2, worker.x, worker.y, 1, 1)
+  spr(worker.sprite+18, worker.x - 7, worker.y, 1, 1)
+ else
+
+  blink = worker.stun > 0 or
+    (frame\4)%worker.blink==0
+  spr(worker.sprite+tonum(blink),
+    worker.x, worker.y,
+    1, 1,worker.facedir == 1)
+  if worker.type == "hunter" then
+   spr(worker.sprite+16,
+     worker.x,
+     worker.y+8,
+     1, 1,
+     worker.facedir == 1)
+  elseif worker.canmove then
+   spr(worker.sprite+16
+     +(frame\16)%2, worker.x,
+     worker.y+8, 1, 1)
+  else
+   spr(worker.sprite+16,
+     worker.x, worker.y+8,
+     1, 1)
+  end
+  if worker.type=="uzi" then
+   spr(worker.sprite+17,
+     worker.x+worker.facedir*3,
+     worker.y+9,1,1,
+     worker.facedir == 1)
+  end
+  if worker.type=="thad" then
+   if worker.pipeanim>0 then
+    spr(worker.sprite+32+worker.pipeanim/4,
       worker.x+worker.facedir*4,
       worker.y+7,1,1,
-     worker.facedir == 1)
-    end
+      worker.facedir == 1)
+   else
+   spr(worker.sprite+32,
+     worker.x+worker.facedir*4,
+     worker.y+7,1,1,
+    worker.facedir == 1)
    end
   end
-
-  ::workers_draw_continue::
-  -- reset palette
-  pal(8,8)
-  pal(9,9)
-  pal(10,10)
  end
+
+  ::worker_draw_end::
+ -- reset palette
+ pal(8,8)
+ pal(9,9)
+ pal(10,10)
 end
 
-function railshots_update()
- for railshot in all(railshots) do
-  if railshot.delay==30 then
-   sfx(5)
-   railshot.y-=2
-   railshot.h=5
-   railshot.color=11
-  elseif railshot.delay==0 then
-   if railshot.owner.canflip then
-    change_direction(railshot.owner)
-   end
-   del(railshots,railshot)
+function railshot_update(railshot)
+ if railshot.delay==30 then
+  sfx(5)
+  railshot.y-=2
+  railshot.h=5
+  railshot.color=11
+ elseif railshot.delay==0 then
+  if railshot.owner.canflip then
+   change_direction(railshot.owner)
   end
-  if railshot.delay<30 then
-   if objcol(pla,railshot)
-     and not pla.dead then
-    player_die()
-   end
-  end
-  if railshot.owner.dead then
-   del(railshots,railshot)
-  end
-  railshot.delay-=1
+  del(railshots,railshot)
  end
+ if railshot.delay<30 then
+  if objcol(pla,railshot)
+    and not pla.dead then
+   player_die()
+  end
+ end
+ if railshot.owner.dead then
+  del(railshots,railshot)
+ end
+ railshot.delay-=1
 end
 
-function railshots_draw()
- for railshot in all(railshots) do
-  rectfill(railshot.x,
-    railshot.y,
-    railshot.x+railshot.w-1,
-    railshot.y+railshot.h-1,
-    railshot.color)
- end
+function railshot_draw(railshot)
+ rectfill(railshot.x,
+   railshot.y,
+   railshot.x+railshot.w-1,
+   railshot.y+railshot.h-1,
+   railshot.color)
 end
 
 function extend_railshot(r)
@@ -1593,47 +1575,45 @@ end
 
 knive_delay = 30
 
-function knives_update()
- for kni in all(knives) do
-  kni.t += 1
-  if kni.t < knive_delay then
-   if kni.owner.dead or
-     kni.owner.stun > 0 then
-    kni.disabled = true
-    kni.t = knive_delay
-   else
-    own = kni.owner
-    p = min(kni.t/20, 1)
-    kni.x = (1-p)*kni.x +
-      p*(own.x+3+7*kni.tx)
-    kni.y = (1-p)*kni.y +
-      p*(own.y+8+7*kni.ty)
-   end
+function knife_update(kni)
+ kni.t += 1
+ if kni.t < knive_delay then
+  if kni.owner.dead or
+    kni.owner.stun > 0 then
+   kni.disabled = true
+   kni.t = knive_delay
   else
-   if kni.t == knive_delay then
-    spd=5
-    sfx(1, -1, 0, 1)
-    px = pla.x+3+rnd(16)-8
-    py = pla.y+10+rnd(16)-8
-    objaimto(kni,px,py,spd)
-    kni.tx = kni.vx/spd
-    kni.ty = kni.vy/spd
-   elseif kni.t > 150 then
-    del(knives, kni)
-   end
-   moving = abs(kni.vx) >= 1
-     or abs(kni.vy) >= 1
-   if moving then
-     if objcol(pla,kni) and
-       not kni.disabled then
-      player_die()
-     end
-   end
-   if kni.disabled then
-    objapplygravity(kni)
-   end
-   objmovecheap(kni)
+   own = kni.owner
+   p = min(kni.t/20, 1)
+   kni.x = (1-p)*kni.x +
+     p*(own.x+3+7*kni.tx)
+   kni.y = (1-p)*kni.y +
+     p*(own.y+8+7*kni.ty)
   end
+ else
+  if kni.t == knive_delay then
+   spd=5
+   sfx(1, -1, 0, 1)
+   px = pla.x+3+rnd(16)-8
+   py = pla.y+10+rnd(16)-8
+   objaimto(kni,px,py,spd)
+   kni.tx = kni.vx/spd
+   kni.ty = kni.vy/spd
+  elseif kni.t > 150 then
+   del(knives, kni)
+  end
+  moving = abs(kni.vx) >= 1
+    or abs(kni.vy) >= 1
+  if moving then
+    if objcol(pla,kni) and
+      not kni.disabled then
+     player_die()
+    end
+  end
+  if kni.disabled then
+   objapplygravity(kni)
+  end
+  objmovecheap(kni)
  end
 end
 
@@ -1675,28 +1655,24 @@ function worker_throw_knives(
  sfx(3)
 end
 
-function electroballs_update()
- for ball in all(electroballs) do
-  ball.t += 1
-  if ball.t > 270 then
-   del(electroballs, ball)
-   add_blood(ball.x+2, ball.y+2, {7, 10, 12})
-  else
-   -- Accelerate towards the player
-   objaimto(ball, pla.x+2, pla.y+6, 0.03, true)
-   ball.vx, ball.vy = veclimit(ball.vx, ball.vy, 3+hard)
-   if objcol(pla, ball) then
-    player_die()
-   end
-   objmove(ball)
+function electroball_update(ball)
+ ball.t += 1
+ if ball.t > 270 then
+  del(electroballs, ball)
+  add_blood(ball.x+2, ball.y+2, {7, 10, 12})
+ else
+  -- Accelerate towards the player
+  objaimto(ball, pla.x+2, pla.y+6, 0.03, true)
+  ball.vx, ball.vy = veclimit(ball.vx, ball.vy, 3+hard)
+  if objcol(pla, ball) then
+   player_die()
   end
+  objmove(ball)
  end
 end
 
-function electroballs_draw()
- for ball in all(electroballs) do
-  spr(53+frame\2%3, ball.x-2, ball.y-2)
- end
+function electroball_draw(ball)
+ spr(53+frame\2%3, ball.x-2, ball.y-2)
 end
 
 -->8
@@ -1778,49 +1754,44 @@ function draw_glitch(x,y,w,h,cols)
  end
 end
 
-function particles_update()
- for p in all(particles) do
-  if p.lifetime < 0 then
+function particle_update(p)
+ if p.lifetime < 0 then
+  del(particles,p)
+ end
+
+ if p.gravity then
+  objapplygravity(p)
+ end
+ objmovecheap(p)
+
+ if p.type == "explosion" then
+  if p.endsize<p.size then
+   p.size-=1
+  else
    del(particles,p)
   end
-
-  if p.gravity then
-   objapplygravity(p)
+ elseif p.type == "hole" then
+  p.size *= 0.95
+  if p.size < 1 then
+   del(particles,p)
   end
-  objmovecheap(p)
-
-  if p.type == "explosion" then
-   if p.endsize<p.size then
-    p.size-=1
-   else
-    del(particles,p)
-   end
-  elseif p.type == "hole" then
-   p.size *= 0.95
-   if p.size < 1 then
-    del(particles,p)
-   end
-  end
-
-  p.lifetime -= 1
  end
+
+ p.lifetime -= 1
 end
 
-function particles_draw()
-  for p in all(particles) do
-   if p.type == "explosion" then
-    circfill(p.x,p.y,p.size,
-      p.color[flr(p.size/2)])
-   elseif p.type == "hole" then
-    s = p.size
-    circfill(p.x,p.y,s,0)
-    draw_glitch(p.x-s, p.y-s,
-     2*s,2*s, p.color)
-   else
-    circfill(p.x,p.y,p.size,
-      p.color)
-   end
-  end
+function particle_draw(p)
+ if p.type == "explosion" then
+  circfill(p.x,p.y,p.size,
+    p.color[flr(p.size/2)])
+ elseif p.type == "hole" then
+  s = p.size
+  circfill(p.x,p.y,s,0)
+  draw_glitch(p.x-s, p.y-s,
+  2*s,2*s, p.color)
+ else
+  circfill(p.x,p.y,p.size,p.color)
+ end
 end
 
 -- camera does the thug shaker

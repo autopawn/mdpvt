@@ -5,7 +5,7 @@ __lua__
 
 -- current level.
 -- stored on dget(1)
-level = 11
+level = 8
 
 -- music to play for each level
 -- in order, starting from 1
@@ -1630,15 +1630,13 @@ function knives_draw(front)
  for kni in all(knives) do
   if front == (kni.t > knive_delay)
     then
-   if frame%2==0 and not kni.disabled then
-    spr(101, kni.x-2, kni.y-2)
-   end
    line(kni.x-3*kni.tx+1,
     kni.y-3*kni.ty+1,
     kni.x+3*kni.tx+1,
     kni.y+3*kni.ty+1, 7)
    circfill(kni.x-kni.tx+1,
-     kni.y-kni.ty+1, 1, 6)
+     kni.y-kni.ty+1, 1,
+     6+frame%2)
   end
  end
 end

@@ -1884,11 +1884,10 @@ dialogs = {
  22,
  "*gulp*"
 },{ -- level 2
- 10, 0, 2,
+ 10,
  "excellent!",
- 10, 2, 9999,
- "try to be faster from now",
- "on, rookie.",
+ "but try to be faster,",
+ "rookie.",
  "management is watching.",
  10,
  "now, i need you to",
@@ -1928,25 +1927,16 @@ dialogs = {
  11,
  "kill 'em all, rookie!",
 },{ -- level 4
- 10, 0, 1,
- "...huh.",
- 20, 0, 1,
- "did i mess up?",
- 10, 0, 1,
- "no, nothing like that.",
- "been a while since a",
- "drone's done this",
- "well though.",
  10,
  "alright, next on the list",
  "is weapons.",
  "you're doing good, but",
  "it's about time you start",
- 10, 0, 4,
- "using some more weaponry.",
- 10, 4, 9999,
- "using your brain.",
- 20, 4, 9999,
+ "using your brai...",
+ 11,
+ "i mean, using some more",
+ "weaponry",
+ 20,
  "hey!",
  10,
  "i've enabled your rocket",
@@ -1990,9 +1980,9 @@ dialogs = {
  "you might have to think",
  "outside the box for",
  "these drones.",
- 10, 6, 9999,
+ 10,
  "hopefully that tip didn't",
- "go over your head...",
+ "go *over* your head...",
  10,
  "good luck!",
 },{ -- level 6
@@ -2130,74 +2120,55 @@ dialogs = {
 -- dialog system
 
 -- current dialog
--- filtered by conditions.
 current_dial = {}
 
 -- current line in dialog
-dialog_l = 1
-
+dialog_l = 0
 -- current char in dialog
 dialog_c = 0
+-- current dialog portrait
+dial_portrait = -1
+-- duration of the portrait so far
+portrait_dur = 0
 
 -- is a dialog currently playing?
 dialog_on = false
 
-function unflatten(d1)
- d2 = {}
- numbs = {-1}
- next = true
- for e in all(d1) do
-  if type(e) == "number" then
-    if next then
-     numbs = {}
-     next = false
-    end
-    add(numbs, e)
-  else
-    add(d2, {e, unpack(numbs)})
-    next = true
-  end
- end
- return d2
-end
-
 -- start next dialog
 function dialog_start(n)
  if n <= #dialogs then
-  current_dial = unflatten(dialogs[n])
-  filter_current_dial()
+  current_dial = dialogs[n]
   dialog_on = true
+  dialog_next()
  end
 end
 
-function filter_current_dial()
- dial2 = {}
- tm = timer_m+timer_f/1800
- for l in all(current_dial) do
-  if ((not l[3]) or l[3]<=tm)
-    and ((not l[4]) or tm<l[4])
-    then
-   add(dial2, l)
-  end
+-- read until the next dialog text
+function dialog_next()
+ dialog_l += 1
+ while type(current_dial[dialog_l]) == "number" do
+  dial_portrait = current_dial[dialog_l]
+  dialog_l += 1
+  portrait_dur = 0
  end
- current_dial = dial2
+ dialog_c = 0
+ portrait_dur += 1
+ if dialog_l > #current_dial then
+  dialog_on = false
+  frame = 0
+  return
+ end
 end
 
 -- update the current dialog
 function dialog_update()
  incomplete = dialog_c <
-   #current_dial[dialog_l][1]
+   #current_dial[dialog_l]
  if btnp(❎) or btn(🅾️) then
   if incomplete and not btn(🅾️) then
-    dialog_c = 100
+   dialog_c = 100
   else
-    dialog_l += 1
-    dialog_c = 0
-    if dialog_l > #current_dial then
-     dialog_l = 1
-     dialog_on = false
-     frame = 0
-    end
+   dialog_next()
   end
   sfx(13)
  elseif incomplete then
@@ -2206,7 +2177,8 @@ function dialog_update()
  end
 end
 
-function draw_portrait(s)
+function draw_portrait()
+ s = dial_portrait
  if s>9 then
   chara = s\10 - 1
   expre = s%10 - 1
@@ -2226,10 +2198,10 @@ function dialog_draw()
 
  line1 = current_dial[dialog_l]
  -- only show a substring
- text1 = sub(line1[1], 1, dialog_c)
+ text1 = sub(line1, 1, dialog_c)
 
- -- black background
- if line1[2] < 0 then
+ -- black background on negative portrait
+ if dial_portrait < 0 then
   cls(0)
  end
 
@@ -2244,10 +2216,9 @@ function dialog_draw()
 
  -- draw two lines
  if dialog_l > 1 then
-  line0 = current_dial[dialog_l-1]
-  text0 = line0[1]
-  if line0[2] == line1[2] then
-   draw_portrait(line1[2])
+  text0 = current_dial[dialog_l-1]
+  if portrait_dur >= 2 then
+   draw_portrait()
    print(text0,22,109, 5)
    print(text1,22,117, 10)
    return
@@ -2255,7 +2226,7 @@ function dialog_draw()
  end
 
  -- draw a single line
- draw_portrait(line1[2])
+ draw_portrait()
  print(text1,22,109, 10)
 end
 

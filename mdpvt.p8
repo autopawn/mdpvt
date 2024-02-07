@@ -9,12 +9,14 @@ level = 0
 -- music to play for each level
 -- in order, starting from 1
 level_music =
-  {0,0,0,12,12,12,20,20,29,37,49}
+  {0,0,0,12,12,12,20,20,29,37,49,-1,-1}
 
 -- music to play for each level
 -- dialogs, in order.
 level_dialog_music =
-  {6,6,6,9,9,9,18,18,26,35,46}
+  {6,6,6,9,9,9,18,18,26,35,46,-1,-1}
+
+-- music pattern index is stored on dget(7)
 
 -- hard difficulty enabled?
 -- (o or 1), stored on dget(6)
@@ -50,9 +52,6 @@ first_rocket_level = 4
 -- cracked bricks
 break_bricks_level = 7
 
--- music track currently playing
-music_playing = -1
-
 -- frames of input transition.
 black = 9
 
@@ -79,6 +78,13 @@ function _init()
   timer_f = dget(4)
   deathcount = dget(5)
   hard = dget(6)
+  if dialog_shown == 1 then
+   if level == 10 then
+    music(level_music[level], 0, 3)
+   else
+    music(dget(7), 0, 3)
+   end
+  end
 
   -- by default, go to main menu
   -- on next load
@@ -187,6 +193,7 @@ function reset_level()
  dset(4, timer_f)
  dset(5, deathcount)
  dset(6, hard)
+ dset(7, stat(54))
 
  run()
 end
@@ -210,28 +217,11 @@ function load_game()
  run()
 end
 
-function play_music(track)
- if (track != music_playing) then
-  music(track, 0, 3)
-  music_playing = track
- end
-end
-
-function stop_music()
- music(-1)
- music_playing = -1
-end
-
 function _update()
  if level==0 then
   menu_update()
  elseif dialog_on then
   dialog_update()
-  -- update music track
-  if level_dialog_music[level] then
-   play_music(
-     level_dialog_music[level])
-  end
  elseif level_has_player then
   foreach(rockets, rocket_update)
   player_update()
@@ -242,10 +232,6 @@ function _update()
   foreach(electroballs, electroball_update)
   shake_update()
   void_blocks_update()
-  -- update music track
-  if level_music[level] then
-   play_music(level_music[level])
-  end
   -- update speedrun timer
   timer_f += 1
   if timer_f >= 1800 then
@@ -2114,7 +2100,13 @@ dialogs = {
  "than one hit, and each",
  "segment of its arms can",
  "kill you. best of luck.",
-}}
+}, { -- level 11
+}
+, { -- level 12
+}
+, { -- epilogue
+}
+}
 
 -->8
 -- dialog system
@@ -2136,6 +2128,7 @@ dialog_on = false
 
 -- start next dialog
 function dialog_start(n)
+ music(level_dialog_music[level], 0, 3)
  if n <= #dialogs then
   current_dial = dialogs[n]
   dialog_on = true
@@ -2146,16 +2139,19 @@ end
 -- read until the next dialog text
 function dialog_next()
  dialog_l += 1
- while type(current_dial[dialog_l]) == "number" do
+ while dialog_l <= #current_dial
+   and type(current_dial[dialog_l]) == "number" do
   dial_portrait = current_dial[dialog_l]
   dialog_l += 1
   portrait_dur = 0
  end
  dialog_c = 0
  portrait_dur += 1
+
  if dialog_l > #current_dial then
   dialog_on = false
   frame = 0
+  music(level_music[level], 0, 3)
   return
  end
 end
@@ -2464,7 +2460,7 @@ function menu_update()
  end
 
  if frame == 80 then
-   play_music(0)
+  music(0, 0, 3)
  end
 end
 

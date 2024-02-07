@@ -2528,7 +2528,7 @@ function void_blocks_update()
   in_cam = inside_camera(8*x,8*y)
 
   fs = frame%10
-  if fs==0 or (fs==5 and (hard or not in_cam)) then
+  if fs==0 or (fs==5 and (hard == 1 or not in_cam)) then
    sfx(60)
    del(void_blocks, p)
    for sx=x-1,x+1 do

@@ -144,7 +144,7 @@ function _init()
     mset(x,y,0)
    elseif t==253 then
     if level_ok then
-      add_electroball(8*x,8*y,false)
+      add_electroball(8*x,8*y,0)
     end
    elseif t==254 then
     if level_ok then
@@ -1251,7 +1251,7 @@ function worker_update(worker)
     if fr < 600 then -- spinning attack
      -- throw energy ball
      if fr%(10540-10000*worker.angry) == 58 then
-      add_electroball(worker.x, worker.y, true)
+      add_electroball(worker.x, worker.y, 2)
       sfx(1)
      end
      -- move the hands
@@ -1666,18 +1666,24 @@ function worker_throw_knives(
  sfx(3)
 end
 
-function add_electroball(worker_x, worker_y, decay)
+-- mode 0: waiting to be in_cam
+-- mode 1: going towards the player (permanent)
+-- mode 2: going towards the player (decay at certain time)
+function add_electroball(worker_x, worker_y, mode)
  add(electroballs, {
-   x=worker_x+2, y=worker_y+10,
-   vx=0, vy=0, w=4, h=4, t=0,
-   decay=decay})
+   x=worker_x+2, y=worker_y+10, t=0,
+   vx=0, vy=0, w=4, h=4, mode=mode})
 end
 
 function electroball_update(ball)
  ball.t += 1
- if ball.decay and ball.t > 270 then
+ if ball.mode==2 and ball.t > 270 then
   del(electroballs, ball)
   add_blood(ball.x+2, ball.y+2, {7, 10, 12})
+ elseif ball.mode == 0 then
+  if inside_camera(ball.x,ball.y) then
+   ball.mode = 1
+  end
  else
   -- Accelerate towards the player
   objaimto(ball, pla.x+2, pla.y+6, 0.03, true)

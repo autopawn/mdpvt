@@ -2485,12 +2485,11 @@ function menu_update()
 end
 
 function printx(s,x,y,c)
- l = {-1,0,0,0,1}
- dx = rnd(l)
- dy = rnd(l)
- print(s,x,y,c)
- print(s,x+dx,y+dy,c)
- print(s,x-dx,y-dy,c)
+ dx = flr(rnd(2.2)-0.6)
+ dy = flr(rnd(1.6))
+ for m = -1,1 do
+  print(s,x+m*dx,y+m*dy,c)
+ end
 end
 
 function menu_draw()

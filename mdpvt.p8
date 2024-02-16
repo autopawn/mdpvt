@@ -1676,15 +1676,15 @@ function add_electroball(worker_x, worker_y, mode)
 end
 
 function electroball_update(ball)
- ball.t += 1
- if ball.mode==2 and ball.t > 270 then
-  del(electroballs, ball)
-  add_blood(ball.x+2, ball.y+2, {7, 10, 12})
- elseif ball.mode == 0 then
+ if ball.mode==0 then
   if inside_camera(ball.x,ball.y) then
    ball.mode = 1
   end
+ elseif ball.t > 270 then
+  del(electroballs, ball)
+  add_blood(ball.x+2, ball.y+2, {7, 10, 12})
  else
+  ball.t += 1
   -- Accelerate towards the player
   objaimto(ball, pla.x+2, pla.y+6, 0.03, true)
   ball.vx, ball.vy = veclimit(ball.vx, ball.vy, 3+hard)

@@ -39,10 +39,6 @@ deathcount = 0
 -- frame for animations
 frame = 0
 
--- if this level had a player
--- sprite somewhere
-level_has_player = false
-
 -- level on which the player
 -- gets the rockets
 first_rocket_level = 4
@@ -132,7 +128,6 @@ function _init()
     if level_ok then
      pla.x = 8*x
      pla.y = 8*y
-     level_has_player = true
     end
     mset(x,y,0)
    elseif fget(t, 4) then
@@ -228,7 +223,7 @@ function _update()
   menu_update()
  elseif dialog_on then
   dialog_update()
- elseif level_has_player then
+ else
   foreach(rockets, rocket_update)
   player_update()
   foreach(workers, worker_update)
@@ -277,7 +272,6 @@ function _draw()
   circfill(sx,sy,s[3],7)
  end
 
-
  camera(camx, camy)
 
  -- draw wallpaper
@@ -296,6 +290,8 @@ function _draw()
 
  -- draw map
  map()
+
+ if (level == 13) cls()
 
  knives_draw(false)
  player_draw()
@@ -749,8 +745,8 @@ function player_update()
  -- go to next level
  if not pla.dead and
    workers_dead >= workers_req
-   and rectinside(pla.x, pla.y,
-   pla.w, pla.h, 2) then
+   and rectinside(pla.x, pla.y, pla.w, pla.h, 2)
+   or pla.y > 1000 then
   next_level()
  end
 
@@ -2121,10 +2117,35 @@ dialogs = {
  "segment of its arms can",
  "kill you. best of luck.",
 }, { -- level 11
-}
-, { -- level 12
-}
-, { -- epilogue
+}, { -- level 12
+},{ -- epilogue
+ 20,
+ "am i out of bounds?",
+ 10,
+ "yeah, you made it!",
+ "i can unplug you now.",
+ 11,
+ "i guess i can consider",
+ "your training complete.",
+ "you will be a great asset.",
+ "i am very proud!",
+ 21,
+ "yesss!",
+ 22,
+ "but, i am not sure i can",
+ "kill in the real world.",
+ 11,
+ "oh, you will just fine.",
+ "also...",
+ 13,
+ "we need their oil to live.",
+ 24,
+ "...!",
+ -1,
+ "assigning perms ://",
+ "user id: supi77uwu",
+ "role: admin",
+ "              [complete]",
 }
 }
 
@@ -2169,6 +2190,12 @@ function dialog_next()
  portrait_dur += 1
 
  if dialog_l > #current_dial then
+  -- end game
+  if level == 13 then
+   -- finish game
+   dset(0, 0)
+   run()
+  end
   dialog_on = false
   frame = 0
   music(level_music[level], 0, 3)
@@ -2544,6 +2571,10 @@ function void_blocks_update()
  void_blocks_2={}
  for p in all(void_blocks) do
   x,y = unpack(p)
+
+  -- don't reach outside
+  if (y > 58) return
+
   in_cam = inside_camera(8*x,8*y)
 
   fs = frame%(2*level-10) -- only for level 11 and 12
@@ -2664,7 +2695,7 @@ dddddddd00005d0000066d000000000000005000000500000000000000005000e111111ee111111e
 504050505050505050505050404040505050505050505050505050505050505050500000af800000000f00e600006500000050005f5f5f000000000000005050
 500000000000000055e6e600000000505050505050500000000000bfbf1f00e620bf505050501f1f1f1f5050505050405080808080805050503000e700000000
 00e6e60000e6e6e6000000e6e6e6e6e6e6e6e6e6e6000000e700000000e6e6e65050000000af8000000000e60000af0000005000410001004100004100005050
-5000000000500000bfe6e600000000505050505050500000004100cfcf00002000bf50505050a0a0a0a050505050404050505050505050505030000000010000
+5000000000500000bfe6e600000000505050505050500000004100cfcf00002000bf50505050a0a0a0a050505050404050505050505050505030000000000000
 0020200000e6e6e6000000202020202020202020200000000000000000e6e6f6504000000000af80000000e60000000000005000af000000af0000af00505050
 500000005050200000205000000000505000002050500000301f000000a1811f00bf505050501f1f1f1f50505050504040505050505050505030000000000000
 0020200000e6e6e6000000000000000000000000bf0000000000000000e6e60050400000000000af000000e60000000000005050505050505040404040505050

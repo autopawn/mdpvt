@@ -9,12 +9,12 @@ level = 0
 -- music to play for each level
 -- in order, starting from 1
 level_music =
-  {0,0,0,12,12,12,20,20,29,37,49,-1,-1}
+  split"0,0,0,12,12,12,20,20,29,37,49,-1,-1"
 
 -- music to play for each level
 -- dialogs, in order.
 level_dialog_music =
-  {6,6,6,9,9,9,18,18,26,35,46,-1,-1}
+  split"6,6,6,9,9,9,18,18,26,35,46,-1,-1"
 
 -- music pattern index is stored on dget(7)
 
@@ -29,8 +29,7 @@ dialog_shown = 0
 -- time on the clock, minutes
 -- and frames.
 -- stored on dget(3) and dget(4)
-timer_m = 0
-timer_f = 0
+timer_m, timer_f = 0, 0
 
 -- death counter tally (player)
 -- stored on dget(5)
@@ -52,9 +51,7 @@ break_bricks_level = 7
 black = 9
 
 -- camera does the thug shaker
-camera_shake_x=0
-camera_shake_y=0
-camera_shake_time=0
+camera_shake_x, camera_shake_y, camera_shake_time = 0, 0, 0
 
 -- stars for the background
 stars = {}
@@ -126,8 +123,7 @@ function _init()
 
    if t==16 then
     if level_ok then
-     pla.x = 8*x
-     pla.y = 8*y
+     pla.x, pla.y = 8*x, 8*y
     end
     mset(x,y,0)
    elseif fget(t, 4) then
@@ -312,16 +308,16 @@ function _draw()
  -- input transition
  if black >= 8 then
   fillp(0)
-  rectfill(0, 0, 127, 127, 0)
+  rectfill(unpack_split"0, 0, 127, 127, 0")
  elseif black > 6 then
   fillp(0b0101000001010000.1)
-  rectfill(0, 0, 127, 127, 0)
+  rectfill(unpack_split"0, 0, 127, 127, 0")
  elseif black > 4 then
   fillp(0b0101101001011010.1)
-  rectfill(0, 0, 127, 127, 0)
+  rectfill(unpack_split"0, 0, 127, 127, 0")
  elseif black > 2 then
   fillp(0b1111101011111010.1)
-  rectfill(0, 0, 127, 127, 0)
+  rectfill(unpack_split"0, 0, 127, 127, 0")
  end
  fillp(0)
 
@@ -341,10 +337,8 @@ function _draw()
  -- speedrun clock
  secs = timer_f\30
  centis = flr(timer_f%30*3.333)
- c1 = centis\10
- c2 = centis%10
- s1 = secs\10
- s2 = secs%10
+ c1, c2 = centis\10, centis%10
+ s1, s2 = secs\10, secs%10
  tstr = timer_m..":"..s1..s2
    .."."..c1..c2
 
@@ -356,8 +350,7 @@ function _draw()
 end
 
 function decor_tiles_update()
- px = pla.x\8
- py = pla.y\8
+ px, py = pla.x\8, pla.y\8
  my = min(py+8, 59)
  for x=px-8,px+8 do
   for y=py-8,my do
@@ -401,9 +394,7 @@ end
 -- system.
 
 function step(z)
- if z > 1 then return 1 end
- if z < -1 then return -1 end
- return z
+ return min(max(-1,z),1)
 end
 
 -- check whether the rectangle
@@ -412,10 +403,8 @@ end
 function rectcol(x, y, w, h, fl)
  -- note: backslash for integer
  -- division.
- xi = x\8
- xf = (x+w-1)\8
- yi = y\8
- yf = (y+h-1)\8
+ xi, xf = x\8, (x+w-1)\8
+ yi, yf = y\8, (y+h-1)\8
 
  for y=yi,yf do
   for x=xi,xf do
@@ -437,10 +426,8 @@ end
 function rectinside(x, y, w, h, fl)
  -- note: backslash for integer
  -- division.
- xi = x\8
- xf = (x+w-1)\8
- yi = y\8
- yf = (y+h-1)\8
+ xi, xf = x\8, (x+w-1)\8
+ yi, yf = y\8, (y+h-1)\8
 
  for y=yi,yf do
   for x=xi,xf do
@@ -459,10 +446,8 @@ end
 --function for checking collisions of two objects
 function objcol(o1, o2, xtra)
   xtra = xtra or 0
-  o1x = flr(o1.x)
-  o2x = flr(o2.x)
-  o1y = flr(o1.y)
-  o2y = flr(o2.y)
+  o1x, o2x = flr(o1.x), flr(o2.x)
+  o1y, o2y = flr(o1.y), flr(o2.y)
   return o1x + o1.w + xtra > o2x and
     o2x + o2.w + xtra > o1x and
     o1y + o1.h + xtra > o2y and
@@ -492,12 +477,10 @@ end
 -- ground.
 function objmove(o)
   -- remaining movement
- rx = o.vx
- ry = o.vy
+ rx, ry = o.vx, o.vy
 
  while abs(rx)>0.1 or abs(ry)>0.1 do
-  sx = step(rx)
-  sy = step(ry)
+  sx,sy = step(rx),step(ry)
 
   -- horizontal movement has
   -- preference.
@@ -538,8 +521,7 @@ function objmovecheap(o)
   o.vy *= 0.5
   if abs(o.vx) < 0.1
     and abs(o.vy) < 0.1 then
-   o.vx = 0
-   o.vy = 0
+   o.vx, o.vy = 0,0
    break
   end
  end
@@ -581,8 +563,7 @@ function veclimit(vx, vy, lim)
 end
 
 function objaimto(o,x,y,s,relative)
- dx = (x - o.x)/4
- dy = (y - o.y)/4
+ dx, dy = (x - o.x)/4, (y - o.y)/4
  if abs(dx) < 128 and
    abs(dy) < 128 then
   dx,dy = veclimit(dx, dy, s)
@@ -590,14 +571,12 @@ function objaimto(o,x,y,s,relative)
    dx += o.vx
    dy += o.vy
   end
-  o.vx = dx
-  o.vy = dy
+  o.vx, o.vy = dx, dy
  end
 end
 
 function inside_camera(x, y)
- dx = abs(x - pla.x)
- dy = abs(y - pla.y)
+ dx, dy = abs(x - pla.x), abs(y - pla.y)
  return dx <= 86 and dy <= 86
 end
 -->8
@@ -689,7 +668,7 @@ function player_update()
      not btnp(⬆️) and
      not pla.slam then
     sfx(8, -1, 0, 15)
-    pla.slam=true
+    pla.slam = true
    end
    pla.animb = 0
   end
@@ -878,9 +857,7 @@ function rocket_update(r)
       objinside(w, r.x+3,
         r.y+1, rocket_xrad) then
      if w.type == "hunter" then
-      w.stun = 90
-      w.animhit = 6
-      w.vx = 0
+      w.stun, w.animhit, w.vx = 90, 6, 0
      elseif w.type=="thad"
        and front then
       w.pipeanim = 12
@@ -914,8 +891,7 @@ function deflect_rocket(r, facer)
  else
   r.vx = -abs(r.vx)
  end
- r.facer = facer
- r.deflected = true
+ r.facer, r.deflected = facer, true
 end
 
 -- rockets_draw function: Draw rockets, including explosion animations
@@ -1117,12 +1093,10 @@ function worker_die(worker)
 
  if worker.lives > 1 then
   if #spawn_points == 0 then
-   sx = worker.startx
-   sy = worker.starty
+   sx, sy = worker.startx, worker.starty
   else
    spawn = rnd(spawn_points)
-   sx = spawn[1]
-   sy = spawn[2]
+   sx, sy = unpack(spawn)
   end
   sfx(60)
   id2 = worker.id
@@ -1281,8 +1255,7 @@ function worker_update(worker)
      -- aim for the player
      fr %= 150
      if fr == 9 then
-      worker.tx = pla.x+1
-      worker.ty = pla.y+4
+      worker.tx, worker.ty = pla.x+1, pla.y+4
       sfx(41)
      elseif fr == 50 then
       worker.tx = nil
@@ -1355,10 +1328,10 @@ end
 
 function mech_reset_hand(worker, h, p)
  hand = worker.hands[h]
- hand.vx = 0
- hand.vy = 0
- hand.x = (1-p)*hand.x+p*(worker.x-23+16*h)
- hand.y = (1-p)*hand.y+p*(worker.y+9)
+ hand.vx, hand.vy = 0, 0
+ pm1 = 1 - p
+ hand.x = pm1*hand.x + p*(worker.x-23+16*h)
+ hand.y = pm1*hand.y + p*(worker.y+9)
 end
 
 function worker_draw(worker)
@@ -1528,8 +1501,7 @@ function railshot_draw(railshot)
 end
 
 function extend_railshot(r)
- a=1
- b=161
+ a, b = 1, 161
  while a+1 < b do
   c = (a+b)\2
   if r.facedir == -1 then
@@ -1547,8 +1519,7 @@ function extend_railshot(r)
  end
 
  if r.facedir == -1 then
-  r.x = r.x-a
-  r.w = a
+  r.x, r.w = r.x-a, a
  else
   r.w = a
  end
@@ -1595,11 +1566,9 @@ function knife_update(kni)
   if kni.t == knive_delay then
    spd=5
    sfx(1, -1, 16)
-   px = pla.x+3+rnd(16)-8
-   py = pla.y+10+rnd(16)-8
+   px, py = pla.x+3+rnd(16)-8, pla.y+10+rnd(16)-8
    objaimto(kni,px,py,spd)
-   kni.tx = kni.vx/spd
-   kni.ty = kni.vy/spd
+   kni.tx, kni.ty = kni.vx/spd, kni.vy/spd
   elseif kni.t > 150 then
    del(knives, kni)
   end
@@ -1645,7 +1614,7 @@ function worker_throw_knives(
  end
  for i=1,nknives do
   local kni = {
-   owner=worker,
+   owner = worker,
    x = worker.x+2,
    y = worker.y+5,
    vx = 0,
@@ -1654,7 +1623,7 @@ function worker_throw_knives(
    h = 3,
    tx = cos(i/nknives)*worker.facedir,
    ty = sin(i/nknives),
-   t=i*2,
+   t = i*2,
    disabled = false,
   }
   add(knives, kni)
@@ -1818,19 +1787,18 @@ end
 
 -- camera does the thug shaker
 function camera_thug_shake(strength, time)
- camera_shake_x = rnd(strength)
- camera_shake_y = rnd(strength)
+ camera_shake_x, camera_shake_y = rnd(strength), rnd(strength)
  camera_shake_time = max(camera_shake_time, time)
 end
 
 function shake_update()
  if camera_shake_time<=0 then
-  camera_shake_y=0
-  camera_shake_x=0
+  camera_shake_y, camera_shake_x = 0, 0
  end
  if camera_shake_time > 0 then
-  camera_shake_y=rnd({-2, -1, 1, 2})
-  camera_shake_x=rnd({-2, -1, 1, 2})
+  randvals = {-2, -1, 1, 2}
+  camera_shake_y, camera_shake_x =
+    rnd(randvals), rnd(randvals)
   camera_shake_time-=1
  end
 end
@@ -2223,11 +2191,10 @@ end
 function draw_portrait()
  s = dial_portrait
  if s>9 then
-  chara = s\10 - 1
-  expre = s%10 - 1
+  chara, expre = s\10 - 1, s%10 - 1
   spr(80+2*chara,2,108,2,2)
   if expre >= 0 then
-   rectfill(7,116,14,123,0)
+   rectfill(unpack_split"7,116,14,123,0")
    spr(112+4*chara+expre,7,116)
   end
  end
@@ -2248,9 +2215,9 @@ function dialog_draw()
   cls(0)
  end
 
- rectfill(0,106,127,127,0)
- rect(1,107,18,124,7)
- rect(20,107,126,124,7)
+ rectfill(unpack_split"0,106,127,127,0")
+ rect(unpack_split"1,107,18,124,7")
+ rect(unpack_split"20,107,126,124,7")
 
  -- draw next icon
  print("❎",119,123, 2)
@@ -2309,8 +2276,7 @@ sina = 0
 -- radius in view space, given
 -- the current camera angle
 function viewrad(rx,ry,rz)
- xx = rx*cosa
- zz = rz*sina
+ xx, zz = rx*cosa, rz*sina
  return sqrt(xx*xx + zz*zz),ry
 end
 
@@ -2357,8 +2323,7 @@ function draw_leg(s)
 end
 
 function draw_led(phi,y)
- px = cos(phi)*9
- pz = sin(phi)*9
+ px, pz = cos(phi)*9, sin(phi)*9
  vx,vy,vz = viewpos(px,y,pz)
  if vz >= 0 then
   col = 10
@@ -2398,8 +2363,7 @@ function draw_eye(x)
 end
 
 function draw_rookie()
- side = sgn(sina)
- front = cosa>=0
+ side, front = sgn(sina), cosa>=0
 
  -- back arm
  draw_arm(-side)
@@ -2468,8 +2432,7 @@ function update_numparts()
 function menu_update()
  -- update camera
  cama = 0.82 - frame*0.01
- cosa = cos(cama)
- sina = sin(cama)
+ cosa, sina = cos(cama), sin(cama)
 
  update_numparts()
 
@@ -2546,20 +2509,20 @@ function menu_draw()
   cls(7)
   sfx(9)
  else
-  print("murder drones", 38, 2, 9)
+  print_unpack_split"murder drones, 38, 2, 9"
   if menu_saved_level == 0 then
-   print("continue",38,84,5)
+   print_unpack_split"continue,38,84,5"
   elseif menu_saved_hard == 1 then
-   print("continue (hard)",38,84,7)
+   print_unpack_split"continue (hard),38,84,7"
   else
-   print("continue (normal)",38,84,7)
+   print_unpack_split"continue (normal),38,84,7"
   end
-  print("new game (normal)",38,94,7)
-  print("new game (hard)",38,104,7)
+  print_unpack_split"new game (normal),38,94,7"
+  print_unpack_split"new game (hard),38,104,7"
   printx("∧", 28, 84+10*menu_option, 9)
 
-  rectfill(-1, 118, 128, 125, 0)
-  rect(-1, 118, 128, 125, 5)
+  rectfill(unpack_split"-1, 118, 128, 125, 0")
+  rect(unpack_split"-1, 118, 128, 125, 5")
   print("FANGAME BY AUTOPAWN, MISZUK, CRJONCH & REMI MIXER. MUSIC BY REMI MIXER. SPECIAL THANKS TO THE MDP DISCORD SERVER!",
    128-(frame-80)%580, 119, 5)
  end
@@ -2598,7 +2561,15 @@ function void_blocks_update()
  void_blocks = void_blocks_2
 end
 -->8
--- sprite flags
+-- misc
+
+function unpack_split(s)
+ return unpack(split(s))
+end
+
+function print_unpack_split(s)
+ print(unpack_split(s))
+end
 
 -- 0: solid sprites
 -- 1: death-blocks

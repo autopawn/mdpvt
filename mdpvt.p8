@@ -2542,7 +2542,7 @@ function void_blocks_update()
 
   fs = frame%(2*level-10) -- only for level 11 and 12
   if fs==0 or (fs==6 and (hard == 1 or not in_cam)) then
-   sfx(60)
+   if (in_cam) sfx(60, -1, 6)
    del(void_blocks, p)
    for sx=x-1,x+1 do
     for sy=y-1,y+1 do

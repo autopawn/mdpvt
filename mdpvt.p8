@@ -662,7 +662,6 @@ function player_update()
     and level >= first_rocket_level
     then
    player_shoot()
-   sfx(12)
   end
 
   -- limit vertical speed

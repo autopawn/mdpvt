@@ -1840,9 +1840,8 @@ dialogs = {
  10,
  "let's try the wings.",
  "press ❎ to flutter.",
- "move to the next area,",
- "and avoid the death-",
- "blocks.",
+ "move to the next area, and",
+ "avoid the death-blocks.",
  20,
  "what do you mean with...",
  10,
@@ -1850,8 +1849,8 @@ dialogs = {
  24,
  "kill me!?",
  11,
- "don't worry, it is just",
- "a simulation.",
+ "don't worry, it is just a",
+ "simulation.",
  10,
  "...",
  "the pain is very real",
@@ -1866,12 +1865,12 @@ dialogs = {
  "management is watching.",
  10,
  "now, i need you to",
- "disassemble all the",
- "drones in this area and",
- "reach the goal.",
+ "disassemble all the drones",
+ "in this area and reach the",
+ "goal.",
  20,
  "i know it's my job and",
- "everything...but how do i",
+ "everything... but how do i",
  "do that exactly?",
  11,
  "simple! just get close and",
@@ -1884,19 +1883,18 @@ dialogs = {
  "disassembling all these",
  "worker drones?",
  12,
- "once you have completed",
- "your training in time,",
- "then maybe i'll give you",
- "an answer.",
+ "it's your job.",
+ "don't question the company.",
  20,
  "`kay!",
  10,
- "worker drones may be",
- "unpredictably armed.",
+ "some workers may resist to",
+ "an uscheduled disassembly",
+ "and be unpredictably armed.",
  "management instructed me",
  "to add angsty teenagers",
- "with railguns in this",
- "part, for some reason.",
+ "with railguns in this part,",
+ "for some reason.",
  22,
  "what is a railgun?",
  11,
@@ -1910,7 +1908,7 @@ dialogs = {
  "using your brai...",
  11,
  "i mean, using some more",
- "weaponry",
+ "weaponry.",
  20,
  "hey!",
  10,
@@ -1918,10 +1916,10 @@ dialogs = {
  "launcher.",
  "press 🅾️ to shoot.",
  "also, you don't have to",
- "worry about ammo, but",
- "you do have to detonate",
- "them manually, pressing",
- "🅾️ a second time.",
+ "worry about ammo, but you",
+ "do have to detonate them",
+ "manually, pressing 🅾️ a",
+ "second time.",
  "here's a few targets to",
  "practice on.",
  "knock 'em dead, rookie!",
@@ -1936,28 +1934,29 @@ dialogs = {
  11,
  "correct answer! looks like",
  "there's no need for any",
- "behavior correction, good",
- "for you!",
+ "behavior correction.",
+ "good for you!",
  22,
- "...should i be worried?",
+ "... is that something to",
+ "be worried about?",
  11,
  "since you're having fun,",
  "no.",
  21,
- "...cool!",
+ "cool!",
  10,
  "alright rookie, time to",
- "spice things up a bit.",
- "not every drone is going",
- "to sit there and take it",
- "if they see something",
- "coming at them.",
+ "spice things up a bit. not",
+ "every drone is going to",
+ "sit there and take it if",
+ "they see something coming",
+ "at them.",
  "you might have to think",
- "outside the box for",
- "these drones.",
+ "outside the box for these",
+ "drones.",
  10,
  "hopefully that tip didn't",
- "go *over* your head...",
+ "go *over your head*...",
  10,
  "good luck!",
 },{ -- level 6
@@ -1971,15 +1970,17 @@ dialogs = {
  "does this mean more",
  "railguns?",
  11,
- "that and more!",
- "worker drones are designed",
- "to work together, so you",
- "may have to deal with",
- "teams that cover each",
+ "bing!♪",
+ 10,
+ "additionally, workers are",
+ "designed to work together,",
+ "so you may have to deal",
+ "with teams that cover each",
  "other's weaknesses.",
+ 11,
  "chin up though, if you're",
- "outnumbered, then it's ",
- "almost a fair fight!"
+ "outnumbered, then it's",
+ "almost a fair fight!",
 },{ -- level 7
  10,
  "okay rookie, now here's a",
@@ -1987,17 +1988,14 @@ dialogs = {
  "in this testroom there's",
  "a drone that'll really",
  "test your mettle.",
- "you'll be able to tell",
- "which one it is by the",
- "thing flying and throwing",
- "projectiles at you...",
+ "it has telekinetic powers",
+ "and can fly...",
  "among other things.",
  22,
- "wait, uh, that sounds",
- "like a whole lot for a",
- "single worker??",
- "doesn't that seem a",
- "little excessive?",
+ "wait, that sounds like a",
+ "whole lot for a worker.",
+ "doesn't that seem a little",
+ "excessive?",
  14,
  "...",
  "rookie, listen carefully,",
@@ -2024,48 +2022,69 @@ dialogs = {
  20,
  "...",
  22,
- "i just don't see the",
- "way out of this tunnel.",
+ "i just don't see the way",
+ "out of this room.",
  11,
- "oh yeah, almost forgot",
+ "oh yeah, almost forgot...",
  10,
- "i've disabled some",
+ "i've disabled some safety",
  "restrictions on your",
- "rocket and dive",
- "protocols. you should be",
- "able to break through",
- "brittle blocks now.",
+ "rocket and dive protocol.",
+ "you should be able to",
+ "break through brittle",
+ "blocks now.",
  20,
  "...dive?",
  10,
- "...yes? that thing you",
- "can do once you gain",
- "enough height and",
- "descend (⬇️)?",
+ "...yes? that thing you can",
+ "do once you gain enough",
+ "height and descend (⬇️)?",
  12,
  "surely you have already",
  "figured that out, right?",
  20,
  "oh!",
- 13,
- "keep that little",
- "maneuver in mind from",
- "now on, the additional",
- "force might be necessary."
+ 10,
+ "it is a powerful maneuver",
+ "that allows you to wreck",
+ "the strongest drones.",
+ "keep that in mind if",
+ "explosives aren't enough.",
 },{ -- level 8
  11,
- "good going rookie! now",
- "it's time to take the",
- "training wheels off!",
+ "good going rookie!",
+ 20,
+ "you know...",
+ "i kinda like this hat.",
+ 10,
+ "it is a part of you that",
+ "could not be removed.",
+ "doesn't matter though,",
+ "there are no trains where",
+ "you're going.",
+ 21,
+ "trains?",
+ 12,
+ "forget i said any of that.",
+ 23,
+ "choo! choo! all aboard!",
+ 13,
+ "don't. do. that!",
+ "...",
+ 11,
+ "i think, since you are in",
+ "good humor, that you are",
+ "ready to take the training",
+ "wheels off!",
  24,
  "they weren't off before?!",
  10,
- "nope. what you fought",
- "was a glimpse of that",
- "drone's power.",
+ "nope. what you fought was",
+ "a glimpse of that drone's",
+ "power.",
  11,
- "so now you're fighting",
- "two of them!",
+ "so now you're fighting two",
+ "of them!",
  22,
  "huh",
  11,
@@ -2075,26 +2094,111 @@ dialogs = {
  11,
  "good luck!",
 },{ -- level 9
+ 20,
+ "wow! what is this!?",
+ "a party? for me?",
+ 21,
+ "*gasp* does that mean that",
+ "i made it to the end?",
+ 11,
+ "you're close, but no!",
  10,
- "this segment is still",
- "under construction, but",
- "you can get a little peek",
- "at this test for now",
+ "the party is real.",
+ 12,
+ "well, sort of.",
+ "as real as it gets.",
+ 14,
+ "they have prepared for",
+ "your visit, even though",
+ "you were not invited.",
+ 10,
+ "you can see where this is",
+ "going...",
+ 24,
+ "they are everywhere!",
+ 10,
+ "use your surroundings to",
+ "take cover.",
+ "you can figure out the",
+ "rest.",
 },{ -- level 10
+ 23,
+ "it is hard, but i feel i",
+ "am getting better at this.",
+ 14,
+ "the time has come.",
+ "i crunched all the numbers,",
+ "to compute the worst-case",
+ "scenario.",
  10,
- "next up is a simple fight",
- "against a worker piloting",
- "a mechanical suit. it's",
- "sturdy enough to take more",
- "than one hit, and each",
- "segment of its arms can",
- "kill you. best of luck.",
+ "behold the most firepower",
+ "a worker drone can muster!",
+ "a sturdy mech suit armed",
+ "with retractile chainsaw",
+ "arms and homing electrical",
+ "projectiles!",
+ 22,
+ "but isn't a robot in a",
+ "mech suit just a bigger",
+ "robot?",
+ 11,
+ "this is my magnus opus,",
+ "just for you!",
+ 21,
+ "bring it on!",
 }, { -- level 11
  10,
- "ok",
-}, { -- level 12
+ "huh. this is strange.",
+ 0,
+ "☉ i am the void ☉",
+ "☉ all will be consumed ☉",
+ 24,
+ "what is going on?",
+ 13,
+ "something unknown is",
+ "corrupting the system.",
  10,
- "test 2",
+ "you need to get moving!",
+ "this corruption may turn",
+ "your brain into a pulp,",
+ "which would be slightly",
+ "worse!",
+}, { -- level 12
+ 24,
+ "hey super! are you there?",
+ 10,
+ "yes, i can hear you.",
+ 24,
+ "do you have an update on",
+ "this situation? is it part",
+ "of the training?",
+ 10,
+ "i am not sure.",
+ "i get the feeling that is",
+ "something management does",
+ "for fun at this point.",
+ 22,
+ "can you just disconnect me",
+ "from the program?",
+ 10,
+ "easier said than done.",
+ "the corruption turns the",
+ "process unsafe, but i see",
+ "there is another option.",
+ 24,
+ "tell me now!",
+ 10,
+ "you need to move until you",
+ "reach the tests starting",
+ "position.",
+ "there you can escape.",
+ "i managed to slow the",
+ "thing down a little.",
+  0,
+ "there is no escape from",
+ "☉ the exponential end ☉ ",
+ 14,
+ "be careful!",
 },{ -- epilogue
  20,
  "am i out of bounds?",
@@ -2201,10 +2305,10 @@ function draw_portrait()
  s = dial_portrait
  if s>9 then
   chara, expre = s\10 - 1, s%10 - 1
-  spr(80+2*chara,2,108,2,2)
+  spr(80+2*chara,1,108,2,2)
   if expre >= 0 then
-   rectfill(unpack_split"7,116,14,123,0")
-   spr(112+4*chara+expre,7,116)
+   rectfill(unpack_split"6,116,13,123,0")
+   spr(112+4*chara+expre,6,116)
   end
  end
 end
@@ -2225,12 +2329,12 @@ function dialog_draw()
  end
 
  rectfill(unpack_split"0,106,127,127,0")
- rect(unpack_split"1,107,18,124,7")
- rect(unpack_split"20,107,126,124,7")
+ rect(unpack_split"0,107,17,124,7")
+ rect(unpack_split"19,107,127,124,7")
 
  -- draw next icon
- print("❎",119,123, 2)
- print("❎",119,122+(frame\8)%2,
+ print("❎",120,123, 2)
+ print("❎",120,122+(frame\8)%2,
    8)
 
  -- draw two lines
@@ -2238,15 +2342,15 @@ function dialog_draw()
   text0 = current_dial[dialog_l-1]
   if portrait_dur >= 2 then
    draw_portrait()
-   print(text0,22,109, 5)
-   print(text1,22,117, 10)
+   print(text0,21,109, 5)
+   print(text1,21,117, 10)
    return
   end
  end
 
  -- draw a single line
  draw_portrait()
- print(text1,22,109, 10)
+ print(text1,21,109, 10)
 end
 
 
@@ -2296,14 +2400,16 @@ function viewpos(x,y,z)
  return 64+vx, y, vz
 end
 
-function oval3d(x,y,z,rx,ry,rz,c)
+function oval3d(x,pms)
+ y,z,rx,ry,rz,c = unpack_split_tonum(pms)
  vx,vy,_ = viewpos(x,y,z)
  vrx,vry = viewrad(rx,ry,rz)
  ovalfill(vx-vrx+0.5,vy-vry+0.5,
    vx+vrx-0.5,vy+vry-0.5, c)
 end
 
-function cili3d(x,y,z,rx,ry,rz,c)
+function cili3d(x,pms)
+ y,z,rx,ry,rz,c = unpack_split_tonum(pms)
  vx,vy,_ = viewpos(x,y,z)
  vrx,vry = viewrad(rx,ry,rz)
  rectfill(vx-vrx+0.5,vy-vry+0.5,
@@ -2311,24 +2417,24 @@ function cili3d(x,y,z,rx,ry,rz,c)
 end
 
 function draw_arm(s, front)
- oval3d(s*6,20,0,4,3,4,6)
- oval3d(s*11,21,0,4,3,4,6)
- oval3d(s*14,22,0,4,3,4,6)
- oval3d(s*17,24,0,4,4,4,7)
+ oval3d(s*6,"20,0,4,3,4,6")
+ oval3d(s*11,"21,0,4,3,4,6")
+ oval3d(s*14,"22,0,4,3,4,6")
+ oval3d(s*17,"24,0,4,4,4,7")
 end
 
 function draw_leg(s)
  if cosa<0 then
-  oval3d(s*6,50,3,4,4,8,10)
+  oval3d(s*6,"50,3,4,4,8,10")
  end
- oval3d(s*4,36,0,3,4,3,6)
- oval3d(s*5,40,1,3,4,3,6)
- oval3d(s*6,44,0,3,4,3,6)
+ oval3d(s*4,"36,0,3,4,3,6")
+ oval3d(s*5,"40,1,3,4,3,6")
+ oval3d(s*6,"44,0,3,4,3,6")
  if cosa>=0 then
-  oval3d(s*6,50,3,4,4,8,10)
+  oval3d(s*6,"50,3,4,4,8,10")
  end
- cili3d(s*6,52,3,4,2,8,10)
- cili3d(s*6,54.5,3,4,0.4,8,9)
+ cili3d(s*6,"52,3,4,2,8,10")
+ cili3d(s*6,"54.5,3,4,0.4,8,9")
 end
 
 function draw_led(phi,y)
@@ -2342,8 +2448,8 @@ function draw_led(phi,y)
 end
 
 function draw_flask()
- cili3d(0,23,-17,2,4,2,5)
- cili3d(0,23,-17,2,3,2,10)
+ cili3d(0,"23,-17,2,4,2,5")
+ cili3d(0,"23,-17,2,3,2,10")
 end
 
 function draw_tail()
@@ -2367,8 +2473,8 @@ function draw_tail()
 end
 
 function draw_eye(x)
- oval3d(x,10,7,1,2,1,9)
- oval3d(x,11,7,1,1,1,10)
+ oval3d(x,"10,7,1,2,1,9")
+ oval3d(x,"11,7,1,1,1,10")
 end
 
 function draw_rookie()
@@ -2384,28 +2490,28 @@ function draw_rookie()
  end
 
  -- neck
- cili3d(0,16,0,3,2,3,9)
+ cili3d(0,"16,0,3,2,3,9")
 
  -- body
- oval3d(0,25,0,6,7,5,6)
- oval3d(0,30,0,5,4,5,6)
+ oval3d(0,"25,0,6,7,5,6")
+ oval3d(0,"30,0,5,4,5,6")
 
  -- head
- oval3d(0,10,0,9,6,9,7)
- cili3d(0,9,0,9,3,9,6)
+ oval3d(0,"10,0,9,6,9,7")
+ cili3d(0,"9,0,9,3,9,6")
  if front then
-  oval3d(0,10,18,9,4,9,0)
+  oval3d(0,"10,18,9,4,9,0")
  end
  if cosa > 0.75 and frame > 79 then
-  oval3d(0,14,8,3,1,1,7)
+  oval3d(0,"14,8,3,1,1,7")
   draw_eye(-3)
   draw_eye(3)
  end
 
  -- cap
- oval3d(0,7,6,9,1,9,5)
- oval3d(0,4,0,9,4,9,5)
- cili3d(0,5,0,9,3,9,5)
+ oval3d(0,"7,6,9,1,9,5")
+ oval3d(0,"4,0,9,4,9,5")
+ cili3d(0,"5,0,9,3,9,5")
 
  -- lights
  for i=0,4 do
@@ -2415,9 +2521,9 @@ function draw_rookie()
 
  if front then
   -- draw zipper
-  oval3d(0,21,3,2,3,1,9)
-  cili3d(0,23,4,2,3,1,9)
-  cili3d(0,23,4,0.5,2,1,6)
+  oval3d(0,"21,3,2,3,1,9")
+  cili3d(0,"23,4,2,3,1,9")
+  cili3d(0,"23,4,0.5,2,1,6")
  else
   -- front tail
   draw_tail()
@@ -2578,6 +2684,12 @@ end
 
 function print_unpack_split(s)
  print(unpack_split(s))
+end
+
+function unpack_split_tonum(s)
+ v = split(s)
+ foreach(v, tonum)
+ return unpack(v)
 end
 
 -- 0: solid sprites

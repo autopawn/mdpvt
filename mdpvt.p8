@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 41
+version 42
 __lua__
 -- main
 
@@ -20,7 +20,7 @@ level_dialog_music =
 
 -- hard difficulty enabled?
 -- (o or 1), stored on dget(6)
-hard = 1
+hard = 0
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -671,7 +671,7 @@ function player_update()
 
   -- ground slam activate
   if not pla.ground then
-   if btnp(⬇️) and
+   if (pla.y > 480 or btnp(⬇️)) and
      not btnp(⬆️) and
      not pla.slam then
     sfx(8, -1, 0, 8)
@@ -1656,10 +1656,11 @@ function electroball_update(ball)
  else
   ball.t += 1
   -- Accelerate towards the player
-  objaimto(ball, pla.x+2, pla.y+8,
-    tonum(level > 10 and hard) * 0.14 + 0.03,
-    true)
-  ball.vx, ball.vy = veclimit(ball.vx, ball.vy, 4+hard)
+  endgame = tonum(level > 10 and hard)
+  acc = endgame * 0.14 + 0.03
+  spd = 3 + endgame + hard
+  objaimto(ball, pla.x+2, pla.y+8, acc, true)
+  ball.vx, ball.vy = veclimit(ball.vx, ball.vy, spd)
   if objcol(pla, ball) then
    player_die()
   end
@@ -2149,15 +2150,15 @@ dialogs = {
 }, { -- level 11
  10,
  "huh. this is strange.",
+ "something is off.",
  0,
+ "all will be consumed.",
  "☉ i am the void ☉",
- "☉ all will be consumed ☉",
  24,
  "what is going on?",
- 13,
- "something unknown is",
- "corrupting the system.",
  10,
+ "an unknown program is",
+ "corrupting the system!",
  "you need to get moving!",
  "this corruption may turn",
  "your brain into a pulp,",
@@ -2174,9 +2175,11 @@ dialogs = {
  "of the training?",
  10,
  "i am not sure.",
- "i get the feeling that is",
- "something management does",
- "for fun at this point.",
+ "either we are in presence",
+ "of a lovecraftian horror,",
+ "or management forgot to",
+ "install the security",
+ "updates.",
  22,
  "can you just disconnect me",
  "from the program?",

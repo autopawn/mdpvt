@@ -4,6 +4,20 @@ __lua__
 -- complete your disassembly drone
 -- training!
 
+-- game made by autopawn,
+-- crjonch, remi mixer, and
+-- miszuk.
+-- thanks to the mdp discord
+-- server.
+-- character graphics in label
+-- commissioned to @marshimiiu.
+
+-- if you don't see more
+-- comments, they were stripped
+-- to comply with the
+-- compression capacity. check
+-- github.com/autopawn/mdpvt
+
 -- current level.
 -- stored on dget(1)
 level = 0

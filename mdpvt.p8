@@ -238,6 +238,7 @@ function jumpkey()
   jumpk = 2
   menuitem(1,"jump key: ⬆️",jumpkey)
  end
+ return true -- keep menu open
 end
 
 function _update()

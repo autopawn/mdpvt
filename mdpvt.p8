@@ -718,8 +718,8 @@ function player_update()
     elseif pre_vy>8 then
      sfx(62)
      add_blood(pla.x+4,pla.y+16,
-       {1,5,6}, rnd(6)+12,
-       rnd({30,35,40,45}))
+       split"1,5,6", rnd(6)+12,
+       rnd(split"30,35,40,45"))
      camera_thug_shake(2,4)
      local slamkillzone={
       x=pla.x-8,
@@ -780,7 +780,7 @@ function player_die()
  pla.vx /= 2
  pla.h = 8
  add_blood(
-   pla.x+3,pla.y+9,{5,6,9,10})
+   pla.x+3,pla.y+9,split"5,6,9,10")
  deathcount+=1
 end
 
@@ -915,7 +915,7 @@ end
 
 function brick_break(brick)
  if level >= break_bricks_level then
-  add_blood(brick.x+4,brick.y+4,{1,5,6,7}, rnd(6)+4)
+  add_blood(brick.x+4,brick.y+4,split"1,5,6,7", rnd(6)+4)
   mset(brick.x/8,brick.y/8,0)
   del(cracked_bricks, brick)
  end
@@ -1039,13 +1039,13 @@ function create_worker(x1, y1, id)
   worker.touchdeath = false
   worker.sprite = 26
   worker.pipeanim = 0
-  worker.blood = {8,5,6}
+  worker.blood = split"8,5,6"
   worker.facedir = 1
  elseif 84<=id and id<=86 then
   worker.type = "hunter"
   worker.touchdeath = false
   worker.sprite = 84
-  worker.blood = {8,13,6}
+  worker.blood = split"8,13,6"
   worker.facedir = 1
   worker.flying = true
   worker.knivedelay = 50+5*#workers
@@ -1056,7 +1056,7 @@ function create_worker(x1, y1, id)
   worker.h = 24
   worker.touchdeath = false
   worker.sprite = 29
-  worker.blood = {5,6,13}
+  worker.blood = split"5,6,13"
   worker.facedir = 1
   worker.maxhp = 15+5*hard
   worker.hands = {
@@ -1073,13 +1073,13 @@ function create_worker(x1, y1, id)
   worker.canflip = false
   worker.touchdeath = false
   worker.sprite = 43
-  worker.blood = {6, 7, 8}
+  worker.blood = split"6, 7, 8"
   worker.facedir = 0
   worker.blink = 0
  else
   worker.type = "normal"
   worker.sprite = 20
-  worker.blood = {1,5,6}
+  worker.blood = split"1,5,6"
   worker.canmove = true
  end
  worker.hp = worker.maxhp
@@ -1682,7 +1682,7 @@ function electroball_update(ball)
   end
  elseif ball.t > 270 then
   del(electroballs, ball)
-  add_blood(ball.x+2, ball.y+2, {7, 10, 12})
+  add_blood(ball.x+2, ball.y+2, split"7,10,12")
  else
   ball.t += 1
   -- Accelerate towards the player
@@ -1770,7 +1770,7 @@ function add_hole(x, y)
    w=1,
    h=1,
    gravity=false,
-   color={0,5,8},
+   color=split"0,5,8",
    lifetime=100,
   })
 end
@@ -1834,7 +1834,7 @@ function shake_update()
   camera_shake_y, camera_shake_x = 0, 0
  end
  if camera_shake_time > 0 then
-  randvals = {-2, -1, 1, 2}
+  randvals = split"-2,-1,1,2"
   camera_shake_y, camera_shake_x =
     rnd(randvals), rnd(randvals)
   camera_shake_time-=1

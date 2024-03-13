@@ -75,9 +75,6 @@ function _init()
   timer_f = dget(4)
   deathcount = dget(5)
   hard = dget(6)
-  if dget(8) != 0 then
-   jumpk = dget(8)
-  end
   if dialog_shown == 1 then
    if level == 10 then
     music(level_music[level], 0, 3)
@@ -92,6 +89,9 @@ function _init()
  end
 
  -- init the jumpkey menu option (twice to keep it the same)
+ if dget(8) != 0 then
+  jumpk = dget(8)
+ end
  jumpkey()
  jumpkey()
 
@@ -207,7 +207,6 @@ function reset_level()
  dset(5, deathcount)
  dset(6, hard)
  dset(7, stat(54))
- dset(8, jumpk)
  run()
 end
 
@@ -219,7 +218,6 @@ function next_level()
  dset(4, timer_f)
  dset(5, deathcount)
  dset(6, hard)
- dset(8, jumpk)
  run()
 end
 
@@ -238,6 +236,7 @@ function jumpkey()
   jumpk = 2
   menuitem(1,"jump key: ⬆️",jumpkey)
  end
+ dset(8, jumpk)
  return true -- keep menu open
 end
 
@@ -682,7 +681,7 @@ function player_update()
    pla.vx /= 4
   end
   -- flutter flight
-   if btnp(jumpk) then
+  if btnp(jumpk) then
    pla.vy -= 3
    pla.animw = 7
    sfx(6 + tonum(pla.ground))

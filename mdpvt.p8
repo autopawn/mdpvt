@@ -1936,7 +1936,7 @@ dialogs = {
  "`kay!",
  10,
  "some workers may resist to",
- "an uscheduled disassembly",
+ "an unscheduled disassembly",
  "and be unpredictably armed.",
  "management instructed me",
  "to add angsty teenagers",

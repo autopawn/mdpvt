@@ -9,4 +9,5 @@ Programmed by:
 * Autopawn
 * [Duzy-Dym](https://github.com/Duzy-Dym) (Discord: miszuk2137)
 * Remixer (Discord: remimixer)
+* Crjönch (Discord: crjonch)
 

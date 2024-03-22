@@ -1244,7 +1244,7 @@ function worker_update(worker)
      worker_throw_knives(worker)
     end
 
-    if frame%35 == 34 then
+    if frame%35 == 0 then
      objaimto(worker,
        pla.x + rnd(90)-45,
        pla.y + rnd(40)-20,1)

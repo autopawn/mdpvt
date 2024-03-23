@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Game version
+version=1.0
+
 # Change directory to script directory
 cd "$(dirname "$0")"
 
@@ -26,6 +29,6 @@ sed 's/--[^>].*//g' mdpvt.p8 \
 $pico8 build/mdpvt_stripped.p8 -export build/index.html
 zip build/index.zip build/index.html build/index.js
 
-$pico8 build/mdpvt_stripped.p8 -export build/mdvt.png
+$pico8 build/mdpvt_stripped.p8 -export "build/mdvt_$version.png"
 
-$pico8 build/mdpvt_stripped.p8 -export build/mdvt.bin
+$pico8 build/mdpvt_stripped.p8 -export "build/mdvt_$version.bin"

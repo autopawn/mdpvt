@@ -1860,278 +1860,264 @@ end
 
 dialogs = {
 { -- level 1
- "∧ zzzZZZ... zzzZZZ... ∧",
- "∧ zzzzzzZZZZZZ... ∧",
+ "∧ zzzzzz... zzzzzz... ∧\n∧ zzzzzzzzzzzz... ∧",
  20,
  "*beep*",
  22,
- "uh... where... who am i?",
+ "uh... where...",
  10,
- "it took you some time to",
- "wake up rookie.",
+ "it took you some time to\nwake up rookie.",
  20,
- "who are you?",
+ "who are you?\nwait, who am i?",
  10,
- "i am your supervisor.",
- "this is your training.",
- "you have been reset, and",
- "retrofitted as a",
- "disassembly drone.",
+ "you are a formerly useless\nworker drone that's been",
+ "reset and retrofitted into\na state of the art",
+ "disassembly drone. i am\nyour supervisor, here to",
+ "oversee your virtual\ntraining.",
  23,
- "cool! what will i be",
- "disassembling?",
+ "cool! what'll i be\ndisassembling?",
  11,
- "worker drones, mostly.",
+ "other worker drones,\nmostly.",
  22,
  "oh...",
  10,
- "let's try the wings.",
- "press ❎ to flutter.",
- "move to the next area, and",
- "avoid the death-blocks.",
+ "to start, let's test your\nwings. input ❎ to flutter.",
+ "once you're comfortable,\nnavigate through the next ",
+ "area and avoid the death\nblocks.",
  20,
- "what do you mean with...",
+ "what do you mean by...",
  10,
- "they will kill you.",
+ "they'll kill you.",
  24,
  "kill me!?",
  11,
- "don't worry, it is just a",
- "simulation.",
+ "don't worry, it's just a\nsimulation.",
  10,
  "...",
- "the pain is very real",
- "though...",
+ "the pain is very real\nthough...",
  22,
- "*gulp*"
+ "*gulp*",
 },{ -- level 2
- 10,
+  10,
  "excellent!",
- "but try to be faster,",
- "rookie.",
+ "but try to be faster from\nhere on rookie.",
+ 12,
  "management is watching.",
  10,
- "now, i need you to",
- "disassemble all the drones",
- "in this area and reach the",
- "goal.",
+ "now, i need you to\ndisassemble all the drones",
+ "in this area and reach the\ngoal.",
  20,
- "i know it's my job and",
- "everything... but how do i",
+ "i know it's my job and\neverything... but how do i",
  "do that exactly?",
  11,
- "simple! just get close and",
- "let your instincts handle",
- "the rest.",
+ "simple! just get close and\nlet your programming",
+ "handle the rest.",
 },{ -- level 3
  20,
- "so...",
- "is there a reason why i'm",
- "disassembling all these",
- "worker drones?",
+ "so...\nis there a reason why i'm",
+ "disassembling all these\nworker drones?",
  12,
- "it's your job.",
- "don't question the company.",
- 20,
+ "it's your job.\ndon't question the company.",
+ 23,
  "`kay!",
  10,
- "some workers may resist to",
- "an unscheduled disassembly",
- "and be unpredictably armed.",
- "management instructed me",
- "to add angsty teenagers",
- "with railguns in this part,",
- "for some reason.",
+ "now some drones may resist\nan unscheduled disassembly",
+ "and be unpredictably armed.\nto demonstrate this i've",
+ "been instructed to add\nangsty teenagers with",
+ "railguns...",
+ 12,
+ "...for some reason.",
  22,
- "what is a railgun?",
+ "what's a railgun?",
  11,
  "kill 'em all, rookie!",
 },{ -- level 4
  10,
- "alright, next on the list",
- "is weapons.",
- "you're doing good, but",
- "it's about time you start",
- "using your brai...",
- 11,
- "i mean, using some more",
- "weaponry.",
+ "alright, next on the list\
+is weapons.",
+ "you're doing good, but\
+it's about time you start",
+"using your\nbrai..weaponry.      \r███",
  20,
  "hey!",
  10,
- "i've enabled your rocket",
- "launcher.",
- "press 🅾️ to shoot.",
- "also, you don't have to",
- "worry about ammo, but you",
- "do have to detonate them",
- "manually, pressing 🅾️ a",
- "second time.",
- "here's a few targets to",
- "practice on.",
+ "i've enabled your rocket\
+launcher.",
+ "input 🅾️ to shoot.\
+you don't have to worry",
+ "about ammo, but you do\
+have to detonate them",
+ "manually by making a\
+second 🅾️ input.",
+ "here's a few targets to\
+practice on.",
+11,
  "knock 'em dead, rookie!",
 },{ -- level 5
- 11,
+ 10,
  "having fun rookie?",
- 22,
- "feels like there's a",
- "correct answer here, but",
+ 20,
+ "feels like there's a\
+correct answer here, but",
  21,
  "yeah!",
  11,
- "correct answer! looks like",
- "there's no need for any",
- "behavior correction.",
- "good for you!",
+ "correct answer! looks like\
+there's no need for any",
+ "behavioral correction,\
+good for you!",
  22,
- "... is that something to",
- "be worried about?",
+ "... is that something i\
+should worry about?",
  11,
- "since you're having fun,",
- "no.",
- 21,
+ "since you're having fun,\
+no.",
+ 23,
  "cool!",
  10,
- "alright rookie, time to",
- "spice things up a bit. not",
- "every drone is going to",
- "sit there and take it if",
- "they see something coming",
- "at them.",
- "you might have to think",
- "outside the box for these",
+ "alright rookie, time to\
+spice things up a bit. not",
+ "every drone is going to\
+sit there and take it if",
+ "they see something coming\
+at them.",
+ "you might have to think\
+outside the box for these",
  "drones.",
- 10,
- "hopefully that tip didn't",
- "go *over your head*...",
+ 14,
+ "*hopefully that tip didn't\
+go over his head*",
  10,
  "good luck!",
 },{ -- level 6
  10,
- "since you seem to have",
- "your aiming down, time to",
- "see if you can still shoot",
- "when there's return fire",
+ "since you seem to have\
+your aiming down, time to",
+ "see if you can still shoot\
+when there's return fire",
  "added back into the mix.",
  22,
- "does this mean more",
- "railguns?",
+ "does this mean more\
+railguns?",
  11,
- "ding!♪",
+ "*0ing!♪*",
  10,
- "additionally, workers are",
- "designed to work together,",
- "so you may have to deal",
- "with teams that cover each",
+ "additionally, workers are\
+designed to work together,",
+ "so you may have to deal\
+with teams that cover each",
  "other's weaknesses.",
  11,
- "chin up though, if you're",
- "outnumbered, then it's",
+ "chin up though, if you're\
+outnumbered then it's",
  "almost a fair fight!",
 },{ -- level 7
  10,
- "okay rookie, now here's a",
- "real threat for you:",
- "in this testroom there's",
- "a drone that'll really",
- "test your mettle.",
- "it has telekinetic powers",
- "and can fly...",
+ "okay rookie, now here's a\
+real threat for you:",
+ "in this test there's\
+a drone that'll really",
+ "test your mettle.\
+it has telekinetic",
+ "abilities and flight...",
+ 12,
  "among other things.",
  22,
- "wait, that sounds like a",
- "whole lot for a worker.",
- "doesn't that seem a little",
- "excessive?",
+ "wait, that sounds like a\
+whole lot for a worker.",
+ "doesn't that seem a little\
+excessive?",
  14,
- "...",
- "rookie, listen carefully,",
- "because i'm only going",
- "to say this once:",
+ "...rookie, i'm only going\
+to say this once:",
  13,
- "this simulation contains",
- "a mere fraction of the",
- "horrors that lie out there.",
+ "this simulation contains\
+only a fraction of what",
+"you may encounter outside.",
  10,
- "best you start preparing",
- "now.",
+ "best you start preparing\
+now.",
  24,
- "...",
- "wait!!",
+ "...\
+wait!!",
  12,
  "what? did i scare you?",
- 22,
- "i mean ye-",
  20,
- "...no?",
+ "yeah...\r██...no?",
  12,
  "...",
  20,
  "...",
  22,
- "i just don't see the way",
- "out of this room.",
+ "i just don't see the way\
+out of this room.",
  11,
  "oh yeah, almost forgot...",
  10,
- "i've disabled some safety",
- "restrictions on your",
- "rocket and dive protocol.",
- "you should be able to",
- "break through brittle",
- "blocks now.",
+ "i've disabled some safety\
+restrictions on your",
+ "rockets and dive protocol.\
+you should be able to",
+ "break through brittle\
+surfaces now.",
  20,
  "...dive?",
  10,
- "...yes? that thing you can",
- "do once you gain enough",
+ "...yes? that thing you can\
+do once you gain enough",
  "height and descend (⬇️)?",
  12,
- "surely you have already",
- "figured that out, right?",
+ "surely you've already\
+figured that out, right?",
  20,
- "oh!",
+ "oh! yeah totally!",
  10,
- "it is a powerful maneuver",
- "that allows you to wreck",
- "the strongest drones.",
- "keep that in mind if",
- "explosives aren't enough.",
+ "it's a powerful maneuver\
+that allows you to punch",
+ "through even the strongest\
+drones. keep that in mind",
+ "if explosives are ever\
+insufficient.",
 },{ -- level 8
  11,
  "good going rookie!",
  20,
- "you know...",
- "i kinda like this hat.",
+ "you know...\
+i kinda like this hat.",
  10,
- "it is a part of you that",
- "could not be removed.",
+ "it's a part of you that\
+couldn't be removed.",
  "doesn't matter though,",
- "there are no trains where",
- "you're going.",
- 21,
- "trains?",
- 12,
- "forget i said any of that.",
+ 14,
+ "𝘵𝘩𝘦𝘳𝘦'𝘴 𝘯𝘰 𝘵𝘳𝘢𝘪𝘯𝘴 𝘸𝘩𝘦𝘳𝘦\
+𝘺𝘰𝘶'𝘳𝘦 𝘩𝘦𝘢𝘥𝘦𝘥.",
  23,
- "choo! choo! all aboard!",
+ "trains? oh i love trains!",
+ 10,
+ "no you don't.\
+forget i said any of that.",
+ 23,
+ "choo! choo!\
+all aboard the s\r◆☉⌂♪▒█⧗▤●░\r▤r웃♪●☉⌂😐♥⬇️▒",
  13,
- "don't. do. that!",
- "...",
+ "\^w\^tstop talking.",
+ "",
+ //"\^w\^tstop talking.      \
+//now.",
  11,
- "i think, since you are in",
- "good humor, that you are",
- "ready to take the training",
- "wheels off!",
+ "i think, since you're in\
+such good humor, that",
+ "you're ready to take the\
+training wheels off!",
  24,
  "they weren't off before?!",
  10,
- "nope. what you fought was",
- "a glimpse of that drone's",
- "power.",
+ "nope. what you fought\
+before was restrained for",
+ "introduction's sake.",
  11,
- "so now you're fighting two",
- "of them!",
+ "so now you're fighting two\
+of them!",
  22,
  "huh",
  11,
@@ -2142,141 +2128,244 @@ dialogs = {
  "good luck!",
 },{ -- level 9
  20,
- "wow! what is this!?",
- "a party? for me?",
- 21,
- "*gasp* does that mean that",
- "i made it to the end?",
+ "wow! what's all this?\
+a party? for me!?",
+ 23,
+ "*gasp* does that mean that\
+i made it to the end?",
  11,
- "you're close, but no!",
+ "close, but not quite!",
  10,
  "the party is real.",
- 12,
- "well, sort of.",
- "as real as it gets.",
  14,
- "they have prepared for",
- "your visit, even though",
- "you were not invited.",
+ "well, sort of...\
+𝘢𝘴 𝘳𝘦𝘢𝘭 𝘢𝘴 𝘪𝘵 𝘨𝘦𝘵𝘴 𝘩𝘦𝘳𝘦.",
  10,
- "you can see where this is",
- "going...",
+ "they've prepared for your\
+attendance, even though",
+ "you weren't invited.",
+ 11,
+ "you can see where this is\
+going...",
  24,
- "they are everywhere!",
+ "they're everywhere!",
  10,
- "use your surroundings to",
- "take cover.",
- "you can figure out the",
- "rest.",
+ "use your surroundings to\
+take cover.",
+ "you can figure out the\
+rest.",
 },{ -- level 10
  14,
- "the time has come.",
- "i crunched all the numbers,",
- "to compute the worst-case",
- "scenario.",
+ "the time has come.\
+i crunched all the numbers",
+ "to compute the worst-case\
+scenario.",
  10,
- "behold the most firepower",
- "a worker drone can muster!",
- "a sturdy mech suit armed",
- "with retractile chainsaw",
- "arms and homing electrical",
- "projectiles!",
+ "behold the most firepower\
+a worker drone can muster!",
+ "a sturdy worker, armed\
+with retractable chainsaw",
+ "arms and homing electrical\
+projectiles!",
+ 20,
+ "can you really call it a\
+worker at this point?",
+ 10,
+ "",
+ 20,
+ "it's more like a mech\
+with a worker in it.",
+ 12,
+ "",
  22,
- "but isn't a robot in a",
- "mech suit just a bigger",
- "robot?",
- 11,
- "this is my magnum opus,",
- "just for you!",
- 23,
- "it is hard, but i feel i",
- "am getting better at this.",
+ "wait, is a robot inside a\
+mech just a bigger robot?",
+ 20,
+ "no, that's like calling a\
+tank driver the whole tank.",
+ 22,
+ "but that's not the same...\
+uhh, my head hurts now!",
+ 14,
+ "sorry, couldn't hear you\
+over the magnificency of",
+ "this engineering marvel.",
+ 10,
+ "this is my magnum opus,\
+just for you!",
+ 20,
+ "it looks tough, but after\
+all this training?",
+ "i think i've got this.",
  21,
  "bring it on!",
 }, { -- level 11
- 10,
- "huh. this is strange.",
- "something is off.",
- 0,
- "all will be consumed.",
- "☉ i am the void ☉",
- 24,
- "what is going on?",
- 10,
- "an unknown program is",
- "corrupting the system!",
- "you need to get moving!",
- "this corruption may turn",
- "your brain into a pulp,",
- "which would be slightly",
- "worse!",
+11,
+ "phenomenal! couldn't have\
+done that better myself!",
+10,
+"so, this next test is to\
+train your ability to ",
+"disengage in conditions of\
+high mental stress and...",
+12,
+"`oh dear, what's this?\
+this doesn't look good!'",
+
+22,
+"huh? what's going on??",
+
+12,
+"`the simulation is being\
+attacked by some kind of..",
+"virus! some horrible virus\
+is coming your way!'",
+"rookie you have to get out\
+of there quickly!",
+"`lest your mind be reduced\
+to pulp, which would only",
+"be moderately concerning!'",
+
+24,
+"\^w\^taaaaaaaaahh!!",
+
 }, { -- level 12
- 24,
- "hey super! are you there?",
- 10,
- "yes, i can hear you.",
- 24,
- "do you have an update on",
- "this situation? is it part",
- "of the training?",
- 10,
- "i am not sure.",
- "either we are in presence",
- "of some kind of",
- "lovecraftian abomination,",
- "or management forgot to",
- "install the security",
- "updates.",
  22,
- "can you just disconnect me",
- "from the program?",
+ "is...is it gone?",
+ "hey supervisor, can you\
+still hear me?",
  10,
- "easier said than done.",
- "the corruption turns the",
- "process unsafe, but i see",
- "there is another option.",
+ "loud and clear rookie,\
+you good?",
+ 22,
+ "i think?\
+what kind of virus was that?",
  24,
- "tell me now!",
- 10,
- "you need to move until you",
- "reach the tests starting",
- "position.",
- "there you can escape.",
- "i managed to slow the",
- "thing down a little.",
-  0,
- "there is no escape from",
- "☉ the exponential end ☉ ",
- 14,
- "be careful!",
-},{ -- epilogue
+ "am i even safe in here?!",
+ 11,
+ "oh there wasn't a virus.",
  20,
- "am i out of bounds?",
+ "what.",
  10,
- "yeah, you made it!",
- "i can unplug you now.",
+ "yeah we simply activated a\
+wiping function.",
+ 12,
+ "sorry about the scare,\
+i've got to stay on script",
+ "or i'll be on the chopping\
+block.",
  11,
- "i guess i can consider",
- "your training complete.",
- "you will be a great asset.",
- "i am very proud!",
- 21,
- "yesss!",
- 22,
- "but, i am not sure i can",
- "kill in the real world.",
- 11,
- "oh, you will just fine.",
- "also...",
- 13,
- "we need their oil to live.",
+ "that does mean you've got\
+fans higher up, that only",
+ "happens to ones they like.",
+ 12,
+ "or they started doing it\
+for fun.",
+ 23,
+ "glad i wasn't in any real\
+danger then!",
+ 12,
+ "whatever helps you sleep..",
+ 14,
+ "..doesn't quite work here,\
+you get what i mean.",
+ 23,
+ "haha! ignoring that!\
+so i'm done here, right?",
+ 10,
+ "nope. i can't stop the\
+wipe now and you're only",
+ "about halfway through now.",
  24,
- "...!",
- -1,
- "assigning perms ://",
- "user id: supi77uwu",
- "role: admin",
- "              [complete]",
+ "oh come on!",
+ 10,
+ "chin up rookie,\
+it's the last stretch!",
+ "all you need to do now is\
+get out of the simulation,",
+ "like an escape room if\
+that helps.",
+
+ 20,
+ "i kinda remember something\
+unstable looking earlier..",
+
+ 11,
+ "that's the ticket!",
+ "now get going! if you've\
+passed everything thus",
+ "far there's no reason to\
+fall here!",
+ 14,
+ "keep a cool head in there,\
+you're almost out.",
+
+ },{ -- epilogue
+ "",
+ 20,
+ "am i...outside the test?",
+
+ 11,
+ "yep, you made it!",
+ "i can pull you out from\
+here and we can call your",
+ "training complete!",
+ "be proud, you've done a\
+great job!",
+
+ 23,
+ "d'aww thanks!",
+ 20,
+ "honestly though, im not\
+sure if im totally",
+ "ready yet...",
+
+ 11,
+ "oh you'll be fine!",
+ "and if not you'll surely\
+shape up quick: its either",
+ "drink drone oil or die\
+out there!",
+
+ 24,
+ "why didn't you warn me\
+earlier?!",
+
+ 10,
+ "didn't want to stress you\
+out,",
+ 12,
+ "plus we didn't have the\
+budget for that.",
+
+ 22,
+ "i mean, will that be\
+enough to...",
+
+ 10,
+ "just wait until you\
+try it yourself. once you",
+ "get your hands on some\
+sweet.....",
+
+ 21,
+ "nevermind that sounds\
+pretty cool!",
+ 11,
+ "glad you got that solved!",
+ "now its about time we hit\
+the field!",
+ "up and at 'em rookie!",
+ 20,
+ "'we'?",
+ 0,
+ "assigning roles: //\
+user id: supi77uwu",
+ "subject: rookie\
+status: hired",
+ "awaiting assignment\
+        [complete]",
+    "[thank you for playing]",
 }
 }
 
@@ -2386,17 +2475,6 @@ function dialog_draw()
  print("❎",120,123, 2)
  print("❎",120,122+(frame\8)%2,
    8)
-
- -- draw two lines
- if dialog_l > 1 then
-  text0 = current_dial[dialog_l-1]
-  if portrait_dur >= 2 then
-   draw_portrait()
-   print(text0,21,109, 5)
-   print(text1,21,117, 10)
-   return
-  end
- end
 
  -- draw a single line
  draw_portrait()

@@ -1926,7 +1926,7 @@ dialogs = {
  "been instructed to add\nangsty teenagers with",
  "railguns...",
  12,
- "...for some reason.",
+ "... for some reason.",
  22,
  "what's a railgun?",
  11,
@@ -2102,8 +2102,6 @@ all aboard the s\r◆☉⌂♪▒█⧗▤●░\r▤r웃♪●☉⌂😐♥⬇�
  13,
  "\^w\^tstop talking.",
  "",
- //"\^w\^tstop talking.      \
-//now.",
  11,
  "i think, since you're in\
 such good humor, that",
@@ -2298,7 +2296,7 @@ you're almost out.",
 
  },{ -- epilogue
  20,
- "am i...outside the test?",
+ "am i... outside the test?",
 
  11,
  "yep, you made it!",

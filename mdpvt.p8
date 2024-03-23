@@ -2297,7 +2297,6 @@ fall here!",
 you're almost out.",
 
  },{ -- epilogue
- "",
  20,
  "am i...outside the test?",
 
@@ -2306,54 +2305,41 @@ you're almost out.",
  "i can pull you out from\
 here and we can call your",
  "training complete!",
- "be proud, you've done a\
-great job!",
+ "you will be a great asset.\
+i am very proud!",
 
  23,
  "d'aww thanks!",
  20,
- "honestly though, im not\
-sure if im totally",
- "ready yet...",
+ "but, i'm not sure i can\
+kill in the real world.",
 
  11,
- "oh you'll be fine!",
- "and if not you'll surely\
+ "oh you'll do just fine!",
+ "and if not, you'll surely\
 shape up quick: its either",
  "drink drone oil or die\
-out there!",
+from overheating out there!",
 
  24,
- "why didn't you warn me\
-earlier?!",
+ "what? that sounds horrible!",
 
- 10,
- "didn't want to stress you\
-out,",
- 12,
- "plus we didn't have the\
-budget for that.",
-
- 22,
- "i mean, will that be\
-enough to...",
-
- 10,
- "just wait until you\
-try it yourself. once you",
- "get your hands on some\
-sweet.....",
+ 11,
+ "just wait until you try it\
+yourself. once you get",
+ "your hands on some warm,\
+sweet-",
 
  21,
  "nevermind that sounds\
 pretty cool!",
  11,
  "glad you got that solved!",
- "now its about time we hit\
-the field!",
+ 10,
+ "well, that's it, i hope to\
+see you in the field!",
+ 11,
  "up and at 'em rookie!",
- 20,
- "'we'?",
  0,
  "assigning roles: //\
 user id: supi77uwu",
@@ -2361,7 +2347,7 @@ user id: supi77uwu",
 status: hired",
  "awaiting assignment\
 [complete]",
- "[thank you for playing]",
+ "[thank you for playing ♥]",
 }
 }
 

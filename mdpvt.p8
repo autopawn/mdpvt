@@ -1858,7 +1858,7 @@ end
 -->8
 -- dialog texts
 
-dialogs = {
+dialogs={
 { -- level 1
  "∧ zzzzzz... zzzzzz... ∧\n∧ zzzzzzzzzzzz... ∧",
  20,
@@ -2216,13 +2216,14 @@ this doesn't look good!'",
 12,
 "`the simulation is being\
 attacked by some kind of..",
-"virus! some horrible virus\
-is coming your way!'",
-"rookie you have to get out\
-of there quickly!",
+"horrible virus coming\
+your way! rookie you have",
+"to get out of there\
+quickly!",
 "`lest your mind be reduced\
 to pulp, which would be",
-"slightly worse!'",
+"slightly worse than\
+normal!'",
 
 24,
 "\^w\^taaaaaaaaahh!!",
@@ -2294,7 +2295,7 @@ fall here!",
  "keep a cool head in there,\
 you're almost out.",
 
- },{ -- epilogue
+},{ -- epilogue
  20,
  "am i... outside the test?",
 
@@ -2302,15 +2303,16 @@ you're almost out.",
  "yep, you made it!",
  "i can pull you out from\
 here and we can call your",
- "training complete!",
- "you will be a great asset.\
-i am very proud!",
+ "training complete! i\
+couldn't be prouder!",
+ "you'll be a fantastic\
+asset!",
 
  23,
  "d'aww thanks!",
- 20,
- "but, i'm not sure i can\
-kill in the real world.",
+ 22,
+ "not sure if i'm ready\
+for the real world though.",
 
  11,
  "oh you'll do just fine!",

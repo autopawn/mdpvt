@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Game version
-version=1.0.1
+version=1.0.2
 
 # Change directory to script directory
 cd "$(dirname "$0")"

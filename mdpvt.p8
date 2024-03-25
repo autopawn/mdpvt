@@ -388,8 +388,10 @@ function _draw()
 
  print(tstr,100,2,6)
  print(tstr,100,1,7)
+ pal(12,12-4*hard)
  spr(15,92,1)
-
+ pal(12,12)
+ 
  ::draw_end::
 end
 

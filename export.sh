@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Game version
-version=1.0.2
+version=1.1
 
 # Change directory to script directory
 cd "$(dirname "$0")"
@@ -13,6 +13,8 @@ mkdir build
 
 sed 's/--[^>].*//g' mdpvt.p8 \
     | sed 's/ = /=/g' \
+    | sed 's/ += /+=/g' \
+    | sed 's/ -= /-=/g' \
     | sed 's/ == /==/g' \
     | sed 's/ != /!=/g' \
     | sed 's/ >= />=/g' \

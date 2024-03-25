@@ -2342,7 +2342,7 @@ pretty cool!",
 see you in the field!",
  11,
  "up and at 'em rookie!",
- 0,
+ -1,
  "assigning roles: //\
 user id: supi77uwu",
  "subject: rookie\

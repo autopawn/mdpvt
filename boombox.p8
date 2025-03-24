@@ -111,6 +111,12 @@ function _draw()
   return
  end
 
+ -- shake camera
+ local shake = 2*distortion
+	local movex = 0.5+2*rnd(shake)-shake
+	local movey = 0.5+2*rnd(shake)-shake
+ camera(movex, movey)
+
  pal(0, 128, 1) -- dark brown
  pal(1, 129, 1) -- dark blue
  pal(15, 137, 1) -- dark orage

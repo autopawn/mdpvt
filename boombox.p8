@@ -83,7 +83,7 @@ function _update60()
 
  mwaves_update()
  
- distortion += mwaves_avg_volume()/30 
+ distortion += mwaves_avg_volume()/70 
  distortion = min(distortion, 1)
  distortion *= 0.75
 end
@@ -95,9 +95,14 @@ wave_colors = {15, 9, 10, 3}
 
 function _draw()
  pal(0, 128, 1) -- dark brown
+ pal(1, 129, 1) -- dark blue
  pal(15, 137, 1) -- dark orage
  pal(3, 135, 1) -- light yellow
- cls()
+
+ fillp(0b1111000011110000)
+ rectfill(0, 0, 127, 127, 0x01)
+ fillp()
+
  color(10)
  -- top
  print("\^wdroneamp",32,3,9)

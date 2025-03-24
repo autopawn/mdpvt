@@ -91,7 +91,7 @@ end
 -->8
 -- draw
 
-wave_colors = {3, 10, 9, 15}
+wave_colors = {15, 9, 10, 3}
 
 function _draw()
  pal(0, 128, 1) -- dark brown
@@ -116,7 +116,8 @@ function _draw()
  line(120, 3, 120, 120)
  -- waves
  rect(11, 9, 116, 35, 15)
- for t=4,1,-1 do
+ for t=1,4 do
+  printh(t)
   for i=-1,32 do
    local mag = flr(mwaves[t][i])
    mag = min(mag, 12)

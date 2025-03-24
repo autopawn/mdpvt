@@ -26,6 +26,7 @@ function _init()
  offset = 1
  option_t = 0
  mwaves_init()
+ distortion = 1.0
 end
 
 function _update60()
@@ -37,7 +38,6 @@ function _update60()
    and t < last_stat56) then
   loops += 1
  end
- printh("s "..s.." t "..t.." loops "..loops)
  last_stat54 = s
  last_stat56 = t
  -- stop at the end of the 2nd loop
@@ -49,6 +49,7 @@ function _update60()
   option -= 1
   option_t = 0
   offset = min(offset, option - 1)
+  distortion += 0.35
   sfx(62)
  end
 
@@ -56,6 +57,7 @@ function _update60()
   option += 1
   option_t = 0
   offset = max(offset, option + 2 - listsize)
+  distortion += 0.35
   sfx(62)
  end
 
@@ -80,6 +82,10 @@ function _update60()
  playing_t += 1
 
  mwaves_update()
+ 
+ distortion += mwaves_avg_volume()/30 
+ distortion = min(distortion, 1)
+ distortion *= 0.75
 end
 
 -->8
@@ -181,6 +187,8 @@ function _draw()
  
  print("MURDER DRONES VIRTUAL", 9, 115, 15)
  print("TRAINING OST", 9, 120)
+
+ distort_screen(distortion)
 end
 -->8
 -- song list
@@ -195,7 +203,7 @@ songs = {
  {24, "working like beasts - practice", "remi mixer"},
  {30, "working out of line - theory", "remi mixer"},
  {32, "working out of line - practice", "remi mixer"},
- {39, "you're the murderer, right?", "remi mixer"},
+ {39, "you're the murderer, right? (unused)", "remi mixer"},
  {41, "there's nothing wrong with murdering the murderer, right?", "remi mixer"},
  {49, "i got killed, right?", "remi mixer"},
  {50, "the darkness is coming! - no time to think", "remi mixer"},
@@ -277,6 +285,14 @@ function mwaves_update()
  end
 end
 
+function mwaves_avg_volume()
+ local sum = 0
+ for v in all(mwaves[4]) do
+  sum += v
+ end
+ return sum / #mwaves[4]
+end
+
 -- get pitch and volume of the
 -- note at the given channel
 function note_at(ch)
@@ -291,6 +307,31 @@ function note_at(ch)
  local pitch = p & 0b111111
  local vol = (p >> 9) & 0b111
  return pitch, vol
+end
+-->8
+-- distortion shader
+
+function distort_screen(d)
+ for i=1,flr(30*d+rnd(1.2)) do
+  local y = flr(rnd(128))
+  local size = flr(rnd(10*d))
+  local offset = 1 + flr(rnd(5*d))
+  if rnd() < 0.5 then
+   -- left-to-right
+   for row=y,y+size do
+    for x=0,127 do
+     pset(x, row, pget(x + offset, row))
+    end
+   end
+  else
+   -- right-to-left
+   for row=y,y+size do
+    for x=127,0,-1 do
+     pset(x, row, pget(x - offset, row))
+    end
+   end
+  end
+ end
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

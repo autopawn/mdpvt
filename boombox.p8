@@ -56,19 +56,27 @@ function _update60()
  end
 
  if btnp(⬆️) then
-  option -= 1
+  if option > 1 then
+   option -= 1
+   sfx(62)
+  else
+   sfx(60)
+  end
   option_t = 0
   offset = min(offset, option - 1)
   distortion += 0.35
-  sfx(62)
  end
 
  if btnp(⬇️) then
-  option += 1
+  if option < #songs then
+   option += 1
+   sfx(62)
+  else
+   sfx(60)
+  end
   option_t = 0
   offset = max(offset, option + 2 - listsize)
   distortion += 0.35
-  sfx(62)
  end
 
  if btnp(❎) then

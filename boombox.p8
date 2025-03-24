@@ -25,6 +25,7 @@ function _init()
  option = 1
  offset = 1
  option_t = 0
+ mwaves_init()
 end
 
 function _update60()
@@ -77,14 +78,19 @@ function _update60()
  
  option_t += 1
  playing_t += 1
+
+ mwaves_update()
 end
 
 -->8
 -- draw
 
+wave_colors = {3, 10, 9, 15}
+
 function _draw()
- pal(0, 128, 1)
- pal(15, 137, 1)
+ pal(0, 128, 1) -- dark brown
+ pal(15, 137, 1) -- dark orage
+ pal(3, 135, 1) -- light yellow
  cls()
  color(10)
  -- top
@@ -104,8 +110,21 @@ function _draw()
  line(120, 3, 120, 120)
  -- waves
  rect(11, 9, 116, 35, 15)
- print("PLAY/PAUSE", 25, 40, 9)
+ for t=4,1,-1 do
+  for i=-1,32 do
+   local mag = flr(mwaves[t][i])
+   mag = min(mag, 12)
+   for k = 1,mag do
+   	local x = 16 + 3*i
+    local y = 35 - 2*k
+    local col = wave_colors[t]
+    line(x, y, x+1, y, col)
+   end
+  end
+ end
+ 
  -- play button
+ print("PLAY/PAUSE", 25, 39, 9)
  if stat(24) < 0 then
   spr(1, 13, 39)
  else
@@ -209,6 +228,69 @@ function partial_sub(txt, len, f)
   i = 1 + flr((f - 48)/8)
  end
  return sub(txt, i, i+len-1)
+end
+-->8
+-- music waves
+
+function mwaves_init()
+ mwaves = {}
+ for i = 1,4 do
+  local mwave = {}
+  for k = -2,33 do
+   mwave[k] = 0
+  end
+  mwaves[i] = mwave
+ end
+end
+
+function mwaves_next()
+ mwaves[1] = mwaves[2]
+ mwaves[2] = mwaves[3]
+ mwaves[3] = mwaves[4]
+ mwaves[4] = {}
+ for k = -2,33 do
+  mwaves[4][k] = 0.66*mwaves[3][k]
+ end
+end
+
+function mwaves_add(pitch, vol)
+ local ph = pitch \ 2
+ if pitch % 2 == 0 then
+	 mwaves[4][ph - 2] += 0.17*vol
+	 mwaves[4][ph - 1] += 0.33*vol
+	 mwaves[4][ph] += vol
+	 mwaves[4][ph + 1] += 0.33*vol
+	 mwaves[4][ph + 2] += 0.17*vol
+	else
+	 mwaves[4][ph - 1] += 0.2*vol
+	 mwaves[4][ph] += 0.8*vol
+	 mwaves[4][ph + 1] += 0.8*vol
+	 mwaves[4][ph + 2] += 0.2*vol
+	end
+end
+
+function mwaves_update()
+ mwaves_next()
+ for c = 0, 3 do
+  local p, w = note_at(c)
+  mwaves_add(p, w)
+ end
+end
+
+-- get pitch and volume of the
+-- note at the given channel
+function note_at(ch)
+ local s = stat(46+ch) -- sfx id
+ if s == -1 then
+  return 0, 0
+ end
+ local n = stat(50+ch) -- note id
+ local sfxaddr = 0x3200 + 68*s
+ local noteaddr = sfxaddr + 2*n
+ local p = peek2(noteaddr)
+ local pitch = p & 0b111111
+ local vol = (p >> 9) & 0b111
+ return pitch, vol
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

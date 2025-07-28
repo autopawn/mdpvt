@@ -6,7 +6,7 @@ version=1.2.2
 # Change directory to script directory
 cd "$(dirname "$0")"
 
-pico8="$HOME/Videos/pico-8/pico8"
+pico8="$HOME/Software/pico-8/pico8"
 
 rm -rf build
 mkdir build

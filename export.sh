@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Game version
-version=1.3
+version=1.4
 
 # Change directory to script directory
 cd "$(dirname "$0")"
@@ -13,7 +13,9 @@ mkdir build
 
 sed 's/--[^>].*//g' mdpvt.p8 \
     | sed 's/ = /=/g' \
-    | sed 's/ += /+=/g' \
+    | sed 's/ [+]= /+=/g' \
+    | sed 's/ [*]= /*=/g' \
+    | sed 's/ \/= /\/=/g' \
     | sed 's/ -= /-=/g' \
     | sed 's/ == /==/g' \
     | sed 's/ != /!=/g' \
@@ -24,7 +26,9 @@ sed 's/--[^>].*//g' mdpvt.p8 \
     | sed 's/ [+] /+/g' \
     | sed 's/ [*] /*/g' \
     | sed 's/ - /-/g' \
+    | sed 's/ % /%/g' \
     | sed 's/^[/][/]/--/g' \
+    | sed '/^ *$/d' \
     | awk '!NF {if (++n <= 1) print; next}; {n=0;print}' \
     > build/mdpvt_stripped.p8
 

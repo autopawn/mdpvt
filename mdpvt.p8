@@ -719,7 +719,7 @@ function player_update()
   end
 
   -- limit vertical speed
-  if pla.vy < -4 and not pla.slam then
+  if pla.vy < -4 then
    pla.vy = -4
   end
 

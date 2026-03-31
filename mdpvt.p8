@@ -37,8 +37,12 @@ level_dialog_music =
 jumpk = 5
 
 -- hard difficulty enabled?
--- (o or 1), stored on dget(6)
+-- (0 or 1), stored on dget(6)
 hard = 0
+
+-- easy mode enabled?
+-- (0 or 1), stored in dget(9)
+easy = 0
 
 -- this level dialog was shown?
 -- stored on dget(2)
@@ -89,6 +93,7 @@ function _init()
   timer_f = dget(4)
   deathcount = dget(5)
   hard = dget(6)
+  easy = dget(9)
   if dialog_shown == 1 then
    if level == 10 then
     music(level_music[level], 0, 3)
@@ -98,7 +103,7 @@ function _init()
   end
 
   -- by default, go to main menu
-  -- on next load
+  -- on next load instead of loading checkpoint
   dset(0, 0)
  end
 
@@ -212,26 +217,27 @@ function _init()
  ::init_end::
 end
 
-function reset_level()
+function save_data()
  dset(0, 1)
- dset(1, level) -- this level
- dset(2, 1) -- after the dialog
  dset(3, timer_m)
  dset(4, timer_f)
  dset(5, deathcount)
  dset(6, hard)
+ dset(9, easy)
+end
+
+function reset_level()
+ save_data()
+ dset(1, level) -- this level
+ dset(2, 1) -- after the dialog
  dset(7, stat(54))
  run()
 end
 
 function next_level()
- dset(0, 1)
+ save_data()
  dset(1, level+1) -- next level
  dset(2, 0) -- before the dialog
- dset(3, timer_m)
- dset(4, timer_f)
- dset(5, deathcount)
- dset(6, hard)
  run()
 end
 
@@ -2480,6 +2486,7 @@ function menu_init()
  menu_saved_level = dget(1)
  -- difficulty saved in the cart
  menu_saved_hard = dget(6)
+ menu_saved_easy = dget(9)
   -- initialize number particles
   -- (x, y, vy)
   for i=0,9 do
@@ -2681,16 +2688,14 @@ function menu_update()
   else
    menu_option = max(0, menu_option)
   end
-  menu_option = min(2, menu_option)
+  menu_option = min(3, menu_option)
 
   if btnp(❎) then
    if menu_option == 0 then
-   	load_game()
-   elseif menu_option == 1 then
-    hard = 0
-    next_level()
+    load_game()
    else
-    hard = 1
+    easy = tonum(menu_option == 1)
+    hard = tonum(menu_option == 3)
     next_level()
    end
   end
@@ -2739,14 +2744,17 @@ function menu_draw()
   print_unpack_split"murder drones, 38, 2, 9"
   if menu_saved_level == 0 then
    print_unpack_split"continue,38,84,5"
+  elseif menu_saved_easy == 1 then
+   print_unpack_split"continue (easy),38,84,7"
   elseif menu_saved_hard == 1 then
    print_unpack_split"continue (hard),38,84,7"
   else
    print_unpack_split"continue (normal),38,84,7"
   end
-  print_unpack_split"new game (normal),38,94,7"
-  print_unpack_split"new game (hard),38,104,7"
-  printx("∧", 28, 84+10*menu_option, 9)
+  print_unpack_split"new game (easy),38,92,7"
+  print_unpack_split"new game (normal),38,100,7"
+  print_unpack_split"new game (hard),38,108,7"
+  printx("∧", 28, 84+8*menu_option, 9)
 
   rectfill(unpack_split"-1, 118, 128, 125, 0")
   rect(unpack_split"-1, 118, 128, 125, 5")

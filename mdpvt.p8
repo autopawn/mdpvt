@@ -60,6 +60,12 @@ deathcount = 0
 -- frame for animations
 frame = 0
 
+-- special variables
+pla_immunity = 0
+pla_dead = false
+pla_deadt = 0
+lives = 1
+
 -- level on which the player
 -- gets the rockets
 first_rocket_level = 4
@@ -95,7 +101,7 @@ function _init()
   hard = dget(6)
   easy = dget(9)
   lives = 1 + 2 * easy
-  immunity = 0
+  pla_immunity = 0
   if dialog_shown == 1 then
    if level == 10 then
     music(level_music[level], 0, 3)
@@ -302,7 +308,7 @@ function _draw()
 
  if level==0 then
   menu_draw()
-  goto draw_end
+  return
  end
 
  cls()
@@ -392,11 +398,13 @@ function _draw()
    .."."..c1..c2
 
  print(tstr,100,1)
- pal(12,12-4*hard)
+ pal(12,12-4*hard-9*easy)
  spr(15,92,1)
  pal(12,12)
 
- ::draw_end::
+ if easy == 1 then
+   print("\fa\^o940♥♥♥", 129 - 8*lives, 8)
+ end
 end
 
 function decor_tiles_update()
@@ -662,19 +670,19 @@ pla = {
 rockets = {}
 
 function player_update()
- if pla.dead then
+ if pla_dead then
   -- increase dead time
-  pla.deadt += 1
+  pla_deadt += 1
 
   -- reset the game from
   -- last checkpoint
-  if pla.deadt > 40 then
+  if pla_deadt > 40 then
    reset_level()
   end
 
  else
   -- lower immunity
-  immunity = max(0, immunity - 1)
+  pla_immunity = max(0, pla_immunity - 1)
   -- update animation counters
   pla.animw -= 1
   pla.animkill -= 1
@@ -774,14 +782,14 @@ function player_update()
  end
 
  -- die if touching death block
- if not pla.dead and
+ if not pla_dead and
    rectcol(pla.x, pla.y, pla.w,
    pla.h, 1) then
   player_hit()
  end
 
  -- go to next level
- if not pla.dead and
+ if not pla_dead and
    workers_dead >= workers_req
    and rectinside(pla.x, pla.y, pla.w, pla.h, 2)
    or pla.y > 1000 then
@@ -793,14 +801,14 @@ function player_update()
 end
 
 function player_hit()
- if pla.dead or immunity > 0 then
+ if pla_dead or pla_immunity > 0 then
   return
  end
  sfx(0)
  lives -= 1
- immunity = 30
+ pla_immunity = 30
  if lives <= 0 then
-  pla.dead = true
+  pla_dead = true
   pla.vy -= 2
   pla.vx /= 2
   pla.h = 8
@@ -812,19 +820,19 @@ end
 
 function player_draw()
  fr = pla.facer
- if immunity % 2 == 1 then
+ if pla_immunity % 2 == 1 then
   return
  end
 
  rectfill(pla.x+1, pla.y+3,
    pla.x+6, pla.y+5, 0)
- if pla.dead then
+ if pla_dead then
   -- draw head
   spr(18, pla.x, pla.y,
     1, 1, fr)
  else
   -- draw head
-  if immunity > 0 then
+  if pla_immunity > 0 then
    headspr = 18
    pal(10, 8)
   elseif pla.animkill > 0 then
@@ -895,7 +903,7 @@ function rocket_update(r)
    sfx(unpack_split"8, -1, 9, 13")
   end
   -- explode if deflected
-  if not pla.dead
+  if not pla_dead
     and r.deflected and
     ((r.x-1 < pla.x) == (r.vx<0))
     then
@@ -911,7 +919,7 @@ function rocket_update(r)
    sfx(9)
    camera_thug_shake(1,2)
    r.explosiont = 1
-   if not pla.dead and
+   if not pla_dead and
      r.deflected and
      objinside(pla, r.x+3,
        r.y+1, rocket_xrad) then
@@ -1205,7 +1213,7 @@ function worker_update(worker)
     worker.w, worker.h, 3) then
    worker_hit(worker)
   end
-  if not pla.dead and
+  if not pla_dead and
     objcol(pla, worker, 1) and
     worker.touchdeath then
    worker_hit(worker)
@@ -1234,7 +1242,7 @@ function worker_update(worker)
    worker.railgundelay-=1
   elseif worker.type == "thad" then
    if objcol(pla, worker, 1) and
-     pla.dead == false then
+     not pla_dead then
     sfx(11)
     worker.pipeanim=12
     pla.vx+=10*worker.facedir
@@ -1552,7 +1560,7 @@ function railshot_update(railshot)
  end
  if railshot.delay<30 then
   if objcol(pla,railshot)
-    and not pla.dead then
+    and not pla_dead then
    player_hit()
   end
  end

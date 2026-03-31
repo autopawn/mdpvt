@@ -60,7 +60,7 @@ deathcount = 0
 -- frame for animations
 frame = 0
 
--- special variables
+-- special variables with player state
 pla_immunity = 0
 pla_dead = false
 pla_deadt = 0
@@ -663,7 +663,6 @@ pla = {
  h=16, -- height
  facer=true, -- facing right?
  ground=false, -- touching ground
- dead=false, -- is dead?
 }
 
 rockets = {}
@@ -2009,6 +2008,10 @@ at them.",
  "you might have to think\
 outside the box for these",
  "drones.",
+ 12.1,
+ "... over their heads.",
+ "detonate (🅾️) your rockets\
+over their heads.",
  14,
  "hopefully that tip didn't\
 go *over your head*.",
@@ -2040,9 +2043,9 @@ outnumbered then it's",
  10,
  "okay rookie, now here's a\
 real threat for you:",
- "in this test there's\
-a drone that'll really",
- "test your mettle.\
+ "in this test there's a\
+drone that'll really test",
+ "your mettle.\
 it has telekinetic",
  "abilities and flight...",
  12,
@@ -2103,6 +2106,11 @@ that allows you to punch",
 drones. keep that in mind",
  "for when explosives are\
 not enough.",
+ 12.1,
+ "... you need to dive (⬇️)\
+to kill these powerful",
+ "drones once they are on\
+the ground.",
 },{ -- level 8
  11,
  "good going rookie!",
@@ -2406,18 +2414,20 @@ end
 
 -- read until the next dialog text
 function dialog_next()
- dialog_l += 1
- while dialog_l <= #current_dial
-   and type(current_dial[dialog_l]) == "number" do
-  dial_portrait = current_dial[dialog_l]
+ repeat
   dialog_l += 1
-  portrait_dur = 0
- end
+  local dialog_line = current_dial[dialog_l]
+  if type(dialog_line) == "number" then
+   dial_portrait = flr(dialog_line)
+   -- decimal portraits are easy-only.
+   dial_easy_only = dialog_line > dial_portrait
+  elseif easy == 1 or not dial_easy_only then
+   break
+  end
+ until dialog_l > #current_dial
  dialog_c = 0
- portrait_dur += 1
 
  if dialog_l > #current_dial then
-  -- end game
   if level == 13 then
    -- finish game
    dset(0, 0)

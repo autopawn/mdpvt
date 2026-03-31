@@ -368,20 +368,17 @@ function _draw()
  fillp(0)
 
  -- death counter
- d = "deaths:"..deathcount
- print(d, 1, 2, 9)
- print(d, 1, 1, 10)
+ print("\fa\^o940deaths:"..deathcount, 1, 1)
 
  -- kill count
  if workers_req != 0 then
   if workers_req == -1 then
-   s = "kills:WHO CARES?"
- 	else
-   s = "kills:"..workers_dead
+   s = "\fa\^o940kills:WHO CARES?"
+  else
+   s = "\fa\^o940kills:"..workers_dead
      .."/"..workers_req
- 	end
-  print(s, 1, 9, 9)
-  print(s, 1, 8, 10)
+  end
+  print(s, 1, 8)
  end
 
  -- speedrun clock
@@ -389,11 +386,10 @@ function _draw()
  centis = flr(timer_f%30*3.333)
  c1, c2 = centis\10, centis%10
  s1, s2 = secs\10, secs%10
- tstr = timer_m..":"..s1..s2
+ tstr = "\f7\^o640"..timer_m..":"..s1..s2
    .."."..c1..c2
 
- print(tstr,100,2,6)
- print(tstr,100,1,7)
+ print(tstr,100,1)
  pal(12,12-4*hard)
  spr(15,92,1)
  pal(12,12)

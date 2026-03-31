@@ -64,7 +64,7 @@ frame = 0
 pla_immunity = 0
 pla_dead = false
 pla_deadt = 0
-lives = 1
+pla_lives = 1
 
 -- level on which the player
 -- gets the rockets
@@ -100,7 +100,7 @@ function _init()
   deathcount = dget(5)
   hard = dget(6)
   easy = dget(9)
-  lives = 1 + 2 * easy
+  pla_lives = 1 + 2 * easy
   pla_immunity = 0
   if dialog_shown == 1 then
    if level == 10 then
@@ -403,7 +403,7 @@ function _draw()
  pal(12,12)
 
  if easy == 1 then
-   print("\fa\^o940♥♥♥", 129 - 8*lives, 8)
+   print("\fa\^o940♥♥♥", 129 - 8*pla_lives, 8)
  end
 end
 
@@ -664,7 +664,6 @@ pla = {
  facer=true, -- facing right?
  ground=false, -- touching ground
  dead=false, -- is dead?
- deadt=0, -- time dead.
 }
 
 rockets = {}
@@ -805,9 +804,9 @@ function player_hit()
   return
  end
  sfx(0)
- lives -= 1
+ pla_lives -= 1
  pla_immunity = 30
- if lives <= 0 then
+ if pla_lives <= 0 then
   pla_dead = true
   pla.vy -= 2
   pla.vx /= 2
@@ -1046,7 +1045,6 @@ function create_worker(x1, y1, id)
   vy = 0,
   h = 16,
   w = 8,
-  dead = false,
   canmove = false,
   canfollow = false,
   canflip = true,

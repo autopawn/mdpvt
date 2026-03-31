@@ -94,6 +94,8 @@ function _init()
   deathcount = dget(5)
   hard = dget(6)
   easy = dget(9)
+  lives = 1 + 2 * easy
+  immunity = 0
   if dialog_shown == 1 then
    if level == 10 then
     music(level_music[level], 0, 3)
@@ -671,6 +673,8 @@ function player_update()
   end
 
  else
+  -- lower immunity
+  immunity = max(0, immunity - 1)
   -- update animation counters
   pla.animw -= 1
   pla.animkill -= 1
@@ -773,7 +777,7 @@ function player_update()
  if not pla.dead and
    rectcol(pla.x, pla.y, pla.w,
    pla.h, 1) then
-  player_die()
+  player_hit()
  end
 
  -- go to next level
@@ -788,22 +792,29 @@ function player_update()
  objmove(pla)
 end
 
-function player_die()
- if pla.dead then
+function player_hit()
+ if pla.dead or immunity > 0 then
   return
  end
  sfx(0)
- pla.dead = true
- pla.vy -= 2
- pla.vx /= 2
- pla.h = 8
- add_blood(
-   pla.x+3,pla.y+9,split"5,6,9,10")
- deathcount+=1
+ lives -= 1
+ immunity = 30
+ if lives <= 0 then
+  pla.dead = true
+  pla.vy -= 2
+  pla.vx /= 2
+  pla.h = 8
+  add_blood(
+    pla.x+3,pla.y+9,split"5,6,9,10")
+  deathcount+=1
+ end
 end
 
 function player_draw()
  fr = pla.facer
+ if immunity % 2 == 1 then
+  return
+ end
 
  rectfill(pla.x+1, pla.y+3,
    pla.x+6, pla.y+5, 0)
@@ -813,7 +824,10 @@ function player_draw()
     1, 1, fr)
  else
   -- draw head
-  if pla.animkill > 0 then
+  if immunity > 0 then
+   headspr = 18
+   pal(10, 8)
+  elseif pla.animkill > 0 then
    headspr = 19
   elseif frame % 60 < 4 then
    headspr = 17 -- blink
@@ -838,6 +852,7 @@ function player_draw()
   end
   spr(bodyspr, pla.x, pla.y+8,
     1, 1, fr)
+  pal(10, 10)
  end
 end
 
@@ -900,7 +915,7 @@ function rocket_update(r)
      r.deflected and
      objinside(pla, r.x+3,
        r.y+1, rocket_xrad) then
-    player_die()
+    player_hit()
    end
    for w in all(workers) do
     if w.facedir == -1 then
@@ -1324,7 +1339,7 @@ function worker_update(worker)
    chs = mech_chainsaws(worker)
    for ch in all(chs) do
     if objcol(ch, pla) then
-     player_die()
+     player_hit()
     end
    end
 
@@ -1332,7 +1347,7 @@ function worker_update(worker)
     objmovecheap(hand)
     -- kill player with hands
     if objcol(pla,hand) then
-     player_die()
+     player_hit()
     end
     -- make sound if colliding
     if hand.moving and hand.vx == 0
@@ -1538,7 +1553,7 @@ function railshot_update(railshot)
  if railshot.delay<30 then
   if objcol(pla,railshot)
     and not pla.dead then
-   player_die()
+   player_hit()
   end
  end
  if railshot.owner.dead then
@@ -1630,7 +1645,7 @@ function knife_update(kni)
   if moving then
     if objcol(pla,kni) and
       not kni.disabled then
-     player_die()
+     player_hit()
     end
   end
   if kni.disabled then
@@ -1710,7 +1725,7 @@ function electroball_update(ball)
   objaimto(ball, pla.x+2, pla.y+8, acc, true)
   ball.vx, ball.vy = veclimit(ball.vx, ball.vy, spd)
   if objcol(pla, ball) then
-   player_die()
+   player_hit()
   end
  fset(2,0,true)
  objmove(ball)
